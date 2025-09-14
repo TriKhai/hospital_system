@@ -9,7 +9,7 @@ Website được xây dựng bằng công nghệ frontend React (typescript) k�
 ---
 
 ### Công nghệ chính
-nghệ
+
 - Tailwindcss
 
 - Typescript
