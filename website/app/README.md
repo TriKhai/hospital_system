@@ -4,12 +4,12 @@
 
 ### Mô tả
 
-Ứng dụng frontend React kết nối với backend Django qua API, sử dụng Axios để gọi các endpoint.
+Website được xây dựng bằng công nghệ frontend React (typescript) kết nối với backend Spring Boot (JAVA) thônh qua API, sử dụng Axios để gọi các endpoint.
 
 ---
 
 ### Công nghệ chính
-
+nghệ
 - Tailwindcss
 
 - Typescript
