@@ -1,69 +1,74 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+## Frontend React Application
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Mô tả
 
-## Expanding the ESLint configuration
+Ứng dụng frontend React kết nối với backend Django qua API, sử dụng Axios để gọi các endpoint.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Công nghệ chính
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- Tailwindcss
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Typescript
+
+- Thư viện hổ trợ react (như `recharts`, `react-toastify`, ...)
+
+- Thư viện hổ trợ xuất file `xlsx`, ...
+
+- Thư viện hổ trợ validation `formik` và `yup`
+
+- `axios` thư viện hổ trợ call APIAPI
+
+- ...v.v...
+
+---
+
+### Yêu cầu
+
+- Node.js (phiên bản >= 16)
+- npm hoặc yarn
+- Backend Django đang chạy trên `http://localhost:8000` hoặc port khác cũng được
+
+---
+
+### Cài đặt
+
+1. Clone repo frontend (nếu chưa)
+
+```bash
+git clone <url-repo-frontend>
+cd <thư-mục-frontend> # fontend/app
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Cài đặt thư viện 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+# hoặc
+yarn install
 ```
+
+3. Cấu hình URL kết nối Backend
+
+Vào file frontend/app/.env (Kiểm tra địa chỉ server backend)
+
+```ts
+// Địa chỉ máy chủ backend
+VITE_API_URL=http://localhost:8000/api/v1/
+
+```
+
+4. Khởi động web
+```bash
+npm run dev
+```
+
+5. fix bug
+*error*: Some issues need review, and may require choosing a different dependency.
+- npm cache clean --force
+- Xóa node_modules và package-lock.json
+- npm install
+
