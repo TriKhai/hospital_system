@@ -5,10 +5,12 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <nav className="bg-blue-600 text-white p-4 flex justify-between">
+    <nav className="bg-gray-100 text-black p-4 flex justify-between">
       <div className="flex gap-4">
         <Link to="/">Trang chủ</Link>
         <Link to="/about">Giới thiệu</Link>
+        <Link to="/about">Tuyển dụng</Link>
+
         {/* {user?.role === "patient" && <Link to="/patient/dashboard">Bệnh nhân</Link>}
         {user?.role === "doctor" && <Link to="/doctor/dashboard">Bác sĩ</Link>}
         {user?.role === "admin" && <Link to="/admin/dashboard">Admin</Link>} */}
