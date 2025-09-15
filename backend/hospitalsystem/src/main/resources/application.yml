@@ -1,9 +1,9 @@
 #spring.application.name=hospitalsystem
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3307/toycollect
+    url: jdbc:mysql://127.0.0.1:3306/HospitalSystem
     username: root
-    password: TriKhai2004@
+    password: admin123
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -28,8 +28,8 @@ spring:
 #  secretKey: ih67YD1YLVcK0rp95jchoOuw7hGgmH/NR7EC4yOfUI0=
 #
 #fileUpload:
-#  rootPath: D:\Các file khác\SpringBoot\toycollect\src\main\resources\static\uploads
+#  rootPath: D:\Cï¿½c file khï¿½c\SpringBoot\toycollect\src\main\resources\static\uploads
 #  avatar:
 #    rootPath:
 #  product:
-#    rootPath: D:\Các file khác\SpringBoot\toycollect\src\main\resources\static\uploads\products
+#    rootPath: D:\Cï¿½c file khï¿½c\SpringBoot\toycollect\src\main\resources\static\uploads\products

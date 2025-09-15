@@ -2,7 +2,9 @@ package com.nln.hospitalsystem.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,10 @@ public class DrugType {
     @Column(name = "unit")
     private String unit;
 
-    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "drugType", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Drug> drugs = new ArrayList<>();
 }
