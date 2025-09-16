@@ -5,7 +5,8 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    <nav className="bg-gray-100 text-black p-4 flex justify-between">
+    <nav className="bg-gray-100 text-black p-4 flex justify-between sticky top-0 shadow-lg z-50">
+
       <div className="flex gap-4">
         <Link to="/">Trang chủ</Link>
         <Link to="/about">Giới thiệu</Link>
