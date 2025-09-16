@@ -1,16 +1,14 @@
 package com.nln.hospitalsystem.controller;
 
-import com.nln.hospitalsystem.AccountService;
-import com.nln.hospitalsystem.dto.account.AccountDTO;
+import com.nln.hospitalsystem.dto.account.LoginDTO;
+import com.nln.hospitalsystem.dto.account.RegisterDTO;
+import com.nln.hospitalsystem.payload.request.LoginRequest;
+import com.nln.hospitalsystem.payload.request.RegisterRequest;
+import com.nln.hospitalsystem.service.AccountService;
 import com.nln.hospitalsystem.payload.ResponseData;
-import com.nln.hospitalsystem.service.Impl.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -19,23 +17,55 @@ public class AuthController {
     @Autowired
     AccountService accountService;
 
-    @PostMapping("/login")
-    public ResponseEntity <?> login() {
+//    @PostMapping("/check-account")
+//    public ResponseEntity <ResponseData<String>> checkAccount(@RequestParam String username, @RequestParam String password) {
+//
+//        boolean exists = accountService.checkLogin(username, password);
+//
+//        if (exists) {
+//            return ResponseEntity.ok(ResponseData.success(null, "Account exists"));
+//        }
+//        return ResponseEntity.ok(ResponseData.error(401, "Invalid credentials"));
+//    }
 
+    @PostMapping("/register")
+    public ResponseEntity<ResponseData<RegisterDTO>> register(@RequestBody RegisterRequest registerRequest) {
+        try {
+            RegisterDTO savedAccount = accountService.register(registerRequest);
 
-        List<AccountDTO> accounts = new ArrayList<>();
-        accounts = accountService.getAllUsers();
-        return new ResponseEntity<>(accounts, HttpStatus.OK);
-    }
+            return ResponseEntity.ok(
+                    ResponseData.success(savedAccount, "Register successfully")
+            );
 
-    @PostMapping("/check-account")
-    public ResponseEntity <ResponseData<String>> checkAccount(@RequestParam String username, @RequestParam String password) {
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(ResponseData.error(400, e.getMessage()));
 
-        boolean exists = accountService.checkLogin(username, password);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(409)
+                    .body(ResponseData.error(409, e.getMessage()));
 
-        if (exists) {
-            return ResponseEntity.ok(ResponseData.success(null, "Account exists"));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.internalServerError()
+                    .body(ResponseData.error(500, "Internal server error"));
         }
-        return ResponseEntity.ok(ResponseData.error(401, "Invalid credentials"));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseData<LoginDTO>> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            LoginDTO response = accountService.login(loginRequest);
+            return ResponseEntity.ok(ResponseData.success(response, "Login successful"));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body(ResponseData.error(400, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(ResponseData.error(500, "Internal server error"));
+        }
+
+    }
+
+
+
 }

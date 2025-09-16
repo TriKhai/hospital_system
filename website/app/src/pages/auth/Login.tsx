@@ -1,48 +1,7 @@
-// import React, { useState } from "react";
-// import { useAuth } from "../../context/useAuth";
-// import { useNavigate } from "react-router-dom";
-
-// export default function Login() {
-//   const { login } = useAuth();
-//   const navigate = useNavigate();
-//   const [username, setUsername] = useState("");
-
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     login(username); // lưu user vào context
-//     navigate("/dashboard"); // chuyển hướng
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen">
-//       <h1 className="text-3xl mb-4">Đăng nhập</h1>
-//       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-//         <input
-//           type="text"
-//           placeholder="Tên đăng nhập"
-//           value={username}
-//           onChange={(e) => setUsername(e.target.value)}
-//           className="border px-3 py-2 rounded"
-//         />
-//         <button
-//           type="submit"
-//           className="bg-blue-600 text-white px-4 py-2 rounded"
-//         >
-//           Login
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// src/pages/DangNhap.tsx
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { NavLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useAuth } from "../../context/useAuth";
-// import { login, type LoginForm } from "../../services/authApi";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Bắt buộc nhập tên tài khoản"),
@@ -63,28 +22,17 @@ export default function Login() {
         <Formik 
           initialValues={{ username: "", password: "" }}
           validationSchema={LoginSchema}
-          onSubmit={async (values, actions) => {
-            try {
-              await login(values.username); // res là TokenResponse | null
-              navigate("/dashboard");
-              // if (res?.access && res?.refresh) {
-              //   localStorage.setItem("access_token", res.access);
-              //   localStorage.setItem("refresh_token", res.refresh);
-
-              //   alert("Đăng nhập thành công!");
-              //   navigate("/");
-              // } else {
-              //   alert(
-              //     "Đăng nhập thất bại! Kiểm tra lại tài khoản hoặc mật khẩu."
-              //   );
-              // }
-            } catch (error) {
-              console.error("Lỗi khi đăng nhập:", error);
-              alert("Có lỗi xảy ra khi đăng nhập!");
-            } finally {
-              actions.setSubmitting(false);
+           onSubmit={async (values, actions) => {
+            const success = await login(values);
+            if (success) {
+              alert("Đăng nhập thành công!");
+              navigate("/");
+            } else {
+              alert("Sai tài khoản hoặc mật khẩu");
             }
+            actions.setSubmitting(false);
           }}
+
         >
           {({ isSubmitting }) => (
             <Form className="space-y-4">

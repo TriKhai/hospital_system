@@ -31,8 +31,8 @@ public class Patient {
     @Column(name = "birth_date")
     private LocalDate birthDate; // ngày sinh
 
-    @Column(name="gender", nullable = false)
-    private Boolean gender; // true = nam, false = nữ (hoặc enum)
+    @Column(name = "gender")
+    private Boolean gender = true;  // true = nam, false = nữ (hoặc enum)
 
     @Column(name="address")
     private String address;
