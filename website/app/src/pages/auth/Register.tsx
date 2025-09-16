@@ -42,15 +42,13 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { NavLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import { registerApi } from "../../services/authApi";
 // import { register } from "../../services/authApi";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faEnvelope, faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string().required("Bắt buộc nhập tên tài khoản"),
-  email: Yup.string()
-    .email("Email không hợp lệ")
-    .required("Bắt buộc nhập email"),
   password: Yup.string()
     .min(8, "Mật khẩu ít nhất 8 ký tự")
     .required("Bắt buộc nhập mật khẩu"),
@@ -70,30 +68,25 @@ export default function Register() {
         <Formik
           initialValues={{
             username: "",
-            email: "",
             password: "",
             confirmPassword: "",
           }}
           validationSchema={RegisterSchema}
           onSubmit={async (values, actions) => {
             try {
-              console.log(values.username, values.password)
-              navigate("/login");
-              // const res = await register({
-              //   username: values.username,
-              //   password: values.password,
-              //   email: values.email,
-              // });
+              const { username, password } = values;
 
-              // if (res.success) {
-              //   alert("Đăng ký thành công! Vui lòng đăng nhập.");
-              //   navigate("/admin/dang-nhap");
-              // } else {
-              //   alert(res.message || "Đăng ký thất bại!");
-              // }
+              const res = await registerApi({ username, password });
+
+              if (res) {
+                alert("Đăng ký thành công! Vui lòng đăng nhập.");
+                navigate("/login");
+              } else {
+                alert("Đăng ký thất bại!");
+              }
             } catch (err) {
               alert("Có lỗi xảy ra khi đăng ký.");
-              console.log(err);
+              console.error(err);
             } finally {
               actions.setSubmitting(false);
             }
@@ -114,24 +107,6 @@ export default function Register() {
                 />
                 <ErrorMessage
                   name="username"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block font-medium mb-1">
-                  {/* <FontAwesomeIcon icon={faEnvelope} className="mr-2 w-5 h-5" /> */}
-                  Email
-                </label>
-                <Field
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="w-full border px-3 py-2 rounded"
-                />
-                <ErrorMessage
-                  name="email"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
