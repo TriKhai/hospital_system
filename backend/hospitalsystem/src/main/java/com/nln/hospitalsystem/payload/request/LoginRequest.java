@@ -1,4 +1,4 @@
-package com.nln.hospitalsystem.dto.account;
+package com.nln.hospitalsystem.payload.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountDTO {
-    private int id;
+public class LoginRequest {
     private String username;
-    private String role;
-    private String token;
+    private String password;
 }

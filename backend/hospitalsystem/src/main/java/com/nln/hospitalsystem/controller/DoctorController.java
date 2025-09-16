@@ -1,6 +1,5 @@
 package com.nln.hospitalsystem.controller;
 
-import com.nln.hospitalsystem.model.Doctor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,19 +26,19 @@ public class DoctorController {
     }
 
     // Tham so dang json
-    @PostMapping("/requestBody")
-    public  String requestBody(@RequestBody Doctor doctor) {
-        return "hello " + doctor.getId();
-    }
+//    @PostMapping("/requestBody")
+//    public  String requestBody(@RequestBody Doctor doctor) {
+//        return "hello " + doctor.getId();
+//    }
 
-    @PostMapping("/list-requestBody")
-    public  String requestBody(@RequestBody List<Doctor> doctor) {
-        StringBuilder s = new StringBuilder();
-        for (Doctor doc : doctor) {
-            s.append(doc.getName());
-        }
-        return  "hello " + s;
-    }
+//    @PostMapping("/list-requestBody")
+//    public  String requestBody(@RequestBody List<Doctor> doctor) {
+//        StringBuilder s = new StringBuilder();
+//        for (Doctor doc : doctor) {
+//            s.append(doc.getName());
+//        }
+//        return  "hello " + s;
+//    }
 
 
 }

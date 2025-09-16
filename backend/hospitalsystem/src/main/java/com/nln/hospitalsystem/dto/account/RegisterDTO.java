@@ -7,11 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class AccountDTO {
-    private int id;
+@AllArgsConstructor
+public class RegisterDTO {
+    private Integer id;
     private String username;
     private String role;
-    private String token;
 }

@@ -1,16 +1,14 @@
 package com.nln.hospitalsystem.dto.account;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountDTO {
-    private int id;
+public class LoginDTO {
+//    private int id;
     private String username;
     private String role;
     private String token;

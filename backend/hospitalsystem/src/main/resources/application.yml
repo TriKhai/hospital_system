@@ -12,6 +12,9 @@ spring:
       hibernate.dialect: org.hibernate.dialect.MySQLDialect
     show-sql: true
     format-sql: true
+  mvc:
+    servlet:
+      path: /api/v1
 #  mail:
 #    host: smtp.gmail.com
 #    port: 587
@@ -24,9 +27,9 @@ spring:
 #          starttls:
 #            enable: true
 #
-#jwt:
-#  secretKey: ih67YD1YLVcK0rp95jchoOuw7hGgmH/NR7EC4yOfUI0=
-#
+jwt:
+  secret: "jBpoQbllxjqpDuO/9T4qTWkiMnGWhtazhidIaHx0DNA=" # ít nhất 32 ký tự
+  expiration: 2592000000 # 30 ngày = 2_592_000_000 ms
 #fileUpload:
 #  rootPath: D:\C�c file kh�c\SpringBoot\toycollect\src\main\resources\static\uploads
 #  avatar:
