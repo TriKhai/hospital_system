@@ -37,6 +37,9 @@ public class Drug {
     @Column(name = "expired_at")
     private LocalDate expiredAt;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name="usage_instructions", columnDefinition = "TEXT")
     private String usageInstructions;
 

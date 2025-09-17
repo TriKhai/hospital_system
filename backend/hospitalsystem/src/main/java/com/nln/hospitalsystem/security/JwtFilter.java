@@ -19,6 +19,7 @@ import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
     @Autowired
     JwtUtils jwtUtils;
 
@@ -34,7 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 // Lấy thông tin từ Claims
                 String username = claims.getSubject();
                 String scope = claims.get("scope", String.class);
-                System.out.println("username: " + username + " scope: " + scope);
+//                System.out.println("username: " + username + " scope: " + scope);
 
                 // Tạo danh sách quyền hạn từ "scope"
 
