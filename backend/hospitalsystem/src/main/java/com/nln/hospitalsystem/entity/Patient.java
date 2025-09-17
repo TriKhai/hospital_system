@@ -43,6 +43,9 @@ public class Patient {
     @Column(name="phone", unique = true)
     private String phone;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @CreatedDate
     @Column(name="created_at", updatable = false)
     private LocalDateTime createdAt;

@@ -30,9 +30,9 @@ spring:
 jwt:
   secret: "jBpoQbllxjqpDuO/9T4qTWkiMnGWhtazhidIaHx0DNA=" # ít nhất 32 ký tự
   expiration: 2592000000 # 30 ngày = 2_592_000_000 ms
-#fileUpload:
-#  rootPath: D:\C�c file kh�c\SpringBoot\toycollect\src\main\resources\static\uploads
-#  avatar:
-#    rootPath:
-#  product:
-#    rootPath: D:\C�c file kh�c\SpringBoot\toycollect\src\main\resources\static\uploads\products
+fileUpload:
+  rootPath: uploads
+  patient:
+    rootPath: uploads/patient
+  doctor:
+    rootPath: uploads/doctor

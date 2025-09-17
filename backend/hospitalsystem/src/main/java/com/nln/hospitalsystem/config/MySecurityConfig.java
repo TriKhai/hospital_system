@@ -24,6 +24,7 @@ public class MySecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println(">>> SecurityFilterChain bean loaded");
         http.csrf(AbstractHttpConfigurer::disable) // Tắt CSRF (nếu không cần)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
                 .authorizeHttpRequests(auth -> auth
@@ -35,7 +36,6 @@ public class MySecurityConfig {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
 
 
 }

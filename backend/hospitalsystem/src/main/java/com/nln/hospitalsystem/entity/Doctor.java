@@ -43,7 +43,10 @@ public class Doctor {
     private LocalDate birthDay;
 
     @Column(name = "gender")
-    private Boolean gender; // true = male, false = female
+    private Boolean gender = true; // true = male, false = female
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @Column(name = "consultation_fee")
     private BigDecimal consultationFee;
