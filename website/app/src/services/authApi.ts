@@ -13,6 +13,7 @@ export async function loginApi(
     );
 
     if (res.data.success) {
+      console.log(res.data)
       return res.data.data;
     }
     return null;

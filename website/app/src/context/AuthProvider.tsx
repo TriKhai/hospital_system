@@ -1,18 +1,19 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
-import type { LoginForm, TokenResponse } from "../types/authType";
+import type { JwtType, LoginForm, User } from "../types/authType";
 import { loginApi } from "../services/authApi";
+import { jwtDecode } from "jwt-decode";
+// import jwtDecode from "jwt-decode";
+
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<TokenResponse | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const username = localStorage.getItem("username");
-    const role = localStorage.getItem("role");
-
-    if (token && username && role) {
-      setUser({ token, username, role }); 
+    if (token) {
+      const decoded = jwtDecode<JwtType>(token);
+      setUser({ username: decoded.sub, role: decoded.scope, token });
     }
   }, []);
 
@@ -21,19 +22,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const res = await loginApi(data);
     if (!res) return false;
 
-    // Lưu localStorage
     localStorage.setItem("token", res.token);
-    localStorage.setItem("username", res.username);
-    localStorage.setItem("role", res.role);
+    const decoded = jwtDecode<JwtType>(res.token);
+    console.log(decoded)
+    
+    await setUser({ username: decoded.sub, role: decoded.scope, token: res.token });
+    console.log("user: ", user)
 
-    setUser(res);
     return true;
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("role");
     setUser(null);
   };
 
