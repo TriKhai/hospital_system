@@ -20,3 +20,23 @@ export interface RegisterResponse {
     username: string;
     role: string;
 }
+
+export interface TokenPayload {
+  username: string;
+  role: "PATIENT" | "DOCTOR" | "ADMIN";
+  exp: number;
+}
+
+export interface JwtType {
+  sub: string;                        // username
+  iat: number;                        // issued at
+  exp: number;                        // expiration timestamp
+  scope: "PATIENT" | "DOCTOR" | "ADMIN"; // role / quyền
+}
+
+export interface User {
+  username: string;
+  role: "PATIENT" | "DOCTOR" | "ADMIN";
+  token: string;
+}
+

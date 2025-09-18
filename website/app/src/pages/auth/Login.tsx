@@ -2,6 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { NavLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useAuth } from "../../context/useAuth";
+import { jwtDecode } from "jwt-decode";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Bắt buộc nhập tên tài khoản"),
@@ -13,6 +14,15 @@ const LoginSchema = Yup.object().shape({
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  
+  // useEffect(() => {
+  //   console.log("uuuser: ", user)
+  //   if (!user) return;
+  //   if (user.role === "PATIENT") navigate("/about");
+  //   else if (user.role === "DOCTOR") navigate("/doctor");
+  //   else if (user.role === "ADMIN") navigate("/admin");
+  // }, [user]);
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -24,13 +34,25 @@ export default function Login() {
           validationSchema={LoginSchema}
            onSubmit={async (values, actions) => {
             const success = await login(values);
-            if (success) {
-              alert("Đăng nhập thành công!");
-              navigate("/");
-            } else {
-              alert("Sai tài khoản hoặc mật khẩu");
-            }
             actions.setSubmitting(false);
+
+            if (!success) {
+              alert("Sai tài khoản hoặc mật khẩu");
+              return;
+            }
+
+            alert("Đăng nhập thành công!");
+
+            // Lấy role từ token thay vì user state
+            const token = localStorage.getItem("token");
+            if (!token) return;
+
+            const decoded = jwtDecode<{ sub: string; scope: string }>(token);
+
+            if (decoded.scope === "PATIENT") navigate("/about");
+            else if (decoded.scope === "DOCTOR") navigate("/doctor");
+            else if (decoded.scope === "ADMIN") navigate("/admin");
+            else navigate("/");
           }}
 
         >
