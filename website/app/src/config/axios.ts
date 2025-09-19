@@ -13,7 +13,7 @@ const axiosClient = axios.create({
 
 // Request interceptor
 axiosClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -23,28 +23,14 @@ axiosClient.interceptors.request.use((config) => {
 // Response Interceptor
 axiosClient.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      localStorage.getItem("refresh_token")
-    ) {
-      originalRequest._retry = true;
-
-    //   const newAccessToken = await refreshToken();
-    //   if (newAccessToken) {
-    //     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-    //     return axiosClient(originalRequest);
-    //   }
-
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-      window.location.href = "/admin/dang-nhap"; 
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token hết hạn hoặc không hợp lệ -> logout
+      localStorage.removeItem("token");
+      window.location.href = "/dang-nhap"; 
     }
-
     return Promise.reject(error);
   }
 );
+
 export default axiosClient;

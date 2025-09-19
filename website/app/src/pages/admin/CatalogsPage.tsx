@@ -5,18 +5,22 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import DataTable from "../../components/layout/admin/DataTable";
 import type { Column } from "../../types/tableType";
 import type {
-    DepartmentRequest,
+  DepartmentRequest,
   DepartmentResponse,
 } from "../../types/departmentType";
 import departmentService from "../../services/departmentApi";
-import { useForm } from "react-hook-form";
+import AddForm, { type FieldConfig } from "../../components/layout/form/AddForm";
 
 const CatalogsPage: React.FC = () => {
   const [departments, setDepartments] = useState<DepartmentResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
 
-  const { register, handleSubmit, reset } = useForm<DepartmentRequest>();
+  const fields: FieldConfig<DepartmentRequest>[] = [
+    { label: "Tên khoa", name: "name", required: true },
+    { label: "Mô tả", name: "description", type: "textarea" },
+  ];
+
 
   // 🔹 Load danh sách Department
   useEffect(() => {
@@ -34,30 +38,22 @@ const CatalogsPage: React.FC = () => {
     fetchDepartments();
   }, []);
 
-  const handleAdd = async (data: DepartmentRequest) => {
-    try {
-      const newDep = await departmentService.create(data);
-      setDepartments((prev) => [...prev, newDep]);
-      reset();
-      setOpenModal(false);
-    } catch (error) {
-      console.error("Tạo khoa thất bại:", error);
-    }
+  const handleAddDepartment = async (data: DepartmentRequest) => {
+    await departmentService.create(data);
+    console.log("Khoa mới:", data);
   };
 
-  
 
+  //   const handleDelete = async (id: number) => {
+  //     if (!window.confirm("Bạn có chắc muốn xóa khoa này?")) return;
 
-//   const handleDelete = async (id: number) => {
-//     if (!window.confirm("Bạn có chắc muốn xóa khoa này?")) return;
-
-//     try {
-//       await departmentService.delete(id);
-//       setDepartments((prev) => prev.filter((d) => d.id !== id));
-//     } catch (error) {
-//       console.error("Xóa khoa thất bại:", error);
-//     }
-//   };
+  //     try {
+  //       await departmentService.delete(id);
+  //       setDepartments((prev) => prev.filter((d) => d.id !== id));
+  //     } catch (error) {
+  //       console.error("Xóa khoa thất bại:", error);
+  //     }
+  //   };
 
   const columns: Column<DepartmentResponse>[] = [
     { key: "id", label: "ID" },
@@ -89,6 +85,14 @@ const CatalogsPage: React.FC = () => {
           title="Danh sách khoa"
         />
       )}
+
+      <AddForm<DepartmentRequest>
+        title="Thêm khoa"
+        fields={fields}
+        isOpen={openModal}
+        onSubmit={handleAddDepartment}
+        onClose={() => setOpenModal(false)}
+      />
     </div>
   );
 };
