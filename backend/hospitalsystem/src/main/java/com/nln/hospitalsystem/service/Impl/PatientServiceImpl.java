@@ -10,6 +10,8 @@ import com.nln.hospitalsystem.service.FileService;
 import com.nln.hospitalsystem.service.PatientService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,11 +29,11 @@ public class PatientServiceImpl implements PatientService {
     private FileService fileService;
 
     @Override
+//    @PreAuthorize("hasRole('PATIENT') or #username == authentication.name")
     public PatientDTO updatePatient(String username, PatientRequest patientRequest) {
         try {
             Patient patient = patientRepository.findByAccount_Username(username)
                     .orElseThrow(() -> new EntityNotFoundException("Patient not found for username: " + username));
-
 
             // handle upload file
             MultipartFile image = patientRequest.getImage();

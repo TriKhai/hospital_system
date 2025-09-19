@@ -10,5 +10,6 @@ public interface AccountService {
 //    List<RegisterDTO> getAllUsers();
 //    boolean checkLogin(String username, String password);
     RegisterDTO register(RegisterRequest registerRequest);
+    RegisterDTO registerDoctor(RegisterRequest registerRequest);
     LoginDTO login(LoginRequest loginRequest);
 }

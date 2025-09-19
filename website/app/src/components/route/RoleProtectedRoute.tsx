@@ -8,17 +8,13 @@ interface RoleProtectedRouteProps {
 }
 
 export function RoleProtectedRoute({ children, allowedRoles }: RoleProtectedRouteProps) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
-  // Chua login
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  if (loading) return <div>Loading...</div>; // hoặc skeleton / spinner
 
-  // Khong can quyen
-  if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/not-found" replace />;
-  }
+  if (!user) return <Navigate to="/login" replace />;
+  if (!allowedRoles.includes(user.role)) return <Navigate to="/not-found" replace />;
+
 
   return <>{children}</>;
 }

@@ -1,36 +1,33 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthProvider";
-// import { useAuth } from "./context/useAuth";
-import Home from "./pages/Home";
-import About from "./pages/About";
 import { Login, Register } from "./pages/auth";
-// import type { JSX } from "react";
 import NotFound from "./pages/not_found/NotFound";
 import { RoleProtectedRoute } from "./components/route/RoleProtectedRoute";
 import HomeDoctor from "./pages/doctor/HomeDoctor";
-import HomeAdmin from "./pages/admin/HomeAdmin";
-
-// function PrivateRoute({ children }: { children: JSX.Element }) {
-//   const { user } = useAuth();
-//   return user ? children : <Navigate to="/login" />;
-// }
+import { HomePage, MainPage } from "./pages/patient";
+import { AdminPage, CatalogsPage, DashboardPage, DoctorPage } from "./pages/admin";
 
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/trang-chu" replace />} />
+          <Route element={<MainPage />}>
+            <Route path="/trang-chu" element={<HomePage />} />
+            {/* <Route path="/gioi-thieu" element={<About />} /> */}
+          </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           {/* <About /> */}
-        
+
           {/* Dashboard chỉ PATIENT được xem */}
           <Route
             path="/about"
             element={
               <RoleProtectedRoute allowedRoles={["PATIENT"]}>
-                <About />
+                {/* <About /> */}
+                <HomePage />
               </RoleProtectedRoute>
             }
           />
@@ -44,16 +41,20 @@ export default function App() {
               </RoleProtectedRoute>
             }
           />
-
-          {/* Admin page chỉ ADMIN được xem */}
           <Route
             path="/admin"
             element={
               <RoleProtectedRoute allowedRoles={["ADMIN"]}>
-                <HomeAdmin />
+                <AdminPage />
               </RoleProtectedRoute>
             }
-          />
+          >
+            <Route index element={<Navigate to="thong-ke" replace />} />
+            <Route path="thong-ke" element={<DashboardPage />} />
+            <Route path="bac-si" element={<DoctorPage />} />
+            <Route path="khoa" element={<CatalogsPage />} />
+          </Route>
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

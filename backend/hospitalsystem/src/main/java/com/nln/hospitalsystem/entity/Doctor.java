@@ -86,6 +86,8 @@ public class Doctor {
     private Specialty specialty;
 
     @OneToMany(mappedBy = "doctor")
-    private List<Appointment> appointments = new ArrayList<>();;
+    private List<Appointment> appointments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "doctor")
+    private List<StaffSchedule> staffSchedules = new ArrayList<>();
 }
