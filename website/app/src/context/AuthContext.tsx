@@ -5,6 +5,7 @@ export type AuthContextType = {
   user: TokenResponse | null;
   login: (data: { username: string; password: string }) => Promise<boolean>;
   logout: () => void;
+  loading: boolean;
 };
 
 // Context chỉ nên định nghĩa, chưa có logic

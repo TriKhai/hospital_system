@@ -28,7 +28,7 @@ spring:
 #            enable: true
 #
 jwt:
-  secret: "jBpoQbllxjqpDuO/9T4qTWkiMnGWhtazhidIaHx0DNA=" # ít nhất 32 ký tự
+  secret: "jBpoQbllxjqpDuO/9T4qTWkiMnGWhtazhidIaHx0DNA="
   expiration: 2592000000 # 30 ngày = 2_592_000_000 ms
 fileUpload:
   rootPath: uploads

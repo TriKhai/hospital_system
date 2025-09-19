@@ -23,6 +23,9 @@ public class Department {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

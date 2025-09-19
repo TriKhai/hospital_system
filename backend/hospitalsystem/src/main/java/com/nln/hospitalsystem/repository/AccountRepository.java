@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AccountRespository extends JpaRepository<Account, Integer> {
+public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     List<Account> findByUsernameAndPasswordHash(String username, String passwordHash);
     boolean existsByUsername(String username);

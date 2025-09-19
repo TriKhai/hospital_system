@@ -15,6 +15,11 @@ public class ResponseData<T> {
     private T data;
     private boolean success;
 
+    public static <T> ResponseData<T> created(T data, String message) {
+        return new ResponseData<>(201, message, data, true);
+    }
+
+
     public static <T> ResponseData<T> success(T data, String message) {
         return new ResponseData<>(200, message, data, true);
     }

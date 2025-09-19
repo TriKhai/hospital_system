@@ -1,15 +1,16 @@
 package com.nln.hospitalsystem.service.Impl;
 
-import com.nln.hospitalsystem.dto.account.AccountDTO;
 import com.nln.hospitalsystem.dto.account.LoginDTO;
+import com.nln.hospitalsystem.entity.Doctor;
 import com.nln.hospitalsystem.entity.Patient;
 import com.nln.hospitalsystem.payload.request.LoginRequest;
 import com.nln.hospitalsystem.payload.request.RegisterRequest;
 import com.nln.hospitalsystem.dto.account.RegisterDTO;
+import com.nln.hospitalsystem.repository.DoctorRepository;
 import com.nln.hospitalsystem.repository.PatientRepository;
 import com.nln.hospitalsystem.service.AccountService;
 import com.nln.hospitalsystem.entity.Account;
-import com.nln.hospitalsystem.repository.AccountRespository;
+import com.nln.hospitalsystem.repository.AccountRepository;
 import com.nln.hospitalsystem.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,10 +20,13 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
-    AccountRespository accountRespository;
+    AccountRepository accountRepository;
 
     @Autowired
     PatientRepository patientRepository;
+
+    @Autowired
+    DoctorRepository doctorRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -69,7 +73,7 @@ public class AccountServiceImpl implements AccountService {
             if (registerRequest.getUsername() == null || registerRequest.getPassword() == null) {
                 throw new IllegalArgumentException("Username or password is null");
             }
-            if (accountRespository.existsByUsername(registerRequest.getUsername())) {
+            if (accountRepository.existsByUsername(registerRequest.getUsername())) {
                 throw new IllegalStateException("Username already exists");
             }
 
@@ -80,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
                     .role(Account.Role.PATIENT)
                     .build();
 
-            Account savedAccount = accountRespository.save(account);
+            Account savedAccount = accountRepository.save(account);
 
             // Tạo patient gắn với account
             Patient patient = Patient.builder()
@@ -105,9 +109,42 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public RegisterDTO registerDoctor(RegisterRequest registerRequest) {
+        if (registerRequest.getUsername() == null || registerRequest.getPassword() == null) {
+            throw new IllegalArgumentException("Username or password is null");
+        }
+
+        if (accountRepository.existsByUsername(registerRequest.getUsername())) {
+            throw new IllegalStateException("Username already exists");
+        }
+
+        // Tạo account
+        Account account = Account.builder()
+                .username(registerRequest.getUsername())
+                .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
+                .role(Account.Role.DOCTOR) // đặt role đúng
+                .build();
+
+        Account savedAccount = accountRepository.save(account);
+
+        // Tạo doctor gắn với account
+        Doctor doctor = Doctor.builder()
+                .account(savedAccount)
+                .build();
+        doctorRepository.save(doctor);
+
+        // Trả về DTO
+        return new RegisterDTO(
+                savedAccount.getId(),
+                savedAccount.getUsername(),
+                savedAccount.getRole().name()
+        );
+    }
+
+    @Override
     public LoginDTO login(LoginRequest loginRequest) {
 //        System.out.println(loginRequest.getUsername());
-        Account account = accountRespository.findByUsername(loginRequest.getUsername())
+        Account account = accountRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
 
 //        System.out.println("passowrd: " + loginRequest.getPassword());

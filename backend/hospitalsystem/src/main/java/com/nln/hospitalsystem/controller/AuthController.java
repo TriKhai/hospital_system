@@ -52,6 +52,13 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/register-doctor")
+    public ResponseEntity<ResponseData<RegisterDTO>> registerDoctor(@RequestBody RegisterRequest registerRequest) {
+        RegisterDTO savedAccount = accountService.registerDoctor(registerRequest);
+        return ResponseEntity.ok(ResponseData.success(savedAccount, "Register successfully"));
+    }
+
+
     @PostMapping("/login")
     public ResponseEntity<ResponseData<LoginDTO>> login(@RequestBody LoginRequest loginRequest) {
         try {

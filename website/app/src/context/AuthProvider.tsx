@@ -8,14 +8,21 @@ import { jwtDecode } from "jwt-decode";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decoded = jwtDecode<JwtType>(token);
+  const token = localStorage.getItem("token");
+  if (token) {
+    const decoded = jwtDecode<JwtType>(token);
+    if (decoded.exp * 1000 < Date.now()) {
+      localStorage.removeItem("token");
+      setUser(null);
+    } else {
       setUser({ username: decoded.sub, role: decoded.scope, token });
     }
-  }, []);
+  }
+  setLoading(false);
+}, []);
 
 
   const login = async (data: LoginForm): Promise<boolean> => {
@@ -28,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     await setUser({ username: decoded.sub, role: decoded.scope, token: res.token });
     console.log("user: ", user)
+    
 
     return true;
   };
@@ -38,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,6 +4,7 @@ import com.nln.hospitalsystem.security.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,12 +25,15 @@ public class MySecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println(">>> SecurityFilterChain bean loaded");
+//        System.out.println(">>> SecurityFilterChain bean loaded");
         http.csrf(AbstractHttpConfigurer::disable) // Tắt CSRF (nếu không cần)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless session
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/register-doctor").hasRole("ADMIN")
                         .requestMatchers("/auth/**").permitAll() // Cho phép truy cập các endpoint bắt đầu bằng /login/
-                        .requestMatchers("/admin/**").hasRole("STAFF")
+                        .requestMatchers(HttpMethod.GET, "/department").permitAll()
+                        .requestMatchers("/department/**").hasRole("ADMIN")
+                        .requestMatchers("/doctor/profile").hasAnyRole("ADMIN", "DOCTOR")
                         .anyRequest().authenticated() // Các request khác phải xác thực
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource));

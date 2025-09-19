@@ -28,12 +28,17 @@ public class FileServiceImpl implements FileService {
 
     @PostConstruct
     public void init(){
-        System.out.println("rootPath " + rootPath);
-        System.out.println("root " + patientPath);
+//        System.out.println("rootPath " + rootPath);
+//        System.out.println("root " + patientPath);
         try {
             patientPath = Paths.get(rootPath, "patient");
             Files.createDirectories(patientPath);
-            System.out.println("root" + patientPath);
+//            System.out.println("root" + patientPath);
+
+            // Folder cho doctor
+            doctorPath = Paths.get(rootPath, "doctor");
+            Files.createDirectories(doctorPath);
+//            System.out.println("Doctor folder: " + doctorPath);
         } catch (Exception e) {
             throw new RuntimeException("Unable to create upload folders", e);
         }
@@ -55,7 +60,7 @@ public class FileServiceImpl implements FileService {
         String timestamp = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
                 .format(LocalDateTime.now());
         String cleanName = originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-        System.out.println("Creating file " + timestamp + "_" + cleanName);
+//        System.out.println("Creating file " + timestamp + "_" + cleanName);
         return timestamp + "_" + cleanName;
     }
 
