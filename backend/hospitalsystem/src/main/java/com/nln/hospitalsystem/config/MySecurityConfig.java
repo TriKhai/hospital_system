@@ -33,6 +33,8 @@ public class MySecurityConfig {
                         .requestMatchers("/auth/**").permitAll() // Cho phép truy cập các endpoint bắt đầu bằng /login/
                         .requestMatchers(HttpMethod.GET, "/department").permitAll()
                         .requestMatchers("/department/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/specialty").permitAll()
+                        .requestMatchers("/specialty/**").hasRole("ADMIN")
                         .requestMatchers("/doctor/profile").hasAnyRole("ADMIN", "DOCTOR")
                         .anyRequest().authenticated() // Các request khác phải xác thực
                 )

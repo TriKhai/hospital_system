@@ -31,9 +31,9 @@ public class Specialty {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "department_id", nullable = true, foreignKey = @ForeignKey(name = "fk_department"))
     private Department department;
 
     @OneToMany(mappedBy = "specialty")
-    private List<Doctor> doctors = new ArrayList<>();;
+    private List<Doctor> doctors = new ArrayList<>();
 }

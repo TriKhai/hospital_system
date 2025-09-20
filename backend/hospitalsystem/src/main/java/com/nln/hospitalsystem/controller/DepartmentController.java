@@ -23,6 +23,12 @@ public class DepartmentController {
         return ResponseEntity.ok(ResponseData.created(dto, "Created successfully"));
     }
 
+    @GetMapping
+    public ResponseEntity<ResponseData<List<DepartmentDTO>>> getAll() {
+        List<DepartmentDTO> departments = departmentService.getAllDepartment();
+        return ResponseEntity.ok(ResponseData.success(departments, "Get departments successfully"));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ResponseData<DepartmentDTO>> update(
             @PathVariable Integer id,
@@ -37,11 +43,7 @@ public class DepartmentController {
         return ResponseEntity.ok(ResponseData.success(null, "Delete department successfully"));
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseData<List<DepartmentDTO>>> getAll() {
-        List<DepartmentDTO> departments = departmentService.getAllDepartment();
-        return ResponseEntity.ok(ResponseData.success(departments, "Get departments successfully"));
-    }
+
 
 //    @GetMapping("/{id}")
 //    public DepartmentDTO getById(@PathVariable Integer id) {

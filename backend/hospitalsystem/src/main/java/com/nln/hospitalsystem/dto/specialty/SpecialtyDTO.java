@@ -1,5 +1,6 @@
 package com.nln.hospitalsystem.dto.specialty;
 
+import com.nln.hospitalsystem.dto.department.DepartmentDTO;
 import jakarta.persistence.Column;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,4 +18,5 @@ public class SpecialtyDTO {
     private String name;
     private String description;
     private LocalDateTime createdAt;
+    private DepartmentDTO department;
 }
