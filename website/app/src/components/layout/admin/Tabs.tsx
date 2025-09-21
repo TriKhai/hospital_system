@@ -29,7 +29,7 @@ export default function Tabs({ tabs, defaultActive, onChange }: TabsProps) {
             onClick={() => handleTabClick(tab.label)}
             className={`pb-2 text-sm font-medium transition-colors ${
               active === tab.label
-                ? "text-green-600 border-b-2 border-green-600"
+                ? "text-[#0E8DA1] border-b-2 border-[#0E8DA1]"
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >

@@ -3,12 +3,17 @@ import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
+export interface Option {
+  label: string;
+  value: string | number;
+}
+
 export type FieldConfig<T> = {
   label: string;
   name: keyof T;
   type?: "text" | "textarea" | "select";
   required?: boolean;
-  options?: { value: string; label: string }[];
+  options?: Option[];
 };
 
 type Props<T> = {

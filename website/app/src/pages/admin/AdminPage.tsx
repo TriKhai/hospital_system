@@ -13,7 +13,7 @@ export default function AdminPage() {
       <Sidebar isOpen={isSidebarOpen} />
       <main className="flex-1 relative p-8 bg-gray-100 border-gray-300 border-l">
         <button
-          className="absolute top-4 left-0 p-2 bg-gray-300 rounded-tr-lg rounded-br-lg z-50"
+          className="absolute bottom-0 left-0 p-2 bg-gray-300 rounded-tr-lg rounded-br-lg z-50"
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <FontAwesomeIcon icon={faBars} />

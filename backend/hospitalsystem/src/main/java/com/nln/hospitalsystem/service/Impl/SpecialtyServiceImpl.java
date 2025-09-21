@@ -90,4 +90,9 @@ public class SpecialtyServiceImpl implements SpecialtyService {
             throw new RuntimeException("Error fetching specialties: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public Long countAllSpecialty() {
+        return specialtyRepository.count();
+    }
 }

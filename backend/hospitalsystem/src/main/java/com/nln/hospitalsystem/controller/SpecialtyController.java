@@ -41,6 +41,13 @@ public class SpecialtyController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseData<Void>> delete(@PathVariable Integer id) {
         specialtyService.deleteSpecialty(id);
-        return ResponseEntity.ok(ResponseData.success(null, "Delete department successfully"));
+        return ResponseEntity.ok(ResponseData.success(null, "Delete specialty successfully"));
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<ResponseData<Long>> getCount() {
+        long count = specialtyService.countAllSpecialty();
+        return ResponseEntity.ok(ResponseData.success(count, "Count specialty"));
+    }
+
 }

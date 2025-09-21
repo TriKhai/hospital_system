@@ -11,4 +11,5 @@ public interface SpecialtyService {
     SpecialtyDTO updateSpecialty(Integer id, SpecialtyRequest request);
     void deleteSpecialty(Integer id);
     List<SpecialtyDTO> getAllSpecialty();
+    Long countAllSpecialty();
 }

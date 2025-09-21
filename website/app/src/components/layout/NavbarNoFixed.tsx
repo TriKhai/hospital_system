@@ -6,6 +6,7 @@ import {
   faChartBar,
   faPills,
   faRightFromBracket,
+  faRightToBracket,
   faUser,
   type IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
@@ -98,8 +99,8 @@ export default function NavbarNoFixed() {
               </button>
             </div>
           ) : (
-            <Link to="/login" className="text-blue-600">
-              Đăng nhập
+            <Link to="/login" className="bg-gray-700 px-3 py-3 rounded-xl text-white" title="Đăng nhập">
+              <FontAwesomeIcon icon={faRightToBracket} className="w-5 h-5" />
             </Link>
           )}
 
