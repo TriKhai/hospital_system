@@ -1,8 +1,10 @@
 package com.nln.hospitalsystem.service.Impl;
 
+import com.nln.hospitalsystem.dto.account.AccountMapper;
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorMapper;
 import com.nln.hospitalsystem.dto.patient.PatientMapper;
+import com.nln.hospitalsystem.entity.Account;
 import com.nln.hospitalsystem.entity.Doctor;
 import com.nln.hospitalsystem.entity.Patient;
 import com.nln.hospitalsystem.enums.FileCategory;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
@@ -25,6 +29,20 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private FileService fileService;
+
+    @Override
+    public List<DoctorDTO> getDoctors() {
+        List<Doctor> listDoctor = doctorRepository.findAll();
+        return listDoctor.stream()
+                .map(DoctorMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long countDoctor() {
+        return doctorRepository.count();
+    }
+
 
     @Override
     public DoctorDTO updateDoctor(String username, DoctorRequest doctorRequest) {

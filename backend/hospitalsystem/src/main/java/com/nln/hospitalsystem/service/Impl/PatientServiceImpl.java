@@ -102,4 +102,9 @@ public class PatientServiceImpl implements PatientService {
                 .toList();
     }
 
+    @Override
+    public Long countPatients() {
+        return patientRepository.count();
+    }
+
 }

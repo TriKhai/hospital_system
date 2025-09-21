@@ -10,4 +10,5 @@ public interface PatientService {
     void deletePatient(Integer id);
     PatientDTO getPatientById(Integer id);
     List<PatientDTO> getAllPatients();
+    Long countPatients();
 }

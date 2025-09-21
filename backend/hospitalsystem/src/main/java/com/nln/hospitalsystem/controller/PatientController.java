@@ -56,6 +56,12 @@ public class PatientController {
         return ResponseEntity.ok(ResponseData.success(patient, "Get patient successfully"));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<ResponseData<Long>> getCount() {
+        long count = patientService.countPatients();
+        return ResponseEntity.ok(ResponseData.success(count, "Count patient successfully"));
+    }
+
 
 // ===== Test uploadFile
 //    @PostMapping("/upload-avatar")

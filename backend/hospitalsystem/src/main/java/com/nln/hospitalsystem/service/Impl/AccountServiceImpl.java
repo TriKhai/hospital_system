@@ -1,5 +1,7 @@
 package com.nln.hospitalsystem.service.Impl;
 
+import com.nln.hospitalsystem.dto.account.AccountDTO;
+import com.nln.hospitalsystem.dto.account.AccountMapper;
 import com.nln.hospitalsystem.dto.account.LoginDTO;
 import com.nln.hospitalsystem.entity.Doctor;
 import com.nln.hospitalsystem.entity.Patient;
@@ -15,6 +17,10 @@ import com.nln.hospitalsystem.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -35,26 +41,14 @@ public class AccountServiceImpl implements AccountService {
     private JwtUtils jwtUtils;
 
 
-//    @Override
-//    public List<RegisterDTO> getAllUsers() {
-//        List<Account> listAccount = accountRespository.findAll();
-//        List<RegisterDTO> accounts = new ArrayList<>();
-//
-//        for (Account account : listAccount) {
-//
-//            RegisterDTO accountDTO = new RegisterDTO();
-//
-//            accountDTO.setId(account.getId());
-//            accountDTO.setUsername(account.getUsername());
-//            accountDTO.setPasswordHash(account.getPasswordHash());
-//            accountDTO.setRole(account.getRole());
-//            accountDTO.setCreatedAt(account.getCreatedAt());
-//            accountDTO.setUpdatedAt(account.getUpdatedAt());
-//
-//            accounts.add(accountDTO);
-//        }
-//        return accounts;
-//    }
+    @Override
+    public List<AccountDTO> getAllUsers() {
+        List<Account> listAccount = accountRepository.findAll();
+        return listAccount.stream()
+                .map(AccountMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
 //
 //    @Override
 //    public boolean checkLogin(String username, String password) {
@@ -156,6 +150,11 @@ public class AccountServiceImpl implements AccountService {
         String token = jwtUtils.generateToken(account.getUsername(), account.getRole().name());
 //        System.out.println("token: " + token);
         return new LoginDTO(account.getUsername(), account.getRole().name(), token);
+    }
+
+    @Override
+    public Long countUsers() {
+        return accountRepository.count();
     }
 
 

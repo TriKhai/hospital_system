@@ -1,4 +1,3 @@
-// src/types/doctor.ts
 export interface DoctorType {
   id: number;
   name: string;
@@ -14,6 +13,6 @@ export interface DoctorType {
   yearsOfExperience?: number;
   degree?: string;
   position?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

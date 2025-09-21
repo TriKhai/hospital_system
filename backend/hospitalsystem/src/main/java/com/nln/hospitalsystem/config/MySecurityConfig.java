@@ -36,6 +36,11 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/specialty").permitAll()
                         .requestMatchers("/specialty/**").hasRole("ADMIN")
                         .requestMatchers("/doctor/profile").hasAnyRole("ADMIN", "DOCTOR")
+                        .requestMatchers(HttpMethod.GET, "/doctor").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/doctor/count").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/patient").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/patient/count").hasRole("ADMIN")
+                        .requestMatchers("/account/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // Các request khác phải xác thực
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource));
