@@ -1,5 +1,6 @@
 package com.nln.hospitalsystem.controller;
 
+import com.nln.hospitalsystem.dto.account.AccountDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
 import com.nln.hospitalsystem.dto.patient.PatientDTO;
 import com.nln.hospitalsystem.payload.ResponseData;
@@ -31,22 +32,29 @@ public class DoctorController {
         return ResponseEntity.ok(ResponseData.success(updated, "Update profile successfully"));
     }
 
-    @GetMapping("/getAll")
-    public String getAll() {
-        return "hello";
+    @GetMapping
+    public ResponseEntity<ResponseData<List<DoctorDTO>>> getAll() {
+        List<DoctorDTO> accounts = doctorService.getDoctors();
+        return ResponseEntity.ok(ResponseData.success(accounts, "Get doctors successfully"));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<ResponseData<Long>> getCount() {
+        long count = doctorService.countDoctor();
+        return ResponseEntity.ok(ResponseData.success(count, "Count accounts successfully"));
     }
 
     // Tham so
-    @GetMapping("/getByID/{id}")
-    public String getByID(@PathVariable("id") int id) {
-        return "hello " + id;
-    }
-
-    // Tham so dang form-data
-    @GetMapping("/requestParam")
-    public String requestParam(@RequestParam("username") String username, @RequestParam("password") String password) {
-        return "hello " + username + " " + password;
-    }
+//    @GetMapping("/getByID/{id}")
+//    public String getByID(@PathVariable("id") int id) {
+//        return "hello " + id;
+//    }
+//
+//    // Tham so dang form-data
+//    @GetMapping("/requestParam")
+//    public String requestParam(@RequestParam("username") String username, @RequestParam("password") String password) {
+//        return "hello " + username + " " + password;
+//    }
 
     // Tham so dang json
 //    @PostMapping("/requestBody")
