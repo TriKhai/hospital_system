@@ -1,32 +1,23 @@
 import { useEffect, useState } from "react";
-import Tabs, { type Tab } from "../../components/layout/admin/Tabs";
-import { useCount } from "../../hooks/useCount";
-import departmentService from "../../services/departmentApi";
-import DepartmentPage from "./catalogs/DepartmentPage";
+import { useCount } from "../../../hooks/useCount";
+import departmentService from "../../../services/departmentApi";
+import specialtyService from "../../../services/specialtyApi";
+import DepartmentPage from "./DepartmentPage";
+import SpecialtyPage from "./SpecialtyPage";
 import { useSearchParams } from "react-router-dom";
+import type { Tab } from "../../../components/layout/admin/Tabs";
+import Tabs from "../../../components/layout/admin/Tabs";
+
 
 const STORAGE_KEY = "crm_active_tab";
 
-function AccountsTable() {
-  return <div className="p-4 border rounded">🏦 Bảng Accounts</div>;
-}
-
-function ContactsTable() {
-  return <div className="p-4 border rounded">👥 Bảng Contacts</div>;
-}
-
-function LeadsTable() {
-  return <div className="p-4 border rounded">🚀 Bảng Leads</div>;
-}
-
 export default function CRMPage() {
   const departmentCount = useCount(departmentService.getCount);
+  const specialtyCount = useCount(specialtyService.getCount)
 
   const crmTabs: Tab[] = [
     { label: "Khoa", count: departmentCount, component: <DepartmentPage /> },
-    { label: "Chuyên Khoa", count: 40, component: <AccountsTable /> },
-    { label: "Contacts", count: 0, component: <ContactsTable /> },
-    { label: "Leads", count: 21, component: <LeadsTable /> },
+    { label: "Chuyên Khoa", count: specialtyCount, component: <SpecialtyPage /> },
   ];
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -42,7 +33,6 @@ export default function CRMPage() {
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, activeTab);
-
     setSearchParams({ tab: activeTab });
   }, [activeTab, setSearchParams]);
 

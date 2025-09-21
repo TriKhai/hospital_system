@@ -5,9 +5,8 @@ import NotFound from "./pages/not_found/NotFound";
 import { RoleProtectedRoute } from "./components/route/RoleProtectedRoute";
 import HomeDoctor from "./pages/doctor/HomeDoctor";
 import { HomePage, MainPage } from "./pages/patient";
-import { AdminPage, CatalogsPage, DashboardPage, DoctorPage } from "./pages/admin";
+import { AdminPage, CRMAccountPage, CRMPage, DashboardPage } from "./pages/admin";
 import OpportunitiesPage from "./components/layout/admin/OpportunitiesPage";
-import CRMPage from "./pages/admin/CRMPage";
 
 export default function App() {
   return (
@@ -52,11 +51,11 @@ export default function App() {
             }
           >
             <Route index element={<Navigate to="thong-ke" replace />} />
-            <Route path="thong-ke" element={<DashboardPage />} />
-            <Route path="bac-si" element={<DoctorPage />} />
-            <Route path="khoa" element={<CatalogsPage />} />
-            <Route path="test" element={<OpportunitiesPage />} />
             <Route path="chuyen-khoa" element={<CRMPage />} />
+            <Route path="thong-ke" element={<DashboardPage />} />
+            <Route path="tai-khoan" element={<CRMAccountPage />} />
+            <Route path="test" element={<OpportunitiesPage />} />
+            
           </Route>
 
           <Route path="*" element={<NotFound />} />

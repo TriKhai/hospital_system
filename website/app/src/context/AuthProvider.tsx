@@ -1,13 +1,13 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
-import type { JwtType, LoginForm, User } from "../types/authType";
+import type { JwtType, LoginForm, TokenResponse } from "../types/authType";
 import { loginApi } from "../services/authApi";
 import { jwtDecode } from "jwt-decode";
 // import jwtDecode from "jwt-decode";
 
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<TokenResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

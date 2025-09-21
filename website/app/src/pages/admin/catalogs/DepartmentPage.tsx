@@ -19,7 +19,7 @@ const DepartmentPage: React.FC = () => {
 
   const fields: FieldConfig<DepartmentRequest>[] = [
     { label: "Tên khoa", name: "name", required: true },
-    { label: "Mô tả", name: "description", type: "textarea" },
+    { label: "Mô tả", name: "description", type: "textarea", required: true },
   ];
 
   // 🔹 Load danh sách Department
