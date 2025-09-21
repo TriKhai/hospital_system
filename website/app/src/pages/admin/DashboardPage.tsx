@@ -8,19 +8,19 @@ const DashboardPage = () => {
 
       {/* Statistic Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+        <div className="bg-white p-4 rounded shadow">
           <p className="text-sm text-gray-500">Doctors</p>
           <p className="text-2xl font-bold">12</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+        <div className="bg-white p-4 rounded shadow">
           <p className="text-sm text-gray-500">Patients</p>
           <p className="text-2xl font-bold">120</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+        <div className="bg-white p-4 rounded shadow">
           <p className="text-sm text-gray-500">Appointments Today</p>
           <p className="text-2xl font-bold">35</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+        <div className="bg-white p-4 rounded shadow">
           <p className="text-sm text-gray-500">Pending Appointments</p>
           <p className="text-2xl font-bold">10</p>
         </div>
@@ -28,14 +28,14 @@ const DashboardPage = () => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow h-64">
+        <div className="bg-white p-4 rounded shadow h-64">
           <p className="font-semibold mb-2">Appointments This Week</p>
           {/* Ở đây bạn có thể render chart bằng Recharts hoặc Chart.js */}
           <div className="h-full flex items-center justify-center text-gray-400">
             Chart placeholder
           </div>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded shadow h-64">
+        <div className="bg-white p-4 rounded shadow h-64">
           <p className="font-semibold mb-2">Patients by Specialty</p>
           <div className="h-full flex items-center justify-center text-gray-400">
             Chart placeholder
@@ -44,7 +44,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Recent Appointments */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
+      <div className="bg-white p-4 rounded shadow">
         <p className="font-semibold mb-2">Recent Appointments</p>
         <ul className="divide-y divide-gray-200 dark:divide-gray-700">
           <li className="py-2 flex justify-between">

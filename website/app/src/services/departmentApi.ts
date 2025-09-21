@@ -5,17 +5,17 @@ import type {
 } from "../types/departmentType";
 import type { ResponseData } from "../types/resType";
 
+const BASE_URL = "/department";
+
 const departmentService = {
   getAll: async (): Promise<DepartmentResponse[]> => {
-    const res = await axiosClient.get<ResponseData<DepartmentResponse[]>>(
-      "/department"
-    );
+    const res = await axiosClient.get<ResponseData<DepartmentResponse[]>>(BASE_URL);
     return res.data.data;
   },
 
   create: async (data: DepartmentRequest): Promise<DepartmentResponse> => {
     const res = await axiosClient.post<ResponseData<DepartmentResponse>>(
-      "/department",
+      BASE_URL,
       data
     );
     return res.data.data;
@@ -26,15 +26,20 @@ const departmentService = {
     data: DepartmentRequest
   ): Promise<DepartmentResponse> => {
     const res = await axiosClient.put<ResponseData<DepartmentResponse>>(
-      `/department/${id}`,
+      `${BASE_URL}/${id}`,
       data
     );
     return res.data.data;
   },
 
   delete: async (id: number): Promise<void> => {
-    await axiosClient.delete(`/department/${id}`);
+    await axiosClient.delete(`${BASE_URL}/${id}`);
   },
+
+  getCount: async (): Promise<number> => {
+    const res = await axiosClient.get(`${BASE_URL}/count`);
+    return res.data.data;
+  }
 };
 
 export default departmentService;

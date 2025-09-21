@@ -64,4 +64,9 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .map(DepartmentMapper::toDTO)
                 .toList();
     }
+
+    @Override
+    public Long countAllDepartment() {
+        return departmentRepository.count();
+    }
 }

@@ -43,7 +43,7 @@ export default function ThemeToggle() {
     <select
       value={theme}
       onChange={(e) => setTheme(e.target.value as Theme)}
-      className="px-2 py-1 rounded bg-gray-100 dark:bg-gray-700 text-sm"
+      className="px-2 py-3 rounded-lg bg-gray-200 dark:bg-gray-700 text-sm"
     >
       <option value="light">Light</option>
       <option value="dark">Dark</option>
