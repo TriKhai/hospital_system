@@ -43,6 +43,13 @@ public class DepartmentController {
         return ResponseEntity.ok(ResponseData.success(null, "Delete department successfully"));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<ResponseData<Long>> getCount() {
+        long count = departmentService.countAllDepartment();
+        return ResponseEntity.ok(ResponseData.success(count, "Count department"));
+    }
+
+
 
 
 //    @GetMapping("/{id}")

@@ -1,5 +1,14 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
+import anh1 from "../../../assets/carousel/anh1.jpg"
+import anh2 from "../../../assets/carousel/anh2.jpg"
+import anh3 from "../../../assets/carousel/anh3.jpg"
+import anh4 from "../../../assets/carousel/anh4.png"
+import anh5 from "../../../assets/carousel/anh5.jpg"
+import anh6 from "../../../assets/carousel/anh6.png"
+import anh7 from "../../../assets/carousel/anh7.jpg"
+import anh8 from "../../../assets/carousel/anh8.jpg"
+import anh9 from "../../../assets/carousel/anh9.jpg"
 
 type Slide = {
   id: number;
@@ -9,15 +18,15 @@ type Slide = {
 };
 
 const slides: Slide[] = [
-  { id: 1, color: "bg-blue-300", img: "/images/slide1.jpg", title: "Slide 1" },
-  { id: 2, color: "bg-green-300", img: "/images/slide2.jpg", title: "Slide 2" },
-  { id: 3, color: "bg-red-300", img: "/images/slide3.jpg", title: "Slide 3" },
-  { id: 4, color: "bg-yellow-300", img: "/images/slide4.jpg", title: "Slide 4" },
-  { id: 5, color: "bg-purple-300", img: "/images/slide5.jpg", title: "Slide 5" },
-  { id: 6, color: "bg-pink-300", img: "/images/slide6.jpg", title: "Slide 6" },
-  { id: 7, color: "bg-indigo-300", img: "/images/slide7.jpg", title: "Slide 7" },
-  { id: 8, color: "bg-teal-300", img: "/images/slide8.jpg", title: "Slide 8" },
-  { id: 9, color: "bg-orange-300", img: "/images/slide9.jpg", title: "Slide 9" },
+  { id: 1, color: "bg-blue-300", img: anh1, title: "Slide 1" },
+  { id: 2, color: "bg-green-300", img: anh2, title: "Slide 2" },
+  { id: 3, color: "bg-red-300", img: anh3, title: "Slide 3" },
+  { id: 4, color: "bg-yellow-300", img: anh4, title: "Slide 4" },
+  { id: 5, color: "bg-purple-300", img: anh5, title: "Slide 5" },
+  { id: 6, color: "bg-pink-300", img: anh6, title: "Slide 6" },
+  { id: 7, color: "bg-indigo-300", img: anh7, title: "Slide 7" },
+  { id: 8, color: "bg-teal-300", img: anh8, title: "Slide 8" },
+  { id: 9, color: "bg-orange-300", img: anh9, title: "Slide 9" },
 ];
 
 export default function Carousel() {

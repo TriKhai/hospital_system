@@ -13,11 +13,11 @@ const Welcome: React.FC = () => {
           <p className="text-3xl">Sức khỏe của bạn – Sứ mệnh của chúng tôi</p>
         </div>
 
-        <div className="flex gap-4 mt-8 justify-center">
-            <button className="bg-green-600 text-white px-6 py-3 rounded-xl shadow hover:bg-green-700">
-              Make Appointment
+        <div className="flex gap-4 mt-8 justify-center text-lg">
+            <button className="bg-[#26a7b6] text-white px-6 py-3 rounded-xl shadow hover:bg-[#0e8a9b]">
+              Tạo lịch hẹn
             </button>
-            <button className="bg-white border border-green-600 text-green-600 px-6 py-3 rounded-xl shadow hover:bg-green-50">
+            <button className="bg-white border border-blue-600 text-blue-600 px-6 py-3 rounded-xl shadow hover:bg-green-50">
               Read More
             </button>
         </div>

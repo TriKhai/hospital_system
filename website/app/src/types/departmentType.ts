@@ -9,6 +9,5 @@ export interface DepartmentResponse {
   id: number;
   name: string;
   description?: string;
-  createdAt?: string; // ISO string từ backend
-  updatedAt?: string;
+  createdAt: string; // ISO string từ backend
 }

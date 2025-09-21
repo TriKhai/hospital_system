@@ -10,4 +10,5 @@ public interface DepartmentService {
     DepartmentDTO updateDepartment(Integer id, DepartmentRequest request);
     void deleteDepartment(Integer id);
     List <DepartmentDTO> getAllDepartment();
+    Long countAllDepartment();
 }
