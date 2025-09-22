@@ -12,34 +12,31 @@ import type { FieldConfig } from "../../../components/layout/form/AddForm";
 import type { Column } from "../../../types/tableType";
 import DataTable from "../../../components/layout/admin/DataTable";
 import AddForm from "../../../components/layout/form/AddForm";
-import type {
-  DrugTypeRequest,
-  DrugTypeResponse,
-} from "../../../types/drugType";
-import drugTypeService from "../../../services/drugTypeApi";
 import { toast } from "react-toastify";
 import UpdateForm from "../../../components/layout/form/UpdateForm";
 import SearchBar from "../../../components/layout/form/SearchBar";
 import { filterAndSortData } from "../../../utils/filterAndSortData";
+import type { ManufacturerRequest, ManufacturerResponse } from "../../../types/drugType";
+import manufacturerService from "../../../services/manufacturer";
 
-const DrugTypePage: React.FC = () => {
-  const [data, setData] = useState<DrugTypeResponse[]>([]);
-  const [row, setRow] = useState<DrugTypeResponse | null>(null);
+const ManufacturerPage: React.FC = () => {
+  const [data, setData] = useState<ManufacturerResponse[]>([]);
+  const [row, setRow] = useState<ManufacturerResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [query, setQuery] = useState("");
-  const [searchKey, setSearchKey] = useState<keyof DrugTypeResponse>("name");
+  const [searchKey, setSearchKey] = useState<keyof ManufacturerResponse>("name");
 
-  const fields: FieldConfig<DrugTypeRequest>[] = [
-    { label: "Tên loại thuốc", name: "name", required: true },
-    { label: "Đơn vị", name: "unit", required: true },
+  const fields: FieldConfig<ManufacturerRequest>[] = [
+    { label: "Tên hãng", name: "name", required: true },
+    { label: "Quốc gia", name: "country", required: true },
   ];
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await drugTypeService.getAll();
+      const res = await manufacturerService.getAll();
       setData(res);
     } catch (error) {
       console.error("Error fetch data:", error);
@@ -52,9 +49,9 @@ const DrugTypePage: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleAdd = async (data: DrugTypeRequest) => {
+  const handleAdd = async (data: ManufacturerRequest) => {
     try {
-      await drugTypeService.create(data);
+      await manufacturerService.create(data);
       toast.success("Thêm mới thành công.");
       fetchData();
     } catch (error) {
@@ -63,10 +60,10 @@ const DrugTypePage: React.FC = () => {
     }
   };
 
-  const handleUpdate = async (id: number, data: DrugTypeRequest) => {
+  const handleUpdate = async (id: number, data: ManufacturerRequest) => {
     try {
       console.log(data);
-      await drugTypeService.update(id, data);
+      await manufacturerService.update(id, data);
       toast.success("Cập nhật thành công.");
       fetchData();
     } catch (error) {
@@ -78,7 +75,7 @@ const DrugTypePage: React.FC = () => {
   const handleDelete = async (id: number) => {
     if (!window.confirm("Bạn có chắc chắn muốn xóa không?")) return;
     try {
-      await drugTypeService.delete(id);
+      await manufacturerService.delete(id);
       toast.success("Xóa thành công.");
       fetchData();
     } catch (error) {
@@ -93,13 +90,13 @@ const DrugTypePage: React.FC = () => {
     setQuery("");
   };
 
-  const handleRowClick = (row: DrugTypeResponse) => {
+  const handleRowClick = (row: ManufacturerResponse) => {
     setRow(row);
   };
 
-  const columns: Column<DrugTypeResponse>[] = [
-    { key: "name", label: "Tên loại thuốc" },
-    { key: "unit", label: "Đơn vị" },
+  const columns: Column<ManufacturerResponse>[] = [
+    { key: "name", label: "Tên hãng" },
+    { key: "country", label: "Quốc gia" },
     {
       key: "createdAt",
       label: "Ngày tạo",
@@ -108,7 +105,7 @@ const DrugTypePage: React.FC = () => {
     },
   ];
 
-  const filterData: DrugTypeResponse[] = filterAndSortData<DrugTypeResponse>(
+  const filterData: ManufacturerResponse[] = filterAndSortData<ManufacturerResponse>(
     data,
     query,
     searchKey
@@ -118,9 +115,9 @@ const DrugTypePage: React.FC = () => {
     <div className="">
       <div className="flex justify-between items-center border-b-gray-300 border-b pb-3">
         <div>
-          <h1 className="text-xl font-semibold">Quản lý loại thuốc</h1>
+          <h1 className="text-xl font-semibold">Quản lý hãng sản xuất</h1>
           <p className="text-lg text-gray-500">
-            Bảng hiển thị các loại thuốc có trong hệ thống
+            Bảng hiển thị các hãng sản xuất có trong hệ thống
           </p>
         </div>
         <div>
@@ -128,7 +125,7 @@ const DrugTypePage: React.FC = () => {
             onClick={() => setOpenModal(true)}
             className="bg-[#12B0C2] text-white px-4 py-2 rounded hover:bg-[#0E8DA1] flex items-center gap-2"
           >
-            <FontAwesomeIcon icon={faPlus} /> Thêm loại thuốc
+            <FontAwesomeIcon icon={faPlus} /> Thêm hãng sản xuất
           </button>
         </div>
       </div>
@@ -184,17 +181,17 @@ const DrugTypePage: React.FC = () => {
                 // value={searchKey}
                 className="border border-gray-400 p-2 rounded-lg"
                 onChange={(e) =>
-                  setSearchKey(e.target.value as keyof DrugTypeResponse)
+                  setSearchKey(e.target.value as keyof ManufacturerResponse)
                 }
               >
-                <option value="name">Tên loại thuốc</option>
-                <option value="unit">Đơn vị tính</option>
+                <option value="name">Tên hãng</option>
+                <option value="country">Quốc gia</option>
               </select>
 
               <SearchBar
                 value={query}
                 onChange={setQuery}
-                placeholder="Tìm kiếm loại thuốc..."
+                placeholder="Tìm kiếm hãng sản xuất..."
               />
             </div>
           </div>
@@ -219,8 +216,8 @@ const DrugTypePage: React.FC = () => {
         />
       )}
 
-      <AddForm<DrugTypeRequest>
-        title="Thêm loại thuốc"
+      <AddForm<ManufacturerRequest>
+        title="Thêm hãng sản xuất"
         fields={fields}
         isOpen={openModal}
         onSubmit={handleAdd}
@@ -239,14 +236,6 @@ const DrugTypePage: React.FC = () => {
           fieldConfig={{
             id: { readOnly: true },
             createdAt: { readOnly: true },
-            unit: {
-              type: "select",
-              options: [
-                { label: "Viên", value: "Viên" },
-                { label: "Chai", value: "Chai" },
-                { label: "Ống", value: "Ống" },
-              ],
-            },
           }}
         />
       )}
@@ -254,4 +243,4 @@ const DrugTypePage: React.FC = () => {
   );
 };
 
-export default DrugTypePage;
+export default ManufacturerPage;

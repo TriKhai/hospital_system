@@ -14,7 +14,7 @@ type Props<T extends object> = {
       keyof T,
       {
         label?: string;
-        type?: "text" | "textarea" | "select" | "date";
+        type?: "text" | "textarea" | "select" | "date" | "email";
         required?: boolean;
         hidden?: boolean;
         readOnly?: boolean;
@@ -39,7 +39,15 @@ const UpdateForm = <T extends object>({
     Object.keys(data).reduce((acc, key) => {
       const config = fieldConfig[key as keyof T];
       if (config?.required) {
-        acc[key] = Yup.string().required(`${config.label ?? key} là bắt buộc`);
+        if (config.type === "email") {
+          acc[key] = Yup.string()
+            .email("Email không hợp lệ")
+            .required(`${config.label ?? key} là bắt buộc`);
+        } else {
+          acc[key] = Yup.string().required(
+            `${config.label ?? key} là bắt buộc`
+          );
+        }
       }
       return acc;
     }, {} as Record<string, Yup.AnySchema>)
@@ -47,7 +55,7 @@ const UpdateForm = <T extends object>({
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-    {/* // <div
+      {/* // <div
     //   className={`
     //                 fixed inset-y-0 right-0 z-50 w-96 bg-white shadow-lg
     //                 transform transition-transform duration-300
@@ -111,6 +119,13 @@ const UpdateForm = <T extends object>({
                           </option>
                         ))}
                       </Field>
+                    ) : config.type === "email" ? (
+                      <Field
+                        type="email"
+                        name={key}
+                        disabled={config.readOnly}
+                        className="border px-3 py-2 rounded w-full"
+                      />
                     ) : (
                       <Field
                         type={inputType}
