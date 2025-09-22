@@ -39,8 +39,6 @@ function DataTable<T extends object>({
     }
   };
 
-
-
   const sortedData = React.useMemo(() => {
     if (!sortKey) return [...data];
 
@@ -117,7 +115,7 @@ function DataTable<T extends object>({
                 return (
                   <tr
                     key={idx}
-                    className={`hover:bg-gray-100 cursor-pointer ${isSelected ? 'bg-gray-200' : ''}`}
+                    className={`hover:bg-gray-200 cursor-pointer ${isSelected ? 'bg-gray-200' : ''}`}
                     onClick={() => handleRowClick(row)}
                   >
                     {columns.map((col) => (
