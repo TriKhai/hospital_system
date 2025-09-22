@@ -220,7 +220,7 @@ const DrugTypePage: React.FC = () => {
       )}
 
       <AddForm<DrugTypeRequest>
-        title="Thêm khoa"
+        title="Thêm loại thuốc"
         fields={fields}
         isOpen={openModal}
         onSubmit={handleAdd}

@@ -41,6 +41,8 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/patient").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/patient/count").hasRole("ADMIN")
                         .requestMatchers("/drug-type/**").permitAll()
+                        .requestMatchers("/manufacturer/**").permitAll()
+                        .requestMatchers("/supplier/**").permitAll()
                         .requestMatchers("/account/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // Các request khác phải xác thực
 

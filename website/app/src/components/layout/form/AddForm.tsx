@@ -11,7 +11,7 @@ export interface Option {
 export type FieldConfig<T> = {
   label: string;
   name: keyof T;
-  type?: "text" | "textarea" | "select";
+  type?: "text" | "textarea" | "select" | "email";
   required?: boolean;
   options?: Option[];
 };
@@ -37,9 +37,15 @@ const AddForm = <T extends object>({
   const validationSchema = Yup.object(
     fields.reduce((acc, field) => {
       if (field.required) {
-        acc[field.name as string] = Yup.string().required(
-          `${field.label} là bắt buộc`
-        );
+        if (field.type === "email") {
+          acc[field.name as string] = Yup.string()
+            .email("Email không hợp lệ")
+            .required(`${field.label} là bắt buộc`);
+        } else {
+          acc[field.name as string] = Yup.string().required(
+            `${field.label} là bắt buộc`
+          );
+        }
       }
       return acc;
     }, {} as Record<string, Yup.AnySchema>)
@@ -98,6 +104,12 @@ const AddForm = <T extends object>({
                         </option>
                       ))}
                     </Field>
+                  ) : field.type === "email" ? (
+                    <Field
+                      type="email"
+                      name={String(field.name)}
+                      className="border px-3 py-2 rounded w-full"
+                    />
                   ) : (
                     <Field
                       type="text"

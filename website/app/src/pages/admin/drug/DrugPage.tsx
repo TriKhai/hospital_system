@@ -1,12 +1,6 @@
 import { useState } from "react";
 import UpdateForm from "../../../components/layout/form/UpdateForm";
-
-interface DrugTypeResponse {
-  id: number;
-  name: string;
-  unit: string;
-  createdAt: Date;
-}
+import type { DrugTypeResponse } from "../../../types/drugType";
 
 const DrugPage = () => {
   const [isOpen, setIsOpen] = useState(false);
