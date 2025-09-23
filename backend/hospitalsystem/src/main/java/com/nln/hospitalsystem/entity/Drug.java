@@ -43,6 +43,9 @@ public class Drug {
     @Column(name="usage_instructions", columnDefinition = "TEXT")
     private String usageInstructions;
 
+    @Column(name="effects", columnDefinition = "TEXT")
+    private String effects;
+
     @CreatedDate
     @Column(name="created_at", updatable = false)
     private LocalDateTime createdAt;

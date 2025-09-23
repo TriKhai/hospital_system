@@ -31,18 +31,30 @@ public class MySecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/register-doctor").hasRole("ADMIN")
                         .requestMatchers("/auth/**").permitAll() // Cho phép truy cập các endpoint bắt đầu bằng /login/
+
                         .requestMatchers(HttpMethod.GET, "/department").permitAll()
                         .requestMatchers("/department/**").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.GET, "/specialty").permitAll()
                         .requestMatchers("/specialty/**").hasRole("ADMIN")
+
                         .requestMatchers("/doctor/profile").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers(HttpMethod.GET, "/doctor").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/doctor/count").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.GET, "/patient").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/patient/count").hasRole("ADMIN")
+
                         .requestMatchers("/drug-type/**").permitAll()
+
                         .requestMatchers("/manufacturer/**").permitAll()
+
                         .requestMatchers("/supplier/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/drug").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/drug/count").permitAll()
+                        .requestMatchers("/drug/**").permitAll()
+
                         .requestMatchers("/account/**").hasRole("ADMIN")
                         .anyRequest().authenticated() // Các request khác phải xác thực
 

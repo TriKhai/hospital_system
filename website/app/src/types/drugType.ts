@@ -41,3 +41,47 @@ export interface SupplierRequest {
     phone:     string;
     email:     string;
 }
+            
+// drug
+export interface DrugResponse {
+    id:                number;
+    name:              string;
+    price:             number;
+    stock:             number;
+    expiredAt:         Date;
+    image:             string;
+    usageInstructions: string;
+    effects:           string;
+    createdAt:         Date;
+    updatedAt:         Date;
+    manufacturer:      ManufacturerResponse;
+    supplier:          SupplierResponse;
+    drugType:          DrugTypeResponse;
+}
+
+export interface DrugRequest {
+  name: string;
+  price: number;
+  stock: number;
+  expiredAt: Date;
+  usageInstructions?: string | null;
+  effects?: string | null;
+  image?: string | File | null;
+  manufacturerId: number;
+  supplierId: number;
+  drugTypeId: number;
+}
+
+export interface DrugFormValues {
+  name: string;
+  price: number;
+  stock: number;
+  expiredAt: string; 
+  usageInstructions?: string;
+  effects?: string;
+  image?: string | File | null;
+  manufacturerId: string;
+  supplierId: string;
+  drugTypeId: string;
+}
+

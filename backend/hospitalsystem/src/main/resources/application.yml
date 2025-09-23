@@ -36,3 +36,5 @@ fileUpload:
     rootPath: uploads/patient
   doctor:
     rootPath: uploads/doctor
+  drug:
+    rootPath: uploads/drug
