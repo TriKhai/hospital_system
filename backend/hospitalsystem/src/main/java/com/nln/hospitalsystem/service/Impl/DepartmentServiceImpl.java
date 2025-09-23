@@ -6,10 +6,19 @@ import com.nln.hospitalsystem.entity.Department;
 import com.nln.hospitalsystem.payload.request.department.DepartmentRequest;
 import com.nln.hospitalsystem.repository.DepartmentRepository;
 import com.nln.hospitalsystem.service.DepartmentService;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -68,5 +77,30 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Long countAllDepartment() {
         return departmentRepository.count();
+    }
+
+    @Override
+    public List<DepartmentDTO> importDepartments(MultipartFile file) {
+        List<Department> departments = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+             CSVParser csvParser = new CSVParser(reader,
+                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
+
+            for (CSVRecord record : csvParser) {
+                Department dept = new Department();
+                dept.setName(record.get("name"));
+                dept.setDescription(record.get("description"));
+                departments.add(dept);
+            }
+
+            return departmentRepository.saveAll(departments)
+                    .stream()
+                    .map(DepartmentMapper::toDTO)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi khi đọc CSV: " + e.getMessage());
+        }
     }
 }

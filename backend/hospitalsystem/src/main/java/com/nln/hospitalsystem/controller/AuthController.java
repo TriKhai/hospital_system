@@ -2,8 +2,11 @@ package com.nln.hospitalsystem.controller;
 
 import com.nln.hospitalsystem.dto.account.LoginDTO;
 import com.nln.hospitalsystem.dto.account.RegisterDTO;
+import com.nln.hospitalsystem.dto.doctor.AccountDoctorDTO;
 import com.nln.hospitalsystem.payload.request.LoginRequest;
 import com.nln.hospitalsystem.payload.request.RegisterRequest;
+import com.nln.hospitalsystem.payload.request.doctor.AccountDoctorRequest;
+import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
 import com.nln.hospitalsystem.service.AccountService;
 import com.nln.hospitalsystem.payload.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +56,11 @@ public class AuthController {
     }
 
     @PostMapping("/register-doctor")
-    public ResponseEntity<ResponseData<RegisterDTO>> registerDoctor(@RequestBody RegisterRequest registerRequest) {
-        RegisterDTO savedAccount = accountService.registerDoctor(registerRequest);
-        return ResponseEntity.ok(ResponseData.success(savedAccount, "Register successfully"));
+    public ResponseEntity<ResponseData<AccountDoctorDTO>> registerDoctor(
+            @ModelAttribute AccountDoctorRequest request
+    ) {
+        AccountDoctorDTO saved = accountService.registerDoctor(request);
+        return ResponseEntity.ok(ResponseData.success(saved, "Register successfully"));
     }
 
 

@@ -1,0 +1,21 @@
+name,description,departmentId
+"Tim Mạch Can Thiệp","Thực hiện các thủ thuật can thiệp tim mạch như đặt stent, nong động mạch, điều trị suy tim. Phòng thủ thuật hiện đại, đội ngũ chuyên gia dày dặn kinh nghiệm.",21
+"Nhi Khoa Thường","Khám và điều trị các bệnh nhi phổ biến: hô hấp, tiêu hóa, dị ứng, chăm sóc sức khỏe định kỳ và tư vấn dinh dưỡng.",19
+"Thần Kinh","Chẩn đoán, điều trị các bệnh về não, tủy sống, thần kinh ngoại biên như đột quỵ, động kinh, đau đầu mãn tính. Trang bị hệ thống MRI, EEG hiện đại.",22
+"Da Liễu Thẩm Mỹ","Điều trị bệnh da liễu từ nhẹ đến nặng, kết hợp dịch vụ thẩm mỹ: laser trị nám, xóa sẹo, trẻ hóa da, trị mụn và vảy nến.",23
+"Tai Mũi Họng Tổng Quát","Khám, chẩn đoán và phẫu thuật các bệnh tai, mũi, họng như viêm xoang, viêm amidan, ù tai, nghe kém. Sử dụng kỹ thuật nội soi tiên tiến.",24
+"Mắt và Khúc Xạ","Khám và điều trị các bệnh về mắt: tật khúc xạ, đục thủy tinh thể, glôcôm, bệnh võng mạc. Thực hiện phẫu thuật LASIK, ghép giác mạc, vi phẫu tinh vi.",25
+"Chấn Thương Chỉnh Hình","Điều trị chấn thương xương, khớp, thoái hóa khớp, thay khớp nhân tạo và phục hồi chức năng sau phẫu thuật.",26
+"Sản Phụ Khoa","Chăm sóc sức khỏe sinh sản, khám thai, siêu âm, đỡ sinh thường/sinh mổ, tư vấn kế hoạch hóa gia đình và điều trị hiếm muộn.",20
+"Nội Tổng Quát","Điều trị các bệnh nội khoa phổ biến như tiểu đường, cao huyết áp, bệnh gan, bệnh thận, hỗ trợ quản lý bệnh mãn tính.",17
+"Ngoại Tổng Hợp","Thực hiện phẫu thuật tổng quát: bụng, tuyến giáp, u bướu. Trang bị thiết bị hiện đại, phẫu thuật ít xâm lấn, hồi phục nhanh.",18
+"Tim Mạch Nhi","Chăm sóc và điều trị bệnh tim bẩm sinh, bệnh tim mạch ở trẻ em. Ứng dụng kỹ thuật tiên tiến, chăm sóc đặc biệt.",21
+"Nhi Thần Kinh","Chẩn đoán và điều trị bệnh thần kinh ở trẻ em: động kinh, chậm phát triển thần kinh, rối loạn vận động. Có phòng khám riêng cho trẻ.",22
+"Da Liễu Nhi","Điều trị các bệnh da liễu cho trẻ: chàm, mụn nhọt, viêm da, dị ứng da. Tư vấn chăm sóc da an toàn.",23
+"Tai Mũi Họng Nhi","Khám và điều trị các bệnh tai mũi họng ở trẻ như viêm tai giữa, viêm mũi họng, rối loạn nghe, phẫu thuật amidan.",24
+"Mắt Nhi Khoa","Chẩn đoán, điều trị tật khúc xạ, loạn thị, đục thủy tinh thể và bệnh võng mạc ở trẻ em.",25
+"Chấn Thương Thể Thao","Điều trị chấn thương thể thao: bong gân, gãy xương, rách dây chằng, phục hồi chức năng, vật lý trị liệu chuyên sâu.",26
+"Sản Tư Vấn Thai Kỳ","Tư vấn sức khỏe sinh sản, kế hoạch hóa gia đình, theo dõi thai kỳ, giáo dục sản khoa và chăm sóc trước sinh.",20
+"Nội Tiêu Hóa","Điều trị các bệnh về hệ tiêu hóa: dạ dày, ruột, gan, mật, tụy, rối loạn dinh dưỡng. Nội soi chẩn đoán hiện đại.",17
+"Ngoại Lồng Ngực","Phẫu thuật lồng ngực, tim, phổi và các bệnh liên quan. Sử dụng kỹ thuật ít xâm lấn, thiết bị tiên tiến.",18
+"Tim Mạch Thống Kê","Theo dõi, quản lý dữ liệu bệnh nhân tim mạch, lập kế hoạch điều trị, thống kê và phòng ngừa biến chứng.",21
