@@ -25,6 +25,7 @@ public class FileServiceImpl implements FileService {
 
     private Path patientPath;
     private Path doctorPath;
+    private Path drugPath;
 
     @PostConstruct
     public void init(){
@@ -39,6 +40,9 @@ public class FileServiceImpl implements FileService {
             doctorPath = Paths.get(rootPath, "doctor");
             Files.createDirectories(doctorPath);
 //            System.out.println("Doctor folder: " + doctorPath);
+
+            drugPath = Paths.get(rootPath, "drug");
+            Files.createDirectories(drugPath);
         } catch (Exception e) {
             throw new RuntimeException("Unable to create upload folders", e);
         }
@@ -48,6 +52,7 @@ public class FileServiceImpl implements FileService {
         return switch (category) {
             case PATIENT -> patientPath;
             case DOCTOR  -> doctorPath;
+            case DRUG -> drugPath;
         };
     }
 

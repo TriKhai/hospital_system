@@ -2,6 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 type Props<T extends object> = {
   title: string;
@@ -14,7 +15,7 @@ type Props<T extends object> = {
       keyof T,
       {
         label?: string;
-        type?: "text" | "textarea" | "select" | "date" | "email";
+        type?: "text" | "textarea" | "select" | "date" | "email" | "file";
         required?: boolean;
         hidden?: boolean;
         readOnly?: boolean;
@@ -32,6 +33,7 @@ const UpdateForm = <T extends object>({
   onClose,
   fieldConfig = {},
 }: Props<T>) => {
+  const [preview, setPreview] = useState<string | null>(null);
   if (!isOpen) return null;
 
   // 🔹 Yup schema động theo data
@@ -53,7 +55,9 @@ const UpdateForm = <T extends object>({
     }, {} as Record<string, Yup.AnySchema>)
   );
 
+
   return (
+
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       {/* // <div
     //   className={`
@@ -80,7 +84,7 @@ const UpdateForm = <T extends object>({
             onClose();
           }}
         >
-          {() => (
+          {({setFieldValue}) => (
             <Form className="space-y-4">
               {Object.entries(data).map(([key, value]) => {
                 const config = fieldConfig[key as keyof T] || {};
@@ -119,6 +123,29 @@ const UpdateForm = <T extends object>({
                           </option>
                         ))}
                       </Field>
+                    ) : config.type === "file" ? (
+                      <>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.currentTarget.files?.[0];
+                            if (file) {
+                              setFieldValue(key, file);
+                              setPreview(URL.createObjectURL(file));
+                            }
+                          }}
+                          className="border px-3 py-2 rounded w-full"
+                        />
+                        {/* Preview */}
+                        {preview && (
+                          <img
+                            src={preview}
+                            alt="Preview"
+                            className="mt-2 max-h-40 rounded shadow"
+                          />
+                        )}
+                      </>
                     ) : config.type === "email" ? (
                       <Field
                         type="email"

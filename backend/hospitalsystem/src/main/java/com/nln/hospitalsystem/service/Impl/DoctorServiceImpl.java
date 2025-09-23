@@ -88,7 +88,7 @@ public class DoctorServiceImpl implements DoctorService {
 
 
         } catch (Exception e) {
-            throw new RuntimeException("Error creating doctor: " + e.getMessage(), e);
+            throw new RuntimeException("Error editing doctor: " + e.getMessage(), e);
         }
     }
 }
