@@ -3,11 +3,16 @@ package com.nln.hospitalsystem.service.Impl;
 import com.nln.hospitalsystem.dto.account.AccountDTO;
 import com.nln.hospitalsystem.dto.account.AccountMapper;
 import com.nln.hospitalsystem.dto.account.LoginDTO;
+import com.nln.hospitalsystem.dto.doctor.AccountDoctorDTO;
+import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
+import com.nln.hospitalsystem.dto.doctor.DoctorMapper;
 import com.nln.hospitalsystem.entity.Doctor;
 import com.nln.hospitalsystem.entity.Patient;
 import com.nln.hospitalsystem.payload.request.LoginRequest;
 import com.nln.hospitalsystem.payload.request.RegisterRequest;
 import com.nln.hospitalsystem.dto.account.RegisterDTO;
+import com.nln.hospitalsystem.payload.request.doctor.AccountDoctorRequest;
+import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
 import com.nln.hospitalsystem.repository.DoctorRepository;
 import com.nln.hospitalsystem.repository.PatientRepository;
 import com.nln.hospitalsystem.service.AccountService;
@@ -102,38 +107,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    @Override
-    public RegisterDTO registerDoctor(RegisterRequest registerRequest) {
-        if (registerRequest.getUsername() == null || registerRequest.getPassword() == null) {
-            throw new IllegalArgumentException("Username or password is null");
-        }
 
-        if (accountRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new IllegalStateException("Username already exists");
-        }
-
-        // Tạo account
-        Account account = Account.builder()
-                .username(registerRequest.getUsername())
-                .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
-                .role(Account.Role.DOCTOR) // đặt role đúng
-                .build();
-
-        Account savedAccount = accountRepository.save(account);
-
-        // Tạo doctor gắn với account
-        Doctor doctor = Doctor.builder()
-                .account(savedAccount)
-                .build();
-        doctorRepository.save(doctor);
-
-        // Trả về DTO
-        return new RegisterDTO(
-                savedAccount.getId(),
-                savedAccount.getUsername(),
-                savedAccount.getRole().name()
-        );
-    }
 
     @Override
     public LoginDTO login(LoginRequest loginRequest) {
@@ -155,6 +129,51 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Long countUsers() {
         return accountRepository.count();
+    }
+
+    @Override
+    public AccountDoctorDTO registerDoctor(AccountDoctorRequest request) {
+        if (request.getUsername() == null || request.getPassword() == null) {
+            throw new IllegalArgumentException("Username or password is null");
+        }
+
+        if (accountRepository.existsByUsername(request.getUsername())) {
+            throw new IllegalStateException("Username already exists");
+        }
+
+        Account acc = Account.builder()
+                .username(request.getUsername())
+                .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .role(Account.Role.DOCTOR)
+                .build();
+
+        Account savedAccount = accountRepository.save(acc);
+
+        Doctor doctor = Doctor.builder()
+                .account(savedAccount)
+                .name(request.getName())
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .address(request.getAddress())
+                .birthDay(request.getBirthDay())
+                .gender(request.getGender())
+                .degree(request.getDegree())
+                .position(request.getPosition())
+                .yearsOfExperience(request.getYearsOfExperience())
+                .consultationFee(request.getConsultationFee())
+                .build();
+
+        Doctor savedDoctor = doctorRepository.save(doctor);
+        DoctorDTO doctorDTO = DoctorMapper.toDTO(savedDoctor);
+
+        return AccountDoctorDTO.builder()
+                .id(savedAccount.getId())
+                .username(savedAccount.getUsername())
+                .role(savedAccount.getRole().name())
+                .createdAt(savedAccount.getCreatedAt())
+                .updatedAt(savedAccount.getUpdatedAt())
+                .doctor(doctorDTO)
+                .build();
     }
 
 

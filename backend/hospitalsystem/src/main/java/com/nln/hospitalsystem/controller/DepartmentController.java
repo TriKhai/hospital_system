@@ -8,6 +8,7 @@ import com.nln.hospitalsystem.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,6 +30,18 @@ public class DepartmentController {
         return ResponseEntity.ok(ResponseData.success(departments, "Get departments successfully"));
     }
 
+    @PostMapping("/import")
+    public ResponseEntity<ResponseData<List<DepartmentDTO>>> importCSV(@RequestParam("file") MultipartFile file) {
+        List<DepartmentDTO> result = departmentService.importDepartments(file);
+        return ResponseEntity.ok(ResponseData.success(result, "Import thành công " + result.size() + " khoa"));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<ResponseData<Long>> getCount() {
+        long count = departmentService.countAllDepartment();
+        return ResponseEntity.ok(ResponseData.success(count, "Count department"));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ResponseData<DepartmentDTO>> update(
             @PathVariable Integer id,
@@ -43,11 +56,9 @@ public class DepartmentController {
         return ResponseEntity.ok(ResponseData.success(null, "Delete department successfully"));
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<ResponseData<Long>> getCount() {
-        long count = departmentService.countAllDepartment();
-        return ResponseEntity.ok(ResponseData.success(count, "Count department"));
-    }
+
+
+
 
 
 

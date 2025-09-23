@@ -1,5 +1,6 @@
 package com.nln.hospitalsystem.controller;
 
+import com.nln.hospitalsystem.dto.department.DepartmentDTO;
 import com.nln.hospitalsystem.dto.specialty.SpecialtyDTO;
 import com.nln.hospitalsystem.payload.ResponseData;
 import com.nln.hospitalsystem.payload.request.specialty.SpecialtyRequest;
@@ -7,6 +8,7 @@ import com.nln.hospitalsystem.service.SpecialtyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -47,6 +49,12 @@ public class SpecialtyController {
     public ResponseEntity<ResponseData<Long>> getCount() {
         long count = specialtyService.countAllSpecialty();
         return ResponseEntity.ok(ResponseData.success(count, "Count specialty"));
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<ResponseData<List<SpecialtyDTO>>> importCSV(@RequestParam("file") MultipartFile file) {
+        List<SpecialtyDTO> result = specialtyService.importSpecialties(file);
+        return ResponseEntity.ok(ResponseData.success(result, "Import thành công " + result.size() + " chuyen khoa"));
     }
 
 }

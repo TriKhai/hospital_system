@@ -3,6 +3,7 @@ package com.nln.hospitalsystem.service;
 import com.nln.hospitalsystem.dto.specialty.SpecialtyDTO;
 import com.nln.hospitalsystem.entity.Specialty;
 import com.nln.hospitalsystem.payload.request.specialty.SpecialtyRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface SpecialtyService {
     void deleteSpecialty(Integer id);
     List<SpecialtyDTO> getAllSpecialty();
     Long countAllSpecialty();
+    List<SpecialtyDTO> importSpecialties(MultipartFile file);
 }

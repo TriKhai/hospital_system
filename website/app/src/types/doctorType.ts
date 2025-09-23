@@ -1,3 +1,5 @@
+import type { FormValue } from "../services/authApi";
+
 export interface DoctorType {
   id: number;
   name: string;
@@ -16,3 +18,52 @@ export interface DoctorType {
   createdAt: Date;
   updatedAt: Date;
 }
+
+// export interface AccountDoctorRequest {
+//   username: string;
+//   password: string;
+//   name: string;
+//   email: string;
+//   phone: string;
+//   address: string;
+//   birthDay: string; // yyyy-MM-dd
+//   gender: boolean;
+//   image?: File;
+//   consultationFee?: number;
+//   workingHours?: string; // HH:mm
+//   licenseNumber?: string;
+//   yearsOfExperience?: number;
+//   degree?: string;
+//   position?: string;
+// }
+
+export interface AccountDoctorRequest {
+  username: string;
+  password: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  birthDay: string;   // yyyy-MM-dd
+  gender: boolean;
+  image?: File;
+  consultationFee?: number;
+  workingHours?: string; // HH:mm
+  licenseNumber?: string;
+  yearsOfExperience?: number;
+  degree?: string;
+  position?: string;
+  [key: string]: FormValue; 
+}
+
+
+export interface AccountDoctorResponse {
+  id: number;
+  username: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  doctor: DoctorType;
+}
+
+
