@@ -2,6 +2,7 @@ package com.nln.hospitalsystem.controller;
 
 import com.nln.hospitalsystem.dto.account.AccountDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
+import com.nln.hospitalsystem.dto.drug.DrugDTO;
 import com.nln.hospitalsystem.dto.patient.PatientDTO;
 import com.nln.hospitalsystem.payload.ResponseData;
 import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
@@ -9,6 +10,7 @@ import com.nln.hospitalsystem.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -30,6 +32,12 @@ public class DoctorController {
         DoctorDTO updated = doctorService.updateDoctor(username, doctorRequest);
 
         return ResponseEntity.ok(ResponseData.success(updated, "Update profile successfully"));
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<ResponseData<List<DoctorDTO>>> importCSV(@RequestParam("file") MultipartFile file) {
+        List<DoctorDTO> result = doctorService.importDoctor(file);
+        return ResponseEntity.ok(ResponseData.success(result, "Import thành công " + result.size() + " record"));
     }
 
     @GetMapping

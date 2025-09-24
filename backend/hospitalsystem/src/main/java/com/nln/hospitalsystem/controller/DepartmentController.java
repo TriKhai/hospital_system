@@ -1,7 +1,6 @@
 package com.nln.hospitalsystem.controller;
 
 import com.nln.hospitalsystem.dto.department.DepartmentDTO;
-import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
 import com.nln.hospitalsystem.payload.ResponseData;
 import com.nln.hospitalsystem.payload.request.department.DepartmentRequest;
 import com.nln.hospitalsystem.service.DepartmentService;

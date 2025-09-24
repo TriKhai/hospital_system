@@ -6,9 +6,17 @@ import com.nln.hospitalsystem.entity.Manufacturer;
 import com.nln.hospitalsystem.payload.request.drug.ManufacturerRequest;
 import com.nln.hospitalsystem.repository.ManufacturerRepository;
 import com.nln.hospitalsystem.service.ManufacturerService;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -56,5 +64,32 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     @Override
     public Long countManufacturers() {
         return manufacturerRepository.count();
+    }
+
+    @Override
+    public List<ManufacturerDTO> importManufacturer(MultipartFile file) {
+        List<Manufacturer> manufacturers = new ArrayList<>();
+        try (
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8));
+                CSVParser csvParser = new CSVParser(reader,
+                        CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())
+        ) {
+            for (CSVRecord record : csvParser) {
+                Manufacturer manufacturer = Manufacturer.builder()
+                        .name(record.get("name"))
+                        .country(record.get("country"))
+                        .build();
+                manufacturers.add(manufacturer);
+            }
+
+            return manufacturerRepository.saveAll(manufacturers)
+                    .stream()
+                    .map(ManufacturerMapper::toDTO)
+                    .toList();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Lỗi khi đọc CSV: " + e.getMessage());
+        }
     }
 }

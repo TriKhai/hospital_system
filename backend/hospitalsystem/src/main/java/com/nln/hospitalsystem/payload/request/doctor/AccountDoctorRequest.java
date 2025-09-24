@@ -28,4 +28,5 @@ public class AccountDoctorRequest {
     private Integer yearsOfExperience;
     private String degree;
     private String position;
+    private Integer specialtyId;
 }

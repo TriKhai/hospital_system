@@ -53,6 +53,7 @@ export interface AccountDoctorRequest {
   yearsOfExperience?: number;
   degree?: string;
   position?: string;
+  specialtyId: number;
   [key: string]: FormValue; 
 }
 
