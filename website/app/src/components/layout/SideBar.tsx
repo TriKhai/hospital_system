@@ -7,6 +7,7 @@ import {
   faBoxes,
   faTruck,
   faUserTie,
+  faPills,
 } from "@fortawesome/free-solid-svg-icons";
 
 interface NavLink {
@@ -25,7 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
     { path: "/admin/tai-khoan", label: "Tài Khoản", icon: faBoxes },
     { path: "/admin/chuyen-khoa", label: "Chuyên Khoa", icon: faTruck },
     { path: "/admin/thuoc", label: "Thuốc", icon: faUserTie },
-    // { path: "/admin/khoa", label: "Department", icon: faPills },
+    { path: "/admin/lich", label: "Lịch làm việc", icon: faPills },
     // { path: "/admin/hangsx", label: "Hãng Sản Xuất", icon: faFlask },
     // { path: "/admin/hoa-don", label: "Hóa Đơn", icon: faFileInvoice },
     // { path: "/admin/theo-doi", label: "Theo dõi", icon: faEye },

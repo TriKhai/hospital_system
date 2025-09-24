@@ -14,6 +14,7 @@ import {
   DashboardPage,
 } from "./pages/admin";
 import OpportunitiesPage from "./components/layout/admin/OpportunitiesPage";
+import SchedulePage from "./pages/admin/schedule/SchedulePage";
 
 export default function App() {
   return (
@@ -30,7 +31,6 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             {/* <About /> */}
 
-            {/* Dashboard chỉ PATIENT được xem */}
             <Route
               path="/about"
               element={
@@ -41,7 +41,6 @@ export default function App() {
               }
             />
 
-            {/* Doctor page chỉ DOCTOR được xem */}
             <Route
               path="/doctor"
               element={
@@ -63,6 +62,7 @@ export default function App() {
               <Route path="thong-ke" element={<DashboardPage />} />
               <Route path="tai-khoan" element={<CRMAccountPage />} />
               <Route path="thuoc" element={<CRMDrugPage />} />
+              <Route path="lich" element={<SchedulePage />} />
               <Route path="test" element={<OpportunitiesPage />} />
             </Route>
 
