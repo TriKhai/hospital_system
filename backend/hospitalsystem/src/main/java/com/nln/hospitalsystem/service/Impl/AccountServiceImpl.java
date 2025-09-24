@@ -6,22 +6,32 @@ import com.nln.hospitalsystem.dto.account.LoginDTO;
 import com.nln.hospitalsystem.dto.doctor.AccountDoctorDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorMapper;
+import com.nln.hospitalsystem.dto.patient.AccountPatientDTO;
+import com.nln.hospitalsystem.dto.patient.PatientDTO;
+import com.nln.hospitalsystem.dto.patient.PatientMapper;
 import com.nln.hospitalsystem.entity.Doctor;
+import com.nln.hospitalsystem.entity.Drug;
 import com.nln.hospitalsystem.entity.Patient;
+import com.nln.hospitalsystem.enums.FileCategory;
 import com.nln.hospitalsystem.payload.request.LoginRequest;
 import com.nln.hospitalsystem.payload.request.RegisterRequest;
 import com.nln.hospitalsystem.dto.account.RegisterDTO;
 import com.nln.hospitalsystem.payload.request.doctor.AccountDoctorRequest;
 import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
+import com.nln.hospitalsystem.payload.request.patient.AccountPatientRequest;
 import com.nln.hospitalsystem.repository.DoctorRepository;
 import com.nln.hospitalsystem.repository.PatientRepository;
+import com.nln.hospitalsystem.repository.SpecialtyRepository;
 import com.nln.hospitalsystem.service.AccountService;
 import com.nln.hospitalsystem.entity.Account;
 import com.nln.hospitalsystem.repository.AccountRepository;
+import com.nln.hospitalsystem.service.FileService;
 import com.nln.hospitalsystem.utils.JwtUtils;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +50,16 @@ public class AccountServiceImpl implements AccountService {
     DoctorRepository doctorRepository;
 
     @Autowired
+    SpecialtyRepository specialtyRepository;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private FileService fileService;
 
 
     @Override
@@ -160,8 +176,18 @@ public class AccountServiceImpl implements AccountService {
                 .degree(request.getDegree())
                 .position(request.getPosition())
                 .yearsOfExperience(request.getYearsOfExperience())
+                .licenseNumber(request.getLicenseNumber())
                 .consultationFee(request.getConsultationFee())
+                .workingHours(request.getWorkingHours())
                 .build();
+
+        doctor.setSpecialty(
+                specialtyRepository.findById(request.getSpecialtyId())
+                        .orElseThrow(() -> new EntityNotFoundException("Specialty not found"))
+        );
+
+
+        handleUploadImageDoctor(request.getImage(), doctor);
 
         Doctor savedDoctor = doctorRepository.save(doctor);
         DoctorDTO doctorDTO = DoctorMapper.toDTO(savedDoctor);
@@ -174,6 +200,66 @@ public class AccountServiceImpl implements AccountService {
                 .updatedAt(savedAccount.getUpdatedAt())
                 .doctor(doctorDTO)
                 .build();
+    }
+
+    @Override
+    public AccountPatientDTO registerPatient(AccountPatientRequest request) {
+        if (request.getUsername() == null || request.getPassword() == null) {
+            throw new IllegalArgumentException("Username or password is null");
+        }
+
+        if (accountRepository.existsByUsername(request.getUsername())) {
+            throw new IllegalStateException("Username already exists");
+        }
+
+        Account acc = Account.builder()
+                .username(request.getUsername())
+                .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .role(Account.Role.DOCTOR)
+                .build();
+
+        Account savedAccount = accountRepository.save(acc);
+
+        Patient patient = Patient.builder()
+                .account(savedAccount)
+                .name(request.getName())
+                .birthDate(request.getBirthDate())
+                .address(request.getAddress())
+                .gender(request.getGender())
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .build();
+
+        handleUploadImagePatient(request.getImage(), patient);
+
+        Patient savedPatient = patientRepository.save(patient);
+        PatientDTO dto = PatientMapper.toDTO(savedPatient);
+
+        return AccountPatientDTO.builder()
+                .id(savedAccount.getId())
+                .username(savedAccount.getUsername())
+                .role(savedAccount.getRole().name())
+                .createdAt(savedAccount.getCreatedAt())
+                .updatedAt(savedAccount.getUpdatedAt())
+                .patient(dto)
+                .build();
+    }
+
+
+    private void handleUploadImagePatient(MultipartFile image, Patient patient) {
+        if (image == null || image.isEmpty()) return;
+
+        String fileName = fileService.createNameFile(image);
+        fileService.saveFile(image, fileName, FileCategory.DRUG);
+        patient.setImageUrl(fileName);
+    }
+
+    private void handleUploadImageDoctor(MultipartFile image, Doctor doctor) {
+        if (image == null || image.isEmpty()) return;
+
+        String fileName = fileService.createNameFile(image);
+        fileService.saveFile(image, fileName, FileCategory.DRUG);
+        doctor.setImageUrl(fileName);
     }
 
 

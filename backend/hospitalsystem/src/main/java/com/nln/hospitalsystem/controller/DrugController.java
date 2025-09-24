@@ -1,6 +1,7 @@
 package com.nln.hospitalsystem.controller;
 
 import com.nln.hospitalsystem.dto.drug.DrugDTO;
+import com.nln.hospitalsystem.dto.drugType.DrugTypeDTO;
 import com.nln.hospitalsystem.dto.specialty.SpecialtyDTO;
 import com.nln.hospitalsystem.payload.ResponseData;
 import com.nln.hospitalsystem.payload.request.drug.DrugRequest;
@@ -9,6 +10,7 @@ import com.nln.hospitalsystem.service.DrugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,6 +31,12 @@ public class DrugController {
     public ResponseEntity<ResponseData<List<DrugDTO>>> getAll() {
         List<DrugDTO> drugs = drugService.getAllDrugs();
         return ResponseEntity.ok(ResponseData.success(drugs, "Get all successfully"));
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<ResponseData<List<DrugDTO>>> importCSV(@RequestParam("file") MultipartFile file) {
+        List<DrugDTO> result = drugService.importDrug(file);
+        return ResponseEntity.ok(ResponseData.success(result, "Import thành công " + result.size() + " record"));
     }
 
     @PutMapping("/{id}")

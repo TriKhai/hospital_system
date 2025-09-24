@@ -22,7 +22,7 @@ export default function AdminPage() {
           <div className="pb-2 border-b border-gray-300">
             <Breadcrumbs />
           </div>
-          <div className="mt-3">
+          <div className="mt-3 h-80">
             <Outlet />
           </div>
         </div>

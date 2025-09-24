@@ -6,3 +6,8 @@
 @import "swiper/css/scrollbar";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}

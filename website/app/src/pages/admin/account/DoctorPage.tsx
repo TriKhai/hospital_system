@@ -18,9 +18,12 @@ import { filterAndSortData } from "../../../utils/filterAndSortData";
 import type { DoctorType } from "../../../types/doctorType";
 import doctorService from "../../../services/doctorApi";
 import FormAddDoctor from "../../../components/layout/form/doctor/DoctorAddForm";
+import specialtyService from "../../../services/specialtyApi";
+import type { SpecialtyResponse } from "../../../types/specialtyType";
 
 const DoctorPage: React.FC = () => {
   const [data, setData] = useState<DoctorType[]>([]);
+  const [specialties, setSpecialties] = useState<SpecialtyResponse[]>([]);
   const [row, setRow] = useState<DoctorType | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -39,7 +42,9 @@ const DoctorPage: React.FC = () => {
     try {
       setLoading(true);
       const res = await doctorService.getAll();
+      const resSpecialty = await specialtyService.getAll();
       setData(res);
+      setSpecialties(resSpecialty);
     } catch (error) {
       console.error("Error fetch data:", error);
     } finally {
@@ -178,7 +183,7 @@ const DoctorPage: React.FC = () => {
             </button>
           </div>
 
-          <div>
+          {/* <div>
             <button
               onClick={() => {
                 if (!row) {
@@ -206,7 +211,7 @@ const DoctorPage: React.FC = () => {
             >
               <FontAwesomeIcon icon={faTrash} /> Xoá
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div>
@@ -255,7 +260,11 @@ const DoctorPage: React.FC = () => {
         />
       )}
 
-      <FormAddDoctor /> 
+      <FormAddDoctor
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        specialties={specialties}
+      />
     </div>
   );
 };

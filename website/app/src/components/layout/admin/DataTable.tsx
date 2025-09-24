@@ -82,7 +82,7 @@ function DataTable<T extends object>({
           <span className="ml-2 text-gray-500">Đang tải dữ liệu...</span>
         </div>
       ) : (
-        <div className="overflow-x-auto overflow-y-auto max-h-[90vh] ">
+        <div className="overflow-x-auto overflow-y-auto max-h-[68vh] ">
           <table className="min-w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gray-100">
