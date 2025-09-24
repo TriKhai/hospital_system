@@ -1,0 +1,21 @@
+username,password,name,email,phone,address,birthDay,gender,consultationFee,workingHours,licenseNumber,yearsOfExperience,degree,position,specialtyId
+bacsi001,123456,Nguyễn Hoàng,hoang1@hospital.com,0905123001,12 Lý Thường Kiệt - HCM,1980-05-15,true,300000,08:00:00,LIC1001,15,Bác sĩ CKI,Trưởng khoa,5
+bacsi002,123456,Trần Thảo,thao2@hospital.com,0905123002,34 Hai Bà Trưng - HN,1985-08-10,false,250000,09:00:00,LIC1002,10,Bác sĩ CKII,Phó khoa,6
+bacsi003,123456,Lê Minh Quân,quan3@hospital.com,0905123003,56 Nguyễn Huệ - ĐN,1978-03-22,true,280000,08:30:00,LIC1003,20,Thạc sĩ Y học,Bác sĩ chính,7
+bacsi004,123456,Phạm Hồng Nhung,nhung4@hospital.com,0905123004,89 Trần Phú - HCM,1990-12-05,false,320000,10:00:00,LIC1004,8,Bác sĩ CKI,Bác sĩ điều trị,8
+bacsi005,123456,Đỗ Văn Tùng,tung5@hospital.com,0905123005,23 Võ Thị Sáu - HN,1982-07-19,true,270000,08:00:00,LIC1005,12,Bác sĩ CKII,Phó khoa,9
+bacsi006,123456,Ngô Thị Lan,lan6@hospital.com,0905123006,45 Nguyễn Chí Thanh - HCM,1987-04-11,false,310000,09:00:00,LIC1006,9,Thạc sĩ Y học,Bác sĩ điều trị,10
+bacsi007,123456,Trương Quốc Bảo,bao7@hospital.com,0905123007,67 Cách Mạng Tháng 8 - ĐN,1975-02-14,true,350000,08:00:00,LIC1007,22,Tiến sĩ Y học,Trưởng khoa,11
+bacsi008,123456,Võ Mỹ Dung,dung8@hospital.com,0905123008,78 Điện Biên Phủ - HCM,1992-09-25,false,240000,09:30:00,LIC1008,6,Bác sĩ CKI,Bác sĩ điều trị,12
+bacsi009,123456,Phan Nhật Nam,nam9@hospital.com,0905123009,11 Phan Bội Châu - HN,1983-11-30,true,260000,08:00:00,LIC1009,14,Bác sĩ CKII,Phó khoa,13
+bacsi010,123456,Lương Bích Ngọc,ngoc10@hospital.com,0905123010,90 Nguyễn Trãi - HCM,1989-06-18,false,300000,09:00:00,LIC1010,11,Bác sĩ CKI,Bác sĩ điều trị,14
+bacsi011,123456,Nguyễn Thành Long,long11@hospital.com,0905123011,22 Lê Duẩn - ĐN,1977-08-07,true,330000,08:30:00,LIC1011,18,Tiến sĩ Y học,Trưởng khoa,15
+bacsi012,123456,Trần Kim Yến,yen12@hospital.com,0905123012,44 Lạc Long Quân - HCM,1991-10-12,false,250000,09:00:00,LIC1012,7,Bác sĩ CKI,Bác sĩ điều trị,16
+bacsi013,123456,Đặng Hoài Phong,phong13@hospital.com,0905123013,66 Nguyễn Văn Cừ - HN,1984-01-23,true,280000,08:00:00,LIC1013,13,Bác sĩ CKII,Phó khoa,17
+bacsi014,123456,Phạm Thu Hằng,hang14@hospital.com,0905123014,88 Phạm Văn Đồng - HCM,1993-03-16,false,240000,09:30:00,LIC1014,5,Bác sĩ CKI,Bác sĩ điều trị,18
+bacsi015,123456,Ngô Quốc Khánh,khanh15@hospital.com,0905123015,33 Bạch Đằng - ĐN,1979-12-21,true,350000,08:00:00,LIC1015,20,Tiến sĩ Y học,Trưởng khoa,19
+bacsi016,123456,Trịnh Thị Mai,mai16@hospital.com,0905123016,55 Nguyễn Tất Thành - HCM,1986-05-28,false,260000,09:00:00,LIC1016,9,Bác sĩ CKII,Phó khoa,20
+bacsi017,123456,Lý Hữu Phúc,phuc17@hospital.com,0905123017,77 Tôn Đức Thắng - HN,1976-07-09,true,300000,08:30:00,LIC1017,21,Tiến sĩ Y học,Trưởng khoa,21
+bacsi018,123456,Hồ Thị Ngân,ngan18@hospital.com,0905123018,99 Nguyễn Đình Chiểu - HCM,1994-02-05,false,220000,09:00:00,LIC1018,4,Bác sĩ CKI,Bác sĩ điều trị,22
+bacsi019,123456,Phùng Gia Huy,huy19@hospital.com,0905123019,21 Hoàng Hoa Thám - ĐN,1981-09-13,true,270000,08:00:00,LIC1019,16,Bác sĩ CKII,Phó khoa,23
+bacsi020,123456,Đinh Lan Phương,phuong20@hospital.com,0905123020,43 Lê Văn Sỹ - HCM,1988-11-02,false,260000,09:00:00,LIC1020,8,Bác sĩ CKI,Bác sĩ điều trị,24 

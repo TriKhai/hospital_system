@@ -49,7 +49,7 @@ export default function Login() {
 
             const decoded = jwtDecode<{ sub: string; scope: string }>(token);
 
-            if (decoded.scope === "PATIENT") navigate("/about");
+            if (decoded.scope === "PATIENT") navigate("/");
             else if (decoded.scope === "DOCTOR") navigate("/doctor");
             else if (decoded.scope === "ADMIN") navigate("/admin");
             else navigate("/");

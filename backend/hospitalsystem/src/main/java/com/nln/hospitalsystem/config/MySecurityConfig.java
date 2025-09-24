@@ -56,13 +56,13 @@ public class MySecurityConfig {
                         .requestMatchers("/drug/**").permitAll()
 
                         .requestMatchers("/account/**").hasRole("ADMIN")
-                        .anyRequest().authenticated() // Các request khác phải xác thực
 
+                        .requestMatchers("/staff-schedule/**").hasAnyRole("ADMIN", "DOCTOR")
+
+                        .anyRequest().authenticated() // Các request khác phải xác thực
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource));
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
-
 }
