@@ -2,6 +2,7 @@ package com.nln.hospitalsystem.controller;
 
 import com.nln.hospitalsystem.dto.account.AccountDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
+import com.nln.hospitalsystem.dto.doctor.DoctorLiteDTO;
 import com.nln.hospitalsystem.dto.drug.DrugDTO;
 import com.nln.hospitalsystem.dto.patient.PatientDTO;
 import com.nln.hospitalsystem.payload.ResponseData;
@@ -44,6 +45,17 @@ public class DoctorController {
     public ResponseEntity<ResponseData<List<DoctorDTO>>> getAll() {
         List<DoctorDTO> accounts = doctorService.getDoctors();
         return ResponseEntity.ok(ResponseData.success(accounts, "Get doctors successfully"));
+    }
+
+    @GetMapping("/specialty")
+    public ResponseEntity<ResponseData<List<DoctorLiteDTO>>> getAll(@RequestParam(required = false) Integer id) {
+        List<DoctorLiteDTO> dto;
+        if (id == null) {
+            dto = doctorService.getDoctorsLite();
+        } else {
+            dto = doctorService.getDoctorsBySpecialty(id);
+        }
+        return ResponseEntity.ok(ResponseData.success(dto, "Get doctors successfully"));
     }
 
     @GetMapping("/count")

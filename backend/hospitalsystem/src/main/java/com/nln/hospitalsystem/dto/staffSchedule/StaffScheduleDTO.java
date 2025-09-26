@@ -1,5 +1,6 @@
 package com.nln.hospitalsystem.dto.staffSchedule;
 
+import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
 import com.nln.hospitalsystem.entity.Doctor;
 import com.nln.hospitalsystem.enums.ScheduleStatus;
 import lombok.*;
@@ -19,6 +20,6 @@ public class StaffScheduleDTO {
     private LocalTime startTime;
     private LocalTime endTime;
     private ScheduleStatus status = ScheduleStatus.ACTIVE;
-    private Doctor doctor;
+    private DoctorDTO doctor;
     private LocalDateTime createdAt;
 }

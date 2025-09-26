@@ -1,5 +1,5 @@
 import axiosClient from "../config/axios";
-import type { DoctorType } from "../types/doctorType";
+import type { DoctorLite, DoctorType } from "../types/doctorType";
 import type { ResponseData } from "../types/resType";
 
 const BASE_URL = "/doctor";
@@ -8,6 +8,15 @@ const doctorService = {
   getAll: async (): Promise<DoctorType[]> => {
     const res = await axiosClient.get<ResponseData<DoctorType[]>>(BASE_URL);
     console.log(res);
+    return res.data.data;
+  },
+
+  getBySpecialty: async (id?: number): Promise<DoctorLite[]> => {
+    if (!id) return [];
+    const res = await axiosClient.get<ResponseData<DoctorLite[]>>(BASE_URL + "/specialty", {
+      params: { id },
+    });
+    console.log("doc: ", res.data.data);
     return res.data.data;
   },
 

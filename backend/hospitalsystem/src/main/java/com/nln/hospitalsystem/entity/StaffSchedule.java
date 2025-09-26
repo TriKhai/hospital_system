@@ -8,6 +8,8 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "staff_schedule")
@@ -41,5 +43,9 @@ public class StaffSchedule {
     @CreatedDate
     @Column(name="created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToOne(mappedBy = "staffSchedule", cascade = CascadeType.ALL)
+    private Appointment appointment;
+
 
 }
