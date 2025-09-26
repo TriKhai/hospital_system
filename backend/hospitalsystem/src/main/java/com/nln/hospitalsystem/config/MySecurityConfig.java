@@ -38,6 +38,7 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/specialty").permitAll()
                         .requestMatchers("/specialty/**").hasRole("ADMIN")
 
+                        .requestMatchers("/doctor/specialty").permitAll()
                         .requestMatchers("/doctor/profile").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers(HttpMethod.GET, "/doctor").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/doctor/count").hasRole("ADMIN")

@@ -1,5 +1,6 @@
 package com.nln.hospitalsystem.dto.doctor;
 
+import com.nln.hospitalsystem.dto.specialty.SpecialtyDTO;
 import jakarta.persistence.Column;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,6 +31,7 @@ public class DoctorDTO {
     private Integer yearsOfExperience;
     private String degree;
     private String position;
+    private SpecialtyDTO specialty;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

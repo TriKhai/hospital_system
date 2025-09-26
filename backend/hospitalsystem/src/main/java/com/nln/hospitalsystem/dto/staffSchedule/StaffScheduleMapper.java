@@ -1,5 +1,8 @@
 package com.nln.hospitalsystem.dto.staffSchedule;
 
+import com.nln.hospitalsystem.dto.doctor.DoctorMapper;
+import com.nln.hospitalsystem.dto.drug.DrugMapper;
+import com.nln.hospitalsystem.entity.Doctor;
 import com.nln.hospitalsystem.entity.StaffSchedule;
 import lombok.*;
 
@@ -13,12 +16,13 @@ public class StaffScheduleMapper {
                 .startTime(schedule.getStartTime())
                 .endTime(schedule.getEndTime())
                 .status(schedule.getStatus())
-                .doctor(schedule.getDoctor()) // hoặc map sang DoctorDTO nếu muốn
+                .doctor(DoctorMapper.toDTO(schedule.getDoctor()))
                 .createdAt(schedule.getCreatedAt())
                 .build();
     }
 
-    public static StaffSchedule toEntity(StaffScheduleDTO dto) {
+    // Map từ DTO sang entity, cần doctor entity từ DB
+    public static StaffSchedule toEntity(StaffScheduleDTO dto, Doctor doctorEntity) {
         if (dto == null) return null;
 
         return StaffSchedule.builder()
@@ -27,7 +31,7 @@ public class StaffScheduleMapper {
                 .startTime(dto.getStartTime())
                 .endTime(dto.getEndTime())
                 .status(dto.getStatus())
-                .doctor(dto.getDoctor()) // cần set doctor từ DB khi create/update
+                .doctor(doctorEntity)
                 .createdAt(dto.getCreatedAt())
                 .build();
     }

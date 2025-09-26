@@ -2,6 +2,7 @@ package com.nln.hospitalsystem.service.Impl;
 
 import com.nln.hospitalsystem.dto.account.AccountMapper;
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
+import com.nln.hospitalsystem.dto.doctor.DoctorLiteDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorMapper;
 import com.nln.hospitalsystem.dto.drug.DrugMapper;
 import com.nln.hospitalsystem.dto.patient.PatientMapper;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.Doc;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -56,6 +58,22 @@ public class DoctorServiceImpl implements DoctorService {
         List<Doctor> listDoctor = doctorRepository.findAll();
         return listDoctor.stream()
                 .map(DoctorMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DoctorLiteDTO> getDoctorsBySpecialty(Integer specialtyID) {
+        List<Doctor> doctors = doctorRepository.findBySpecialtyId(specialtyID);
+        return doctors.stream()
+                .map(DoctorMapper::toLiteDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DoctorLiteDTO> getDoctorsLite() {
+        List<Doctor> doctors = doctorRepository.findAll();
+        return doctors.stream()
+                .map(DoctorMapper::toLiteDTO)
                 .collect(Collectors.toList());
     }
 

@@ -22,15 +22,18 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
-
-    @Column(name = "end_time")
-    private LocalDateTime endTime;
+//    @Column(name = "start_time", nullable = false)
+//    private LocalDateTime startTime;
+//
+//    @Column(name = "end_time")
+//    private LocalDateTime endTime;
 
     @Enumerated(EnumType.STRING)  // lưu chuỗi thay vì số
     @Column(name = "status", nullable = false, length = 20)
     private AppointmentStatus status;
+
+    @Column(name = "note", columnDefinition = "TEXT")
+    private String note;
 
     @CreatedDate
     @Column(name="created_at", updatable = false)
@@ -50,8 +53,12 @@ public class Appointment {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
-    private MedicalRecord medicalRecord;
+//    @OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
+//    private MedicalRecord medicalRecord;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff_schedule_id", nullable = false, unique = true)
+    private StaffSchedule staffSchedule;
 
     public enum AppointmentStatus {
         BOOKED,       // đã đặt

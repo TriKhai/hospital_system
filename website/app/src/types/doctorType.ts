@@ -1,4 +1,5 @@
 import type { FormValue } from "../services/authApi";
+import type { SpecialtyResponse } from "./specialtyType";
 
 export interface DoctorType {
   id: number;
@@ -15,6 +16,7 @@ export interface DoctorType {
   yearsOfExperience?: number;
   degree?: string;
   position?: string;
+  specialty: SpecialtyResponse;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -67,4 +69,14 @@ export interface AccountDoctorResponse {
   doctor: DoctorType;
 }
 
+export type DoctorSchedule = {
+  id: number;
+  name: string;
+  specialtyId: number;
+  specialtyName: string;
+};
 
+export interface DoctorLite {
+  id: number;
+  name: string;
+}
