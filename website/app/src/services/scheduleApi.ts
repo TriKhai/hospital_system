@@ -2,7 +2,7 @@ import axiosClient from "../config/axios";
 import type { ResponseData } from "../types/resType";
 import type { ScheduleReq, ScheduleRes } from "../types/scheduleType";
 
-const BASE_URL = "/staff-schedule";
+const BASE_URL = "/work";
 
 const scheduleService = {
   getAll: async (specialtyID?: number): Promise<ScheduleRes[]> => {

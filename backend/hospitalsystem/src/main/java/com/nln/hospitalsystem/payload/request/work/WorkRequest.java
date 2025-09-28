@@ -1,4 +1,4 @@
-package com.nln.hospitalsystem.payload.request.schedule;
+package com.nln.hospitalsystem.payload.request.work;
 
 import com.nln.hospitalsystem.enums.RepeatSchedule;
 import com.nln.hospitalsystem.enums.ScheduleStatus;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ScheduleRequest {
+public class WorkRequest {
     private Integer doctorId;
     private LocalDate workDate;
     private Shifts shift;         // enum MORNING, AFTERNOON, EVENING

@@ -90,4 +90,7 @@ public class Doctor {
 
     @OneToMany(mappedBy = "doctor")
     private List<StaffSchedule> staffSchedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
+    private List<DoctorWorkDetail> doctorWorkDetails= new ArrayList<>();
 }

@@ -36,7 +36,7 @@ export default function ScheduleCalendar({
     slotMinutes: 30,
     repeat: "DAILY",
     repeatCount: 1,
-    status: "ACTIVE",
+    status: "AVAILABLE",
   };
 
   const [form, setForm] = useState<ScheduleReq>(initialForm);
@@ -245,7 +245,7 @@ export default function ScheduleCalendar({
               onChange={handleChange}
               className="border p-2 w-full rounded"
             >
-              <option value="ACTIVE">ACTIVE</option>
+              <option value="AVAILABLE">AVAILABLE</option>
               <option value="INACTIVE">INACTIVE</option>
             </select>
           </div>

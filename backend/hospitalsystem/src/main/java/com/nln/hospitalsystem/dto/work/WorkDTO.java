@@ -1,6 +1,7 @@
-package com.nln.hospitalsystem.dto.staffSchedule;
+package com.nln.hospitalsystem.dto.work;
 
 import com.nln.hospitalsystem.enums.ScheduleStatus;
+import com.nln.hospitalsystem.enums.ShiftStatus;
 import lombok.*;
 
 @Getter
@@ -8,11 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ScheduleDTO {
+public class WorkDTO {
     private String id;
     private String title;
     private String start; // ISO string
     private String end;   // ISO string
-    private ScheduleStatus status;
+    private ShiftStatus status;
     private Integer doctorId;
 }

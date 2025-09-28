@@ -59,6 +59,8 @@ public class MySecurityConfig {
                         .requestMatchers("/account/**").hasRole("ADMIN")
 
                         .requestMatchers("/staff-schedule/**").hasAnyRole("ADMIN", "DOCTOR")
+                        .requestMatchers("/work/**").hasAnyRole("ADMIN", "DOCTOR")
+//                        .requestMatchers("/work/**").permitAll()
 
                         .anyRequest().authenticated() // Các request khác phải xác thực
                 )
