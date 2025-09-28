@@ -1,9 +1,7 @@
 package com.nln.hospitalsystem.service.Impl;
 
 import com.nln.hospitalsystem.dto.account.AccountMapper;
-import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
-import com.nln.hospitalsystem.dto.doctor.DoctorLiteDTO;
-import com.nln.hospitalsystem.dto.doctor.DoctorMapper;
+import com.nln.hospitalsystem.dto.doctor.*;
 import com.nln.hospitalsystem.dto.drug.DrugMapper;
 import com.nln.hospitalsystem.dto.patient.PatientMapper;
 import com.nln.hospitalsystem.entity.*;
@@ -191,5 +189,18 @@ public class DoctorServiceImpl implements DoctorService {
         } catch (Exception e) {
             throw new RuntimeException("Lỗi khi đọc CSV: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public List<DoctorWorkDTO> getAllDoctorWorks(Integer specialtyId) {
+        List<Doctor> doctors;
+        if (specialtyId == null) {
+            doctors = doctorRepository.findAllUpcomingWithWorkDetails();
+        } else {
+            doctors = doctorRepository.findAllUpcomingBySpecialty(specialtyId);
+        }
+        return doctors.stream()
+                .map(DoctorWorkMapper::mapToDTO)
+                .collect(Collectors.toList());
     }
 }

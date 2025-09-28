@@ -4,7 +4,10 @@ import com.nln.hospitalsystem.entity.DoctorWorkDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface DoctorWorkDetailRepository extends JpaRepository<DoctorWorkDetail, Integer> {
     boolean existsByIdDoctorIdAndIdWorkDetailId(Integer doctorId, Long workDetailId);
+    Optional<DoctorWorkDetail> findByIdDoctorIdAndIdWorkDetailId(Integer doctorId, Long workDetailId);
 }

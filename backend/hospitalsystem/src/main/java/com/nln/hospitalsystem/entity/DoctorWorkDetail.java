@@ -44,4 +44,7 @@ public class DoctorWorkDetail {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "doctorWorkDetail", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Appointment appointment;
 }

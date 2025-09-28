@@ -3,6 +3,7 @@ package com.nln.hospitalsystem.controller;
 import com.nln.hospitalsystem.dto.account.AccountDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorLiteDTO;
+import com.nln.hospitalsystem.dto.doctor.DoctorWorkDTO;
 import com.nln.hospitalsystem.dto.drug.DrugDTO;
 import com.nln.hospitalsystem.dto.patient.PatientDTO;
 import com.nln.hospitalsystem.payload.ResponseData;
@@ -62,6 +63,12 @@ public class DoctorController {
     public ResponseEntity<ResponseData<Long>> getCount() {
         long count = doctorService.countDoctor();
         return ResponseEntity.ok(ResponseData.success(count, "Count accounts successfully"));
+    }
+
+    @GetMapping("/doctor-work")
+    public ResponseEntity<ResponseData<List<DoctorWorkDTO>>> getDoctorWork(@RequestParam(required = false) Integer id) {
+        List<DoctorWorkDTO> dto = doctorService.getAllDoctorWorks(id);
+        return ResponseEntity.ok(ResponseData.success(dto, "Get doctors successfully"));
     }
 
     // Tham so

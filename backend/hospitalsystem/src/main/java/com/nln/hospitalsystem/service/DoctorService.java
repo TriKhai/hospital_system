@@ -3,6 +3,7 @@ package com.nln.hospitalsystem.service;
 import com.nln.hospitalsystem.dto.doctor.AccountDoctorDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorLiteDTO;
+import com.nln.hospitalsystem.dto.doctor.DoctorWorkDTO;
 import com.nln.hospitalsystem.dto.drug.DrugDTO;
 import com.nln.hospitalsystem.payload.request.RegisterRequest;
 import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
@@ -17,4 +18,6 @@ public interface DoctorService {
     Long countDoctor();
     DoctorDTO updateDoctor(String username, DoctorRequest doctorRequest);
     List<DoctorDTO> importDoctor(MultipartFile file);
+    List<DoctorWorkDTO> getAllDoctorWorks(Integer specialtyId);
+
 }

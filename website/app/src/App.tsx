@@ -15,6 +15,7 @@ import {
 } from "./pages/admin";
 import OpportunitiesPage from "./components/layout/admin/OpportunitiesPage";
 import SchedulePage from "./pages/admin/schedule/SchedulePage";
+import About from "./pages/patient/About";
 
 export default function App() {
   return (
@@ -25,7 +26,7 @@ export default function App() {
             <Route path="/" element={<Navigate to="/trang-chu" replace />} />
             <Route element={<MainPage />}>
               <Route path="/trang-chu" element={<HomePage />} />
-              {/* <Route path="/gioi-thieu" element={<About />} /> */}
+              <Route path="/gioi-thieu" element={<About />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
