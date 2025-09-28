@@ -80,3 +80,35 @@ export interface DoctorLite {
   id: number;
   name: string;
 }
+
+// DoctorWork
+export interface DoctorWorkDetail {
+    id:        number;
+    startTime: string;
+    endTime:   string;
+    status:    string;
+    note:      null;
+    shiftName: string;
+    workDate:  Date;
+}
+
+export interface DoctorWorkResponse {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  birthDay: Date;          
+  gender: boolean;        
+  imageUrl: string;
+  consultationFee?: number; 
+  workingHours?: Date;      
+  licenseNumber?: string;
+  yearsOfExperience?: number;
+  degree?: string;
+  position?: string;
+  specialty: SpecialtyResponse;
+  createdAt: Date;
+  updatedAt: Date;
+  doctorWorkDetails: DoctorWorkDetail[];
+}

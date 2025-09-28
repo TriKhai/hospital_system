@@ -85,12 +85,6 @@ public class Doctor {
     @JoinColumn(name = "specialty_id")
     private Specialty specialty;
 
-    @OneToMany(mappedBy = "doctor")
-    private List<Appointment> appointments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "doctor")
-    private List<StaffSchedule> staffSchedules = new ArrayList<>();
-
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
     private List<DoctorWorkDetail> doctorWorkDetails= new ArrayList<>();
 }

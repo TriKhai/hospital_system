@@ -1,5 +1,9 @@
 import axiosClient from "../config/axios";
-import type { DoctorLite, DoctorType } from "../types/doctorType";
+import type {
+  DoctorLite,
+  DoctorType,
+  DoctorWorkResponse,
+} from "../types/doctorType";
 import type { ResponseData } from "../types/resType";
 
 const BASE_URL = "/doctor";
@@ -13,15 +17,30 @@ const doctorService = {
 
   getBySpecialty: async (id?: number): Promise<DoctorLite[]> => {
     if (!id) return [];
-    const res = await axiosClient.get<ResponseData<DoctorLite[]>>(BASE_URL + "/specialty", {
-      params: { id },
-    });
+    const res = await axiosClient.get<ResponseData<DoctorLite[]>>(
+      BASE_URL + "/specialty",
+      {
+        params: { id },
+      }
+    );
     console.log("doc: ", res.data.data);
     return res.data.data;
   },
 
   getCount: async (): Promise<number> => {
     const res = await axiosClient.get(`${BASE_URL}/count`);
+    return res.data.data;
+  },
+
+  getDoctorWorks: async (
+    specialtyId?: number
+  ): Promise<DoctorWorkResponse[]> => {
+    const url = specialtyId
+      ? `${BASE_URL}/doctor-work?specialtyId=${specialtyId}`
+      : `${BASE_URL}/doctor-work`;
+
+    const res = await axiosClient.get<ResponseData<DoctorWorkResponse[]>>(url);
+    console.log(res.data.data);
     return res.data.data;
   },
 

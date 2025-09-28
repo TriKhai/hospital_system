@@ -8,7 +8,7 @@ const MainPage: React.FC = () => {
         <NavbarNoFixed />
         {/* <Navbar /> */}
         {/* <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl mx-auto mt-6"> */}
-        <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl mx-auto">
+        <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl mx-auto mt-22">
           <Outlet />
         </main>
     </div>

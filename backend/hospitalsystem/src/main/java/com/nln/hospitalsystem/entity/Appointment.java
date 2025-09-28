@@ -1,5 +1,7 @@
 package com.nln.hospitalsystem.entity;
 
+import com.nln.hospitalsystem.enums.AppointmentStatus;
+import com.nln.hospitalsystem.enums.RecordStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,18 +24,16 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @Column(name = "start_time", nullable = false)
-//    private LocalDateTime startTime;
-//
-//    @Column(name = "end_time")
-//    private LocalDateTime endTime;
-
     @Enumerated(EnumType.STRING)  // lưu chuỗi thay vì số
     @Column(name = "status", nullable = false, length = 20)
     private AppointmentStatus status;
 
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "del_status", nullable = false)
+    private RecordStatus delStatus = RecordStatus.ACTIVE;
 
     @CreatedDate
     @Column(name="created_at", updatable = false)
@@ -43,10 +43,12 @@ public class Appointment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Mối quan hệ với Doctor
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id"),
+            @JoinColumn(name = "work_detail_id", referencedColumnName = "work_detail_id")
+    })
+    private DoctorWorkDetail doctorWorkDetail;
 
     // Mối quan hệ với Patient
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,14 +58,5 @@ public class Appointment {
 //    @OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
 //    private MedicalRecord medicalRecord;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "staff_schedule_id", nullable = false, unique = true)
-    private StaffSchedule staffSchedule;
 
-    public enum AppointmentStatus {
-        BOOKED,       // đã đặt
-        CANCELLED,    // đã hủy
-        COMPLETED,    // đã hoàn thành
-        RESCHEDULED   // dời lịch
-    }
 }
