@@ -1,6 +1,6 @@
 export type Shift = "MORNING" | "AFTERNOON" | "EVENING";
 export type Repeat = "DAILY" | "WEEKLY";
-export type Status = "ACTIVE" | "INACTIVE";
+export type Status = "AVAILABLE" | "BOOKED" | "CANCELLED" | "COMPLETED" | "ABSENT" | "MEETING";
 
 export interface ScheduleReq {
   doctorId: number;
@@ -17,6 +17,6 @@ export interface ScheduleRes {
   title: string;       // Hiển thị trên calendar
   start: string;       // ISO string: ngày giờ bắt đầu
   end: string;         // ISO string: ngày giờ kết thúc
-  status?: "ACTIVE" | "INACTIVE"; // tuỳ chọn, dùng để hiển thị màu sắc hoặc trạng thái
+  status?: Status; // tuỳ chọn, dùng để hiển thị màu sắc hoặc trạng thái
   doctorId: number
 };

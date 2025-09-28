@@ -6,6 +6,7 @@ import ScheduleCalendar from "../../../components/layout/schedule/ScheduleCalend
 import scheduleService from "../../../services/scheduleApi";
 import type { ScheduleReq, ScheduleRes } from "../../../types/scheduleType";
 import { toast } from "react-toastify";
+import WorkCalendar from "../../../components/layout/work/WorkCalendar";
 
 type SpecialtyType = { id: number; name: string };
 
@@ -104,12 +105,15 @@ export default function SchedulePage() {
         </select>
       </div>
 
-      <ScheduleCalendar
+      {/* <ScheduleCalendar
         doctors={doctors}
         events={events}
         onAddSchedules={handleAddSchedules}
         onDeleteSchedules={handleDelete}
-      />
+      /> */}
+
+      <WorkCalendar specialtyID={activeSpecialtyId} />
+
     </div>
   );
 }

@@ -34,7 +34,7 @@ public class StaffSchedule {
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private ScheduleStatus status = ScheduleStatus.ACTIVE;
+    private ScheduleStatus status = ScheduleStatus.AVAILABLE;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
