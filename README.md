@@ -6,15 +6,13 @@
 
 ## Technologies Used:
 
-- Python 3.10
-- Django 4.2
-- React 5.1
+- Java 
+- MySQL
+- React TS
 
-## Additional Python Modules Required:
+## Additional JAVA Modules Required
 
-- django-crispy-forms 2.1
-- crispy-bootstrap4 2023.1
-- Pillow 10.1.0
+-
 
 ## Task: Hệ thống khám bệnh
 
@@ -35,3 +33,14 @@
 
 \*Nâng cao:
 - Phát hiện hóa đơn bất thường
+
+### TÍNH NĂNG HỆ THỐNG
+
+1. Trang Admin
+   - CRUD các bảngtức
+   - Thống kê hệ thống
+   - Lịch làm việc
+   - Lịch hẹn
+   - Quản lý tin tức
+3. Trang Doctor
+4. Trang Patient
