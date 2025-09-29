@@ -42,5 +42,13 @@
    - Lịch làm việc
    - Lịch hẹn
    - Quản lý tin tức
+     
 3. Trang Doctor
-4. Trang Patient
+   - Xem lịch làm việc
+   - Điều chỉnh việc làm việc
+   - Thông báo với admin là buổi bận (*)
+     
+5. Trang Patient
+   - Trang chủ, aboutabout
+   - Đặt lịch làm việc
+   - Profile,....
