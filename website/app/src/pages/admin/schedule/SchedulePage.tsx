@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import specialtyService from "../../../services/specialtyApi";
 import doctorService from "../../../services/doctorApi";
 import type { DoctorLite } from "../../../types/doctorType";
-import ScheduleCalendar from "../../../components/layout/schedule/ScheduleCalendar";
 import scheduleService from "../../../services/scheduleApi";
 import type { ScheduleReq, ScheduleRes } from "../../../types/scheduleType";
 import { toast } from "react-toastify";
+import { mapSchedulesToEvents } from "../../../utils/workHelper";
 import WorkCalendar from "../../../components/layout/work/WorkCalendar";
 
 type SpecialtyType = { id: number; name: string };
@@ -31,6 +31,7 @@ export default function SchedulePage() {
         scheduleRes = await scheduleService.getAll();
       }
 
+      // alert(scheduleRes)
       setDoctors(doctorRes);
       setEvents(scheduleRes);
     } catch (err) {
@@ -105,15 +106,9 @@ export default function SchedulePage() {
         </select>
       </div>
 
-      {/* <ScheduleCalendar
-        doctors={doctors}
-        events={events}
-        onAddSchedules={handleAddSchedules}
-        onDeleteSchedules={handleDelete}
-      /> */}
-
-      <WorkCalendar specialtyID={activeSpecialtyId} />
-
+      <div className="">
+        <WorkCalendar events={mapSchedulesToEvents(events)} />
+      </div>
     </div>
   );
 }
