@@ -1,88 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
-// import type { Event } from 'react-big-calendar';
-import { format, parse, startOfWeek, getDay } from 'date-fns';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import {enUS} from 'date-fns/locale';
-import type { ScheduleRes } from '../../../types/scheduleType';
-import scheduleService from '../../../services/scheduleApi';
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
+import type { EventInput } from "@fullcalendar/core";
+import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
+import timeGridPlugin from "@fullcalendar/timegrid";
+import viLocale from "@fullcalendar/core/locales/vi";
+import { useRef } from "react";
+// import { MonthPicker } from "@mui/x-date-pickers/MonthPicker";
+import MiniCalendar from "./MiniCalendar";
+import { Dayjs } from "dayjs";
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css"; // CSS cơ bản
+import "tippy.js/themes/light.css"; // nếu muốn theme light
 
-export interface CalendarEvent {
-  id: string | number;
-  title: string;
-  start: Date;
-  end: Date;
-  resource: {
-    doctorId: number;
-    status: string; // AVAILABLE / BOOKED
+interface Props {
+  events: EventInput[];
+}
+
+const WorkCalendar: React.FC<Props> = ({ events }) => {
+  const mainCalendarRef = useRef<FullCalendar | null>(null);
+
+  const handleMiniChange = (date: Dayjs) => {
+    const api = mainCalendarRef.current?.getApi();
+    api?.gotoDate(date.toDate()); // nhảy ngày theo mini calendar
   };
-}
-
-
-
-// interface WorkDTO {
-//   id: number | string;
-//   title: string;
-//   start: string; // ISO string
-//   end: string;   // ISO string
-//   status: 'AVAILABLE' | 'BOOKED';
-//   doctorId: number;
-//   specialty?: string | null;
-// }
-
-interface WorkCalendarProps {
-  specialtyID?: number | null;
-}
-
-const locales = {
-  'en-US': enUS
-};
-
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
-
-const WorkCalendar: React.FC<WorkCalendarProps> = ({ specialtyID }) => {
-  const [events, setEvents] = useState<CalendarEvent[]>([]);
-
-  useEffect(() => {
-    const fetchWork = async () => {
-      try {
-        const data: ScheduleRes[] = await scheduleService.getAll(specialtyID || undefined);
-        const mapped: CalendarEvent[] = data.map((w) => ({
-            id: w.id,
-            title: w.title,
-            start: new Date(w.start),
-            end: new Date(w.end),
-            resource: { doctorId: w.doctorId, status: w.status || "UNKNOWN" }
-        }));
-        setEvents(mapped);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchWork();
-  }, [specialtyID]);
 
   return (
-    <div style={{ height: '800px' }}>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        titleAccessor="title"
-        style={{ height: 800 }}
-        eventPropGetter={(event) => {
-          const backgroundColor = event.resource.status === 'AVAILABLE' ? '#28a745' : '#dc3545';
-          return { style: { backgroundColor, color: 'white' } };
-        }}
-      />
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <FullCalendar
+          ref={mainCalendarRef}
+          height="70vh"
+          plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+          initialView="dayGridMonth"
+          allDaySlot={false}
+          //   headerToolbar={false}
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,timeGridWeek,timeGridDay",
+          }}
+          locale={viLocale}
+          // dayHeaderFormat={{ weekday: 'short' }}
+
+          fixedWeekCount={false}
+          dayHeaderContent={(args) => {
+            // args.date là ngày đầy đủ
+            const d = args.date;
+            const weekday = d.toLocaleDateString("vi-VN", { weekday: "short" }); // Th 2
+            const dayNum = d.getDate(); // 29, 30,...
+            return (
+              <div className="flex flex-col items-center">
+                <span className="text-sm font-semibold">{weekday}</span>
+                <span className="text-lg">{dayNum}</span>
+              </div>
+            );
+          }}
+          events={events}
+          eventDidMount={(info) => {
+            const e = info.event;
+            tippy(info.el, {
+              content: 
+                `
+                    <b>${e.title}</b>
+                    <br/>
+                    ${e.start?.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    })}
+                    -
+                    ${e.end?.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                `,
+              allowHTML: true,
+              theme: "light",
+              trigger: "click", // hoặc "mouseenter"
+              placement: "right",
+            });
+          }}
+        />
+      </div>
+
+      <MiniCalendar onChange={handleMiniChange} />
     </div>
   );
 };
