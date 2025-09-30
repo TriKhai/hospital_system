@@ -7,6 +7,7 @@ import type { ScheduleReq, ScheduleRes } from "../../../types/scheduleType";
 import { toast } from "react-toastify";
 import { mapSchedulesToEvents } from "../../../utils/workHelper";
 import WorkCalendar from "../../../components/layout/work/WorkCalendar";
+import AddScheduleDialog from "../../../components/layout/work/AddWorkDialog";
 
 type SpecialtyType = { id: number; name: string };
 
@@ -17,6 +18,16 @@ export default function SchedulePage() {
   const [activeSpecialtyId, setActiveSpecialtyId] = useState<number | null>(
     null
   );
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
 
   const fetchDoctorsAndSchedules = async (specialtyId: number | null) => {
     try {
@@ -58,57 +69,89 @@ export default function SchedulePage() {
     fetchDoctorsAndSchedules(activeSpecialtyId);
   }, [activeSpecialtyId]);
 
-  const handleAddSchedules = async (newSchedules: ScheduleReq[]) => {
+  // const handleAddSchedules = async (newSchedules: ScheduleReq[]) => {
+  //   try {
+  //     for (const schedule of newSchedules) {
+  //       await scheduleService.create(schedule);
+  //       fetchDoctorsAndSchedules(activeSpecialtyId);
+  //       toast.success("Đã thêm lịch thành công.");
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
+  //   }
+  // };
+
+  const handleAddSchedules = async (data: ScheduleReq) => {
     try {
-      for (const schedule of newSchedules) {
-        await scheduleService.create(schedule);
-        fetchDoctorsAndSchedules(activeSpecialtyId);
-        toast.success("Đã thêm lịch thành công.");
-      }
+      const payload = {
+        ...data,
+        workDate: data.workDate,
+      };
+      console.log(payload);
+      await scheduleService.create(payload);
+      await fetchDoctorsAndSchedules(activeSpecialtyId);
+      toast.success("Đã thêm lịch thành công.");
     } catch (err) {
       console.error(err);
       toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
     }
   };
 
-  const handleDelete = async (id: number) => {
-    try {
-      await scheduleService.delete(id);
-      fetchDoctorsAndSchedules(activeSpecialtyId);
-      toast.success("Đã xoá lịch thành công.");
-    } catch (err) {
-      console.error(err);
-      toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
-    }
-  };
+  // const handleDelete = async (id: number) => {
+  //   try {
+  //     await scheduleService.delete(id);
+  //     fetchDoctorsAndSchedules(activeSpecialtyId);
+  //     toast.success("Đã xoá lịch thành công.");
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
+  //   }
+  // };
 
   return (
     <div className="p-1">
       <h1 className="text-2xl font-bold mb-6">Quản lý lịch làm việc bác sĩ</h1>
 
-      <div className="mb-4">
-        <label className="mr-2 font-bold">Chọn khoa:</label>
-        <select
-          value={activeSpecialtyId ?? "all"}
-          onChange={(e) =>
-            setActiveSpecialtyId(
-              e.target.value === "all" ? null : Number(e.target.value)
-            )
-          }
-          className="border p-2 rounded bg-white"
-        >
-          <option value="all">-- Tất cả --</option>
-          {specialties.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
+      <div className="flex">
+        <div className="mb-4">
+          <label className="mr-2 font-bold">Chọn khoa:</label>
+          <select
+            value={activeSpecialtyId ?? "all"}
+            onChange={(e) =>
+              setActiveSpecialtyId(
+                e.target.value === "all" ? null : Number(e.target.value)
+              )
+            }
+            className="border p-2 rounded bg-white"
+          >
+            <option value="all">-- Tất cả --</option>
+            {specialties.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <button className="p-2 ml-2 bg-green-200 border" onClick={handleOpen}>
+            Add
+          </button>
+        </div>
       </div>
 
       <div className="">
-        <WorkCalendar events={mapSchedulesToEvents(events)} />
+        <WorkCalendar events={mapSchedulesToEvents(events)} onDateClick={setSelectedDate} />
       </div>
+
+      <AddScheduleDialog
+        onSubmit={handleAddSchedules}
+        onClose={handleClose}
+        open={isOpen}
+        doctors={doctors}
+        // defaultDate={selectedDate.toISOString().split("T")[0]} 
+        defaultDate={selectedDate.toLocaleDateString("en-CA")} 
+      />
     </div>
   );
 }
