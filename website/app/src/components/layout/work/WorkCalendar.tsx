@@ -14,9 +14,10 @@ import "tippy.js/themes/light.css"; // nếu muốn theme light
 
 interface Props {
   events: EventInput[];
+  onDateClick: (date: Date) => void;
 }
 
-const WorkCalendar: React.FC<Props> = ({ events }) => {
+const WorkCalendar: React.FC<Props> = ({ events, onDateClick }) => {
   const mainCalendarRef = useRef<FullCalendar | null>(null);
 
   const handleMiniChange = (date: Dayjs) => {
@@ -41,6 +42,14 @@ const WorkCalendar: React.FC<Props> = ({ events }) => {
           }}
           locale={viLocale}
           // dayHeaderFormat={{ weekday: 'short' }}
+          dateClick={(info) => {
+            // 👇 callback lên cha
+            onDateClick?.(info.date);
+          }}
+
+          editable={true}      // bật drag & drop cho event
+          selectable={true}    // cho phép chọn khoảng thời gian (drag chọn)
+          selectMirror={true}  // show ghost khi kéo chọn
 
           fixedWeekCount={false}
           dayHeaderContent={(args) => {
