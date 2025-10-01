@@ -20,6 +20,10 @@ export default function SchedulePage() {
   );
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedSchedule, setSelectedSchedule] = useState<ScheduleRes | null>(
+    null
+  );
+  const [dialogMode, setDialogMode] = useState<"create" | "edit">("create");
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -42,7 +46,6 @@ export default function SchedulePage() {
         scheduleRes = await scheduleService.getAll();
       }
 
-      // alert(scheduleRes)
       setDoctors(doctorRes);
       setEvents(scheduleRes);
     } catch (err) {
@@ -69,19 +72,6 @@ export default function SchedulePage() {
     fetchDoctorsAndSchedules(activeSpecialtyId);
   }, [activeSpecialtyId]);
 
-  // const handleAddSchedules = async (newSchedules: ScheduleReq[]) => {
-  //   try {
-  //     for (const schedule of newSchedules) {
-  //       await scheduleService.create(schedule);
-  //       fetchDoctorsAndSchedules(activeSpecialtyId);
-  //       toast.success("Đã thêm lịch thành công.");
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
-  //   }
-  // };
-
   const handleAddSchedules = async (data: ScheduleReq) => {
     try {
       const payload = {
@@ -100,14 +90,37 @@ export default function SchedulePage() {
 
   // const handleDelete = async (id: number) => {
   //   try {
-  //     await scheduleService.delete(id);
-  //     fetchDoctorsAndSchedules(activeSpecialtyId);
+  //     // await scheduleService.delete(id);
+  //     // fetchDoctorsAndSchedules(activeSpecialtyId);
   //     toast.success("Đã xoá lịch thành công.");
   //   } catch (err) {
   //     console.error(err);
   //     toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
   //   }
   // };
+
+  const handleUpdateSchedule = async (data: ScheduleReq) => {
+    try {
+      // await scheduleService.update(data);  // giả sử bạn có API PUT
+      // await fetchDoctorsAndSchedules(activeSpecialtyId);
+      toast.success("Cập nhật lịch thành công.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Không thể cập nhật lịch.");
+    }
+  };
+
+  function mapScheduleResToReq(schedule: ScheduleRes): ScheduleReq {
+    return {
+      doctorId: schedule.doctorId,
+      workDate: schedule.start.split("T")[0], // just the date part
+      shift: "MORNING", // 🔧 You'll need real logic here
+      slotMinutes: 30, // 🔧 or extract this if available
+      repeat: "NONE",
+      repeatCount: 0,
+      status: schedule.status || "AVAILABLE",
+    };
+  }
 
   return (
     <div className="p-1">
@@ -141,17 +154,57 @@ export default function SchedulePage() {
       </div>
 
       <div className="">
-        <WorkCalendar events={mapSchedulesToEvents(events)} onDateClick={setSelectedDate} />
+        {/* <WorkCalendar
+          events={mapSchedulesToEvents(events)}
+          onDateClick={setSelectedDate}
+        /> */}
+        <WorkCalendar
+          events={mapSchedulesToEvents(events)}
+          onDateClick={setSelectedDate}
+          onEventClick={(info) => {
+            const id = info.event.id;
+            const schedule = events.find((e) => e.id === id);
+            if (schedule) {
+              setSelectedSchedule(schedule);
+              setDialogMode("edit");
+              setIsOpen(true);
+            }
+          }}
+        />
       </div>
 
-      <AddScheduleDialog
+      {/* <AddScheduleDialog
         onSubmit={handleAddSchedules}
         onClose={handleClose}
         open={isOpen}
         doctors={doctors}
-        // defaultDate={selectedDate.toISOString().split("T")[0]} 
-        defaultDate={selectedDate.toLocaleDateString("en-CA")} 
+        // defaultDate={selectedDate.toISOString().split("T")[0]}
+        defaultDate={selectedDate.toLocaleDateString("en-CA")}
+      /> */}
+      <AddScheduleDialog
+        open={isOpen}
+        onClose={handleClose}
+        onSubmit={handleAddSchedules}
+        doctors={doctors}
+        defaultDate={selectedDate.toLocaleDateString("en-CA")}
+        mode="create"
       />
+
+      {isOpen && (
+        <AddScheduleDialog
+          open={isOpen}
+          onClose={handleClose}
+          onSubmit={
+            selectedSchedule ? handleUpdateSchedule : handleAddSchedules
+          }
+          doctors={doctors}
+          defaultDate={selectedDate.toLocaleDateString("en-CA")}
+          mode={selectedSchedule ? "edit" : "create"}
+          initalData={
+            selectedSchedule ? mapScheduleResToReq(selectedSchedule) : undefined
+          }
+        />
+      )}
     </div>
   );
 }

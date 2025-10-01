@@ -148,7 +148,7 @@ public class WorkServiceImpl implements WorkService {
 
     @Override
     public List<WorkDTO> getAllWorkShift(Integer specialtyId) {
-        System.out.println(specialtyId);
+//        System.out.println(specialtyId);
         List<Work> works = workRepository.findAll();
         List<WorkDTO> result = new ArrayList<>();
 
@@ -200,8 +200,15 @@ public class WorkServiceImpl implements WorkService {
         return result;
     }
 
+    @Override
+    public void updateWork(Long id, WorkRequest request) {
 
+    }
 
+    @Override
+    public void deleteWork(Long id) {
+
+    }
 
     private void generateWorkDetails(WorkShift shift, int slotMinutes) {
         LocalTime start = shift.getStartTime();

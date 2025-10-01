@@ -12,7 +12,6 @@ public class WorkMapper {
         String title = "BS " + doctorName + " (" + specialty + ")";
         String start = shift.getWork().getWorkDate().toString() + "T" + shift.getStartTime().toString();
         String end   = shift.getWork().getWorkDate().toString() + "T" + shift.getEndTime().toString();
-
         return new WorkDTO(id, title, start, end, shift.getShiftStatus(), doctorId);
     }
 }

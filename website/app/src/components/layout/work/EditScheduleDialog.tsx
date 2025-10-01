@@ -12,24 +12,20 @@ import type { ScheduleReq } from "../../../types/scheduleType";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 
-export default function AddScheduleDialog({
+export default function EditScheduleDialog({
   open,
   onClose,
   doctors,
   onSubmit,
   defaultDate,
-  mode,
-  initalData,
 }: {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: ScheduleReq) => void | Promise<void>;
   doctors: { id: number; name: string }[];
   defaultDate: string;
-  mode?: "create" | "edit";
-  initalData?: ScheduleReq;
 }) {
-  const initialValues: ScheduleReq = initalData || {
+  const initialValues: ScheduleReq = {
     doctorId: 0,
     workDate: defaultDate,
     shift: "MORNING",
@@ -40,31 +36,30 @@ export default function AddScheduleDialog({
   };
 
   const handleSubmit = async (values: ScheduleReq) => {
+    console.log("Submit:", values);
     if (values.doctorId === 0) {
       toast.error("Đã xảy ra lỗi, không tìm thấy bác sĩ nào.");
       return;
     }
 
-    // kiểm tra ngày
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0); // reset giờ về 0h
     const selectedDate = new Date(values.workDate);
     selectedDate.setHours(0, 0, 0, 0);
 
-    if (selectedDate <= today && mode !== "edit") {
+    if (selectedDate <= today) {
       toast.error("Ngày làm việc phải từ ngày mai trở đi.");
       return;
     }
 
     await onSubmit(values);
+    // gọi API POST /schedule ở đây
     onClose();
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        {mode === "create" ? "Thêm lịch làm việc" : "Cập nhật lịch làm việc"}
-      </DialogTitle>
+      <DialogTitle>Thêm lịch làm việc</DialogTitle>
       <DialogContent>
         <Formik initialValues={initialValues} onSubmit={handleSubmit}>
           {({ values, handleChange }) => (
@@ -172,7 +167,7 @@ export default function AddScheduleDialog({
                 <MenuItem value="PENDING">Pending</MenuItem>
               </TextField>
               <Button type="submit" variant="contained" color="primary">
-                {mode === "edit" ? "Cập nhật" : "Lưu"}
+                Lưu
               </Button>
             </Form>
           )}
