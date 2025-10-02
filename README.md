@@ -52,3 +52,8 @@
    - Trang chủ, aboutabout
    - Đặt lịch làm việc
    - Profile,....
+  
+\* Tính năng phát triển AI
+- Phân lớp bệnh
+- Cụ thể dùng các mô hình máy học để phân lớp (1 loại bệnh)
+- .....
