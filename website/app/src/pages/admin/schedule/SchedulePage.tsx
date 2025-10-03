@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { mapSchedulesToEvents } from "../../../utils/workHelper";
 import WorkCalendar from "../../../components/layout/work/WorkCalendar";
 import AddScheduleDialog from "../../../components/layout/work/AddWorkDialog";
+import type { EventInput } from "@fullcalendar/core/index.js";
 
 type SpecialtyType = { id: number; name: string };
 
@@ -23,14 +24,29 @@ export default function SchedulePage() {
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduleRes | null>(
     null
   );
+  const [selectedEvent, setSelectedEvent] = useState<EventInput | null>(null);
+
   const [dialogMode, setDialogMode] = useState<"create" | "edit">("create");
 
   const handleOpen = () => {
+    setSelectedSchedule(null); // tạo mới => clear selection
+    setDialogMode("create");
+    setIsOpen(true);
+  };
+
+  const handleEditClick = () => {
+    if (!selectedSchedule) {
+      toast.info("Vui lòng chọn 1 lịch để sửa");
+      return;
+    }
+    setDialogMode("edit");
     setIsOpen(true);
   };
 
   const handleClose = () => {
     setIsOpen(false);
+    setSelectedSchedule(null);
+    setDialogMode("create");
   };
 
   const fetchDoctorsAndSchedules = async (specialtyId: number | null) => {
@@ -88,22 +104,37 @@ export default function SchedulePage() {
     }
   };
 
-  // const handleDelete = async (id: number) => {
-  //   try {
-  //     // await scheduleService.delete(id);
-  //     // fetchDoctorsAndSchedules(activeSpecialtyId);
-  //     toast.success("Đã xoá lịch thành công.");
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
-  //   }
-  // };
+ const handleDelete = async () => {
+  if (!selectedSchedule) {
+    toast.info("Vui lòng chọn 1 lịch để xoá");
+    return;
+  }
+
+  try {
+    await scheduleService.delete(
+      selectedSchedule.doctorId,
+      selectedSchedule.scheduleId
+    );
+    await fetchDoctorsAndSchedules(activeSpecialtyId);
+    setSelectedSchedule(null); // clear selection
+    toast.success("Đã xoá lịch thành công.");
+  } catch (err) {
+    console.error(err);
+    toast.error("Đã xảy ra lỗi, không thể xoá lịch.");
+  }
+};
+
 
   const handleUpdateSchedule = async (data: ScheduleReq) => {
     try {
-      // await scheduleService.update(data);  // giả sử bạn có API PUT
-      // await fetchDoctorsAndSchedules(activeSpecialtyId);
-      toast.success("Cập nhật lịch thành công.");
+      const payload = {
+        ...data,
+        workDate: data.workDate,
+      };
+      console.log(payload);
+      await scheduleService.update(payload);
+      await fetchDoctorsAndSchedules(activeSpecialtyId);
+      toast.success("Đã chỉnh sửa lịch thành công.");
     } catch (err) {
       console.error(err);
       toast.error("Không thể cập nhật lịch.");
@@ -119,13 +150,14 @@ export default function SchedulePage() {
       repeat: "NONE",
       repeatCount: 0,
       status: schedule.status || "AVAILABLE",
+      scheduleId: schedule.scheduleId,
+      note: schedule.note,
     };
   }
 
   return (
     <div className="p-1">
       <h1 className="text-2xl font-bold mb-6">Quản lý lịch làm việc bác sĩ</h1>
-
       <div className="flex">
         <div className="mb-4">
           <label className="mr-2 font-bold">Chọn khoa:</label>
@@ -151,8 +183,23 @@ export default function SchedulePage() {
             Add
           </button>
         </div>
+        <div>
+          <button
+            className="p-2 ml-2 bg-green-200 border"
+            onClick={handleEditClick}
+          >
+            Edit
+          </button>
+        </div>
+        <div>
+          <button
+            className="p-2 ml-2 bg-green-200 border"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        </div>
       </div>
-
       <div className="">
         {/* <WorkCalendar
           events={mapSchedulesToEvents(events)}
@@ -166,13 +213,15 @@ export default function SchedulePage() {
             const schedule = events.find((e) => e.id === id);
             if (schedule) {
               setSelectedSchedule(schedule);
-              setDialogMode("edit");
-              setIsOpen(true);
+            } else {
+              setSelectedSchedule(null); // nếu không tìm thấy thì clear
             }
+            setSelectedEvent(schedule ?? null);
           }}
+        
+          selectedEvent={selectedSchedule}
         />
       </div>
-
       {/* <AddScheduleDialog
         onSubmit={handleAddSchedules}
         onClose={handleClose}
@@ -181,27 +230,21 @@ export default function SchedulePage() {
         // defaultDate={selectedDate.toISOString().split("T")[0]}
         defaultDate={selectedDate.toLocaleDateString("en-CA")}
       /> */}
-      <AddScheduleDialog
-        open={isOpen}
-        onClose={handleClose}
-        onSubmit={handleAddSchedules}
-        doctors={doctors}
-        defaultDate={selectedDate.toLocaleDateString("en-CA")}
-        mode="create"
-      />
 
       {isOpen && (
         <AddScheduleDialog
           open={isOpen}
           onClose={handleClose}
           onSubmit={
-            selectedSchedule ? handleUpdateSchedule : handleAddSchedules
+            dialogMode === "edit" ? handleUpdateSchedule : handleAddSchedules
           }
           doctors={doctors}
           defaultDate={selectedDate.toLocaleDateString("en-CA")}
-          mode={selectedSchedule ? "edit" : "create"}
+          mode={dialogMode}
           initalData={
-            selectedSchedule ? mapScheduleResToReq(selectedSchedule) : undefined
+            dialogMode === "edit" && selectedSchedule
+              ? mapScheduleResToReq(selectedSchedule)
+              : undefined
           }
         />
       )}

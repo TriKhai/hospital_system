@@ -16,6 +16,8 @@ export interface ScheduleReq {
   repeat?: string;
   repeatCount?: number;
   status: string;
+  scheduleId: number;
+  note: string;
 }
 
 export interface ScheduleRes {
@@ -25,4 +27,6 @@ export interface ScheduleRes {
   end: string; // ISO string: ngày giờ kết thúc
   status?: Status; // tuỳ chọn, dùng để hiển thị màu sắc hoặc trạng thái
   doctorId: number;
+  scheduleId: number;
+  note: string;
 }
