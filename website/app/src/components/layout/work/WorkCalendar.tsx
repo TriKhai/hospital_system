@@ -11,14 +11,21 @@ import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css"; // CSS cơ bản
 import "tippy.js/themes/light.css"; // nếu muốn theme light
 
-
 interface Props {
   events: EventInput[];
   onDateClick: (date: Date) => void;
   onEventClick?: (event: EventClickArg) => void;
+  // eventDidMount?: (info: EventMountArg) => void;
+  selectedEvent?: EventInput | null;
 }
 
-const WorkCalendar: React.FC<Props> = ({ events, onDateClick, onEventClick }) => {
+const WorkCalendar: React.FC<Props> = ({
+  events,
+  onDateClick,
+  onEventClick,
+  // eventDidMount,
+  selectedEvent,
+}) => {
   const mainCalendarRef = useRef<FullCalendar | null>(null);
 
   const handleMiniChange = (date: Dayjs) => {
@@ -30,6 +37,7 @@ const WorkCalendar: React.FC<Props> = ({ events, onDateClick, onEventClick }) =>
     <div className="flex gap-4">
       <div className="flex-1">
         <FullCalendar
+          key={selectedEvent?.id || "calendar"}
           ref={mainCalendarRef}
           height="70vh"
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
@@ -66,6 +74,11 @@ const WorkCalendar: React.FC<Props> = ({ events, onDateClick, onEventClick }) =>
           events={events}
           eventDidMount={(info) => {
             const e = info.event;
+            if (selectedEvent && info.event.id === selectedEvent.id) {
+              info.el.classList.add("selected-event");
+            } else {
+              info.el.classList.remove("selected-event");
+            }
             tippy(info.el, {
               content: `
                     <b>${e.title}</b>
@@ -85,6 +98,32 @@ const WorkCalendar: React.FC<Props> = ({ events, onDateClick, onEventClick }) =>
               trigger: "click", // hoặc "mouseenter"
               placement: "right",
             });
+          }}
+          eventClassNames={(arg) => {
+            return selectedEvent && arg.event.id === selectedEvent.id
+              ? ["selected-event"]
+              : [];
+          }}
+          eventContent={(arg) => {
+            const status = arg.event.extendedProps.status;
+            const dotColor = status === "CANCELLED" ? "red" : "blue";
+            const isSelected =
+              selectedEvent && arg.event.id === selectedEvent.id;
+
+            return (
+              <div
+                className={`flex items-center w-full overflow-hidden rounded px-1
+                    ${isSelected ? "bg-blue-500 text-white shadow-md" : ""}`}
+              >
+                <span
+                  className="w-2 h-2 rounded-full mr-1 flex-shrink-0"
+                  style={{ backgroundColor: dotColor }}
+                />
+                <span className="truncate text-sm">
+                  {arg.timeText} <b>{arg.event.title}</b>
+                </span>
+              </div>
+            );
           }}
           eventClick={(info) => {
             onEventClick?.(info); // gọi callback nếu có

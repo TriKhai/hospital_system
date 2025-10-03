@@ -2,7 +2,7 @@ import axiosClient from "../config/axios";
 import type { ResponseData } from "../types/resType";
 import type { ScheduleReq, ScheduleRes } from "../types/scheduleType";
 
-const BASE_URL = "/work";
+const BASE_URL = "/schedule";
 
 const scheduleService = {
   getAll: async (specialtyID?: number): Promise<ScheduleRes[]> => {
@@ -17,20 +17,15 @@ const scheduleService = {
     return res.data.data;
   },
 
-  //   update: async (
-  //     id: number,
-  //     data: SupplierRequest
-  //   ): Promise<SupplierResponse> => {
-  //     const res = await axiosClient.put<ResponseData<SupplierResponse>>(
-  //       `${BASE_URL}/${id}`,
-  //       data
-  //     );
-  //     return res.data.data;
-  //   },
+  update: async (data: ScheduleReq): Promise<void> => {
+    const res = await axiosClient.put<ResponseData<void>>(BASE_URL, data);
+    return res.data.data;
+  },
 
-    delete: async (id: number): Promise<void> => {
-      await axiosClient.delete(`${BASE_URL}/${id}`);
-    },
+  delete: async (doctorId: number, scheduleId: number): Promise<void> => {
+    await axiosClient.delete(`${BASE_URL}/${doctorId}/${scheduleId}`);
+  }
+    
 };
 
 export default scheduleService;
