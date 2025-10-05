@@ -82,15 +82,14 @@ export interface DoctorLite {
 }
 
 // DoctorWork
-export interface DoctorWorkDetail {
+export interface SlotType {
     id:        number;
+    status:    string;
     startTime: string;
     endTime:   string;
-    status:    string;
-    note:      null;
-    shiftName: string;
     workDate:  Date;
 }
+
 
 export interface DoctorWorkResponse {
   id: number;
@@ -110,5 +109,5 @@ export interface DoctorWorkResponse {
   specialty: SpecialtyResponse;
   createdAt: Date;
   updatedAt: Date;
-  doctorWorkDetails: DoctorWorkDetail[];
+  slots: SlotType[];
 }

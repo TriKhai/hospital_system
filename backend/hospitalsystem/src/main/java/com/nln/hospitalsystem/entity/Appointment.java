@@ -4,7 +4,6 @@ import com.nln.hospitalsystem.enums.AppointmentStatus;
 import com.nln.hospitalsystem.enums.RecordStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,13 +41,6 @@ public class Appointment {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id"),
-            @JoinColumn(name = "work_detail_id", referencedColumnName = "work_detail_id")
-    })
-    private DoctorWorkDetail doctorWorkDetail;
 
     // Mối quan hệ với Patient
     @ManyToOne(fetch = FetchType.LAZY)

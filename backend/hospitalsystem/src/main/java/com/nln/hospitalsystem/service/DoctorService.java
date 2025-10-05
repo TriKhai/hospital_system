@@ -18,6 +18,7 @@ public interface DoctorService {
     Long countDoctor();
     DoctorDTO updateDoctor(String username, DoctorRequest doctorRequest);
     List<DoctorDTO> importDoctor(MultipartFile file);
-    List<DoctorWorkDTO> getAllDoctorWorks(Integer specialtyId);
 
+
+    List<DoctorWorkDTO> getDoctorsWithAvailableSlotsBySpecialty(Integer specialtyId);
 }

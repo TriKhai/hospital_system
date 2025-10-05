@@ -4,6 +4,7 @@ import doctorService from "../../services/doctorApi";
 import type { AppointmentRequest } from "../../types/appointmentType";
 import { format } from "date-fns";
 import appointmentService from "../../services/appointmentApi";
+import dayjs from "dayjs";
 
 export default function DoctorWork() {
   const [doctors, setDoctors] = useState<DoctorWorkResponse[]>([]);
@@ -63,12 +64,12 @@ export default function DoctorWork() {
               </tr>
             </thead>
             <tbody>
-              {doc.doctorWorkDetails.map((slot) => (
+              {doc.slots.map((slot) => (
                 <tr key={slot.id}>
                   <td style={{ border: "1px solid #ccc" }}>
                     {format(slot.workDate, "dd/MM/yyyy")}
                   </td>
-                  <td style={{ border: "1px solid #ccc" }}>{slot.shiftName}</td>
+                  <td style={{ border: "1px solid #ccc" }}>{dayjs(slot.workDate).format("DD/MM/YYYY")}</td>
                   <td style={{ border: "1px solid #ccc" }}>{slot.startTime}</td>
                   <td style={{ border: "1px solid #ccc" }}>{slot.endTime}</td>
                   <td

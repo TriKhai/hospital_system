@@ -4,11 +4,13 @@ import com.nln.hospitalsystem.dto.account.AccountMapper;
 import com.nln.hospitalsystem.dto.doctor.*;
 import com.nln.hospitalsystem.dto.drug.DrugMapper;
 import com.nln.hospitalsystem.dto.patient.PatientMapper;
+import com.nln.hospitalsystem.dto.slot.SlotDTO;
 import com.nln.hospitalsystem.entity.*;
 import com.nln.hospitalsystem.enums.FileCategory;
 import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
 import com.nln.hospitalsystem.repository.AccountRepository;
 import com.nln.hospitalsystem.repository.DoctorRepository;
+import com.nln.hospitalsystem.repository.SlotRepository;
 import com.nln.hospitalsystem.repository.SpecialtyRepository;
 import com.nln.hospitalsystem.service.DoctorService;
 import com.nln.hospitalsystem.service.FileService;
@@ -31,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +47,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private SlotRepository slotRepository;
 
     @Autowired
     private FileService fileService;
@@ -192,15 +198,60 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorWorkDTO> getAllDoctorWorks(Integer specialtyId) {
+    public List<DoctorWorkDTO> getDoctorsWithAvailableSlotsBySpecialty(Integer specialtyId) {
+        LocalDate fromDate = LocalDate.now().plusDays(1);
+        LocalDate toDate = fromDate.plusMonths(1);
+
         List<Doctor> doctors;
         if (specialtyId == null) {
-            doctors = doctorRepository.findAllUpcomingWithWorkDetails();
+            // 🔹 Lấy tất cả bác sĩ
+            doctors = doctorRepository.findAll();
         } else {
-            doctors = doctorRepository.findAllUpcomingBySpecialty(specialtyId);
+            // 🔹 Lấy bác sĩ theo chuyên khoa
+            doctors = doctorRepository.findBySpecialtyId(specialtyId);
         }
-        return doctors.stream()
-                .map(DoctorWorkMapper::mapToDTO)
-                .collect(Collectors.toList());
+        if (doctors.isEmpty()) return List.of();
+
+        // Lấy tất cả ID bác sĩ
+        List<Integer> doctorIds = doctors.stream()
+                .map(Doctor::getId)
+                .toList();
+
+        //  Lấy tất cả slot khả dụng cho danh sách bác sĩ (1 query duy nhất)
+        List<Slot> allSlots = slotRepository.findAvailableSlotsByDoctorIdsAndDateRange(doctorIds, fromDate, toDate);
+
+        // Gom slot theo doctorId
+        Map<Integer, List<Slot>> slotsByDoctorId = allSlots.stream()
+                .collect(Collectors.groupingBy(slot -> slot.getDoctorSchedule().getDoctor().getId()));
+
+        // Tạo danh sách DTO
+        return doctors.stream().map(doctor -> {
+            DoctorWorkDTO dto = DoctorWorkMapper.toDoctorWorkDTO(doctor);
+            List<Slot> doctorSlots = slotsByDoctorId.getOrDefault(doctor.getId(), List.of());
+
+            dto.setSlots(doctorSlots.stream().map(slot -> SlotDTO.builder()
+                    .id(slot.getId())
+                    .status(slot.getStatus())
+                    .startTime(slot.getStartTime())
+                    .endTime(slot.getEndTime())
+                    .workDate(slot.getDoctorSchedule().getSchedule().getWorkDate())
+                    .build()).toList());
+
+            return dto;
+        }).toList();
     }
+
+//    @Override
+//    public List<DoctorWorkDTO> getAllDoctorWorks(Integer specialtyId) {
+////        List<Doctor> doctors;
+////        if (specialtyId == null) {
+////            doctors = doctorRepository.findAllUpcomingWithWorkDetails();
+////        } else {
+////            doctors = doctorRepository.findAllUpcomingBySpecialty(specialtyId);
+////        }
+////        return doctors.stream()
+////                .map(DoctorWorkMapper::mapToDTO)
+////                .collect(Collectors.toList());
+//        return List.of();
+//    }
 }
