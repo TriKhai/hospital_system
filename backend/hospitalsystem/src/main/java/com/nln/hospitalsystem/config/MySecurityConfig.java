@@ -60,6 +60,7 @@ public class MySecurityConfig {
 
                         .requestMatchers("/staff-schedule/**").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers("/work/**").hasAnyRole("ADMIN", "DOCTOR")
+                        .requestMatchers("/schedule/**").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers("/appointment").hasRole("PATIENT")
 
                         .anyRequest().authenticated() // Các request khác phải xác thực

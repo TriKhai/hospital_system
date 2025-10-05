@@ -169,7 +169,8 @@ export default function AddScheduleDialog({
                 onChange={handleChange}
               >
                 <MenuItem value="AVAILABLE">Available</MenuItem>
-                <MenuItem value="PENDING">Pending</MenuItem>
+                <MenuItem value="CANCELLED">Cancelled</MenuItem>
+                {/* <MenuItem value="CONFIRMED">Pending</MenuItem> */}
               </TextField>
               <Button type="submit" variant="contained" color="primary">
                 {mode === "edit" ? "Cập nhật" : "Lưu"}

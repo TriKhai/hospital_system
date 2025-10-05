@@ -1,5 +1,6 @@
 package com.nln.hospitalsystem.dto.doctor;
 
+import com.nln.hospitalsystem.dto.slot.SlotDTO;
 import com.nln.hospitalsystem.dto.specialty.SpecialtyDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,5 +35,5 @@ public class DoctorWorkDTO {
     private SpecialtyDTO specialty;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<DoctorWorkDetailDTO> doctorWorkDetails;
+    private List<SlotDTO> slots;
 }

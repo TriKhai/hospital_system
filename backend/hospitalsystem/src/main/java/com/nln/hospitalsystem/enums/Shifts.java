@@ -1,5 +1,7 @@
 package com.nln.hospitalsystem.enums;
 
+import java.time.LocalTime;
+
 public enum Shifts {
     MORNING("08:00","12:00"),
     AFTERNOON("13:00","17:00"),
@@ -15,4 +17,13 @@ public enum Shifts {
 
     public String getStart() { return start; }
     public String getEnd() { return end; }
+
+    public LocalTime getStartTime() {
+        return LocalTime.parse(start);
+    }
+
+    public LocalTime getEndTime() {
+        return LocalTime.parse(end);
+    }
+
 }

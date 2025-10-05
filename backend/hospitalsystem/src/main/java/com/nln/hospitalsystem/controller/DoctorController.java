@@ -66,8 +66,8 @@ public class DoctorController {
     }
 
     @GetMapping("/doctor-work")
-    public ResponseEntity<ResponseData<List<DoctorWorkDTO>>> getDoctorWork(@RequestParam(required = false) Integer id) {
-        List<DoctorWorkDTO> dto = doctorService.getAllDoctorWorks(id);
+    public ResponseEntity<ResponseData<List<DoctorWorkDTO>>> getDoctorWork(@RequestParam(required = false) Integer specialtyId) {
+        List<DoctorWorkDTO> dto = doctorService.getDoctorsWithAvailableSlotsBySpecialty(specialtyId);
         return ResponseEntity.ok(ResponseData.success(dto, "Get doctors successfully"));
     }
 
