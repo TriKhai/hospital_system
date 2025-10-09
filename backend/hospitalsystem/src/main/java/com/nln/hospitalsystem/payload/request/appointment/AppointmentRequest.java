@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AppointmentRequest {
-    private Integer doctorId;       // Bác sĩ
-    private Long workDetailId;   // Slot làm việc
-    private Integer patientId;      // Bệnh nhân
+    private String usernamePatient;      // Bệnh nhân
+    private Long slotId;   // Slot làm việc
     private String note;            // Ghi chú
 }

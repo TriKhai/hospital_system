@@ -6,14 +6,20 @@ import com.nln.hospitalsystem.dto.doctor.DoctorLiteDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorWorkDTO;
 import com.nln.hospitalsystem.dto.drug.DrugDTO;
 import com.nln.hospitalsystem.dto.patient.PatientDTO;
+import com.nln.hospitalsystem.enums.FileCategory;
 import com.nln.hospitalsystem.payload.ResponseData;
 import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
 import com.nln.hospitalsystem.service.DoctorService;
+import com.nln.hospitalsystem.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
 import java.security.Principal;
 import java.util.List;
 
@@ -23,6 +29,9 @@ public class DoctorController {
 
     @Autowired
     DoctorService doctorService;
+
+    @Autowired
+    FileService fileService;
 
     @PutMapping("/profile")
     public ResponseEntity<ResponseData<DoctorDTO>> updateDoctor(
@@ -69,6 +78,21 @@ public class DoctorController {
     public ResponseEntity<ResponseData<List<DoctorWorkDTO>>> getDoctorWork(@RequestParam(required = false) Integer specialtyId) {
         List<DoctorWorkDTO> dto = doctorService.getDoctorsWithAvailableSlotsBySpecialty(specialtyId);
         return ResponseEntity.ok(ResponseData.success(dto, "Get doctors successfully"));
+    }
+
+    @GetMapping("/avatar/{fileName}")
+    public ResponseEntity<?> getAvatar(@PathVariable String fileName) {
+        try {
+            Resource resource = fileService.loadFile(fileName, FileCategory.DOCTOR);
+            String contentType = Files.probeContentType(resource.getFile().toPath());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().body("Không thể tải file: " + e.getMessage());
+        }
     }
 
     // Tham so

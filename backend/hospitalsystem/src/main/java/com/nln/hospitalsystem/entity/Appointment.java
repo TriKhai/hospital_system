@@ -47,6 +47,11 @@ public class Appointment {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
+    @OneToOne
+    @JoinColumn(name = "slot_id", nullable = false, unique = true)
+    private Slot slot;
+
+
 //    @OneToOne(mappedBy = "appointment", fetch = FetchType.LAZY)
 //    private MedicalRecord medicalRecord;
 

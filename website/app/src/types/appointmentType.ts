@@ -1,6 +1,5 @@
 export interface AppointmentRequest {
-    doctorId:     number;
-    workDetailId: number;
-    patientId:    number;
-    note:         string;
+    usernamePatient: string;
+    slotId: number;
+    note: string;
 }

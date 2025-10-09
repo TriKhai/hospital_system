@@ -48,4 +48,7 @@ public class Slot {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "slot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Appointment appointment;
 }
