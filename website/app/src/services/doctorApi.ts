@@ -44,6 +44,19 @@ const doctorService = {
     return res.data.data;
   },
 
+  loadImage: async (imageName?: string): Promise<string> => {
+    if (!imageName) return "/default-doctor.png"; // ảnh mặc định
+    try {
+      const response = await axiosClient.get(`${BASE_URL}/avatar/${imageName}`, {
+        responseType: "blob", 
+      });
+      return URL.createObjectURL(response.data); // chuyển blob → objectURL
+    } catch (error) {
+      console.error("Lỗi khi tải ảnh:", error);
+      return "/default-doctor.png";
+    }
+  },
+
   // create: async (formData: FormData): Promise<DoctorType> => {
   //   const res = await axiosClient.post<ResponseData<DoctorType>>(
   //     BASE_URL,
