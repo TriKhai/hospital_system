@@ -4,3 +4,4 @@ export { default as CatalogsPage } from "./CatalogsPage";
 export { default as CRMPage} from "./catalogs/CRMPage"
 export { default as CRMAccountPage} from "./account/CRMAccountPage"
 export { default as CRMDrugPage} from "./drug/CRMDrugPage"
+export { default as CRMAppointmentPage} from "./appointment/CRMAppointmentPage"

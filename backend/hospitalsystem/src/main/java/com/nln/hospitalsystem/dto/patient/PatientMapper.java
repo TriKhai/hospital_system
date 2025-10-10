@@ -14,8 +14,7 @@ public class PatientMapper {
                 .address(patient.getAddress() != null ? patient.getAddress() : "")
                 .email(patient.getEmail() != null ? patient.getEmail() : "")
                 .phone(patient.getPhone() != null ? patient.getPhone() : "")
-                .imageUrl(patient.getImageUrl() != null ? "patient/" + patient.getImageUrl() : "default-avatar.png")
-
+                .imageUrl(patient.getImageUrl())
                 .createdAt(patient.getCreatedAt())
                 .updatedAt(patient.getUpdatedAt())
                 .build();

@@ -1,21 +1,32 @@
 package com.nln.hospitalsystem.dto.appointment;
 
+import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
+import com.nln.hospitalsystem.dto.patient.PatientDTO;
+import com.nln.hospitalsystem.dto.slot.SlotDTO;
 import com.nln.hospitalsystem.enums.AppointmentStatus;
 import com.nln.hospitalsystem.enums.RecordStatus;
+import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AppointmentDTO {
     private Integer id;
-    private AppointmentStatus status;
     private String note;
-    private RecordStatus delStatus;
+    private AppointmentStatus status;
+
+    // Bệnh nhân
+    private PatientDTO patient;
+    // Bác sĩ
+    private DoctorDTO doctor;
+    // Slot
+    private SlotDTO slot;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    // Dữ liệu phụ (nếu bạn muốn hiển thị tên bệnh nhân và slot)
-    private Integer patientId;
-    private String patientName;
-    private Integer slotId;
-    private String slotTime;
 }

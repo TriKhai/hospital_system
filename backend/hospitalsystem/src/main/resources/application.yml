@@ -15,18 +15,18 @@ spring:
   mvc:
     servlet:
       path: /api/v1
-#  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: "trikhaikhmt@gmail.com"
-#    password: "bppv ywmd guha vfrr"
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "trikhaikhmt@gmail.com"
+    password: "zqzz icyx nyme kkbh"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
   secret: "jBpoQbllxjqpDuO/9T4qTWkiMnGWhtazhidIaHx0DNA="
   expiration: 2592000000 # 30 ngày = 2_592_000_000 ms

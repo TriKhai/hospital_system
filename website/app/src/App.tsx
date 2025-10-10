@@ -9,6 +9,7 @@ import { HomePage, MainPage } from "./pages/patient";
 import {
   AdminPage,
   CRMAccountPage,
+  CRMAppointmentPage,
   CRMDrugPage,
   CRMPage,
   DashboardPage,
@@ -16,6 +17,7 @@ import {
 import OpportunitiesPage from "./components/layout/admin/OpportunitiesPage";
 import SchedulePage from "./pages/admin/schedule/SchedulePage";
 import About from "./pages/patient/About";
+import ProfilePatientPage from "./pages/patient/ProfilePatientPage";
 
 export default function App() {
   return (
@@ -27,22 +29,18 @@ export default function App() {
             <Route element={<MainPage />}>
               <Route path="/trang-chu" element={<HomePage />} />
               <Route path="/gioi-thieu" element={<About />} />
+              <Route
+                path="/trang-ca-nhan"
+                element={
+                  <RoleProtectedRoute allowedRoles={["PATIENT"]}>
+                    {/* <Route path="trang-ca-nhan" element={} /> */}
+                    <ProfilePatientPage />
+                  </RoleProtectedRoute>
+                }
+              />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            {/* <Route path="/test" element={<TestCalendar />} /> */}
-            
-            {/* <About /> */}
-
-            <Route
-              path="/about"
-              element={
-                <RoleProtectedRoute allowedRoles={["PATIENT"]}>
-                  {/* <About /> */}
-                  <HomePage />
-                </RoleProtectedRoute>
-              }
-            />
 
             <Route
               path="/doctor"
@@ -52,6 +50,7 @@ export default function App() {
                 </RoleProtectedRoute>
               }
             />
+
             <Route
               path="/admin"
               element={
@@ -66,6 +65,7 @@ export default function App() {
               <Route path="tai-khoan" element={<CRMAccountPage />} />
               <Route path="thuoc" element={<CRMDrugPage />} />
               <Route path="lich" element={<SchedulePage />} />
+              <Route path="lich-hen" element={<CRMAppointmentPage />} />
               <Route path="test" element={<OpportunitiesPage />} />
             </Route>
 

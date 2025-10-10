@@ -5,6 +5,7 @@ import com.nln.hospitalsystem.dto.patient.PatientMapper;
 import com.nln.hospitalsystem.entity.Patient;
 import com.nln.hospitalsystem.enums.FileCategory;
 import com.nln.hospitalsystem.payload.request.patient.PatientRequest;
+import com.nln.hospitalsystem.payload.request.patient.PatientUpdateRequest;
 import com.nln.hospitalsystem.repository.PatientRepository;
 import com.nln.hospitalsystem.service.FileService;
 import com.nln.hospitalsystem.service.PatientService;
@@ -105,6 +106,58 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Long countPatients() {
         return patientRepository.count();
+    }
+
+    @Override
+    public PatientDTO getPatientByUsername(String username) {
+        Patient patient = patientRepository.findByAccount_Username(username)
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found for username: " + username));
+        return PatientMapper.toDTO(patient);
+    }
+
+    @Override
+    public void updateImagePatient(String username, MultipartFile image) {
+        try {
+            if (image == null || image.isEmpty()) {
+                throw new IllegalArgumentException("Invalid image file");
+            }
+
+            Patient patient = patientRepository.findByAccount_Username(username)
+                    .orElseThrow(() -> new EntityNotFoundException("Patient not found for username: " + username));
+
+            if (patient.getImageUrl() != null) {
+                String oldFileName = Path.of(patient.getImageUrl()).getFileName().toString();
+                fileService.deleteFile(oldFileName, FileCategory.PATIENT);
+            }
+
+            String fileName = fileService.createNameFile(image);
+            fileService.saveFile(image, fileName, FileCategory.PATIENT);
+
+            patient.setImageUrl(fileName);
+            patientRepository.save(patient);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating patient: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void updateInforPatient(String username, PatientUpdateRequest request) {
+        try {
+            Patient patient = patientRepository.findByAccount_Username(username)
+                    .orElseThrow(() -> new EntityNotFoundException("Patient not found for username: " + username));
+
+            if (request.getName() != null) patient.setName(request.getName());
+            if (request.getBirthDate() != null) patient.setBirthDate(request.getBirthDate());
+            if (request.getGender() != null) patient.setGender(request.getGender());
+            if (request.getAddress() != null) patient.setAddress(request.getAddress());
+            if (request.getEmail() != null) patient.setEmail(request.getEmail());
+            if (request.getPhone() != null) patient.setPhone(request.getPhone());
+
+            patientRepository.save(patient);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating patient: " + e.getMessage(), e);
+        }
     }
 
 }

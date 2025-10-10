@@ -1,5 +1,5 @@
 import axiosClient from "../config/axios";
-import type { AppointmentRequest } from "../types/appointmentType";
+import type { AppointmentRequest, AppointmentResponse } from "../types/appointmentType";
 import type { ResponseData } from "../types/resType";
 
 const BASE_URL = "/appointment";
@@ -10,7 +10,15 @@ const appointmentService = {
     const res = await axiosClient.post<ResponseData<void>>(BASE_URL, data);
     return res.data.data;
   },
-
+  getAll: async (): Promise<AppointmentResponse[]> => {
+    const res = await axiosClient.get<ResponseData<AppointmentResponse[]>>(BASE_URL);
+    console.log(res)
+    return res.data.data;
+  },
+  updateStatus: async (id: number, status: string): Promise<void> => {
+    const res = await axiosClient.put<ResponseData<void>>(`${BASE_URL}/${id}/status`, status)
+    return res.data.data;
+  }
 };
 
 export default appointmentService;
