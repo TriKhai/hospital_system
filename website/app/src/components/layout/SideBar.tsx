@@ -8,7 +8,10 @@ import {
   faTruck,
   faUserTie,
   faPills,
+  faRightFromBracket,
+  faFlask,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../context/useAuth";
 
 interface NavLink {
   path: string;
@@ -21,13 +24,15 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
+  const { logout } = useAuth();
+
   const navLinks: NavLink[] = [
     { path: "/admin/thong-ke", label: "Thống Kê", icon: faChartBar },
     { path: "/admin/tai-khoan", label: "Tài Khoản", icon: faBoxes },
     { path: "/admin/chuyen-khoa", label: "Chuyên Khoa", icon: faTruck },
     { path: "/admin/thuoc", label: "Thuốc", icon: faUserTie },
     { path: "/admin/lich", label: "Lịch làm việc", icon: faPills },
-    // { path: "/admin/hangsx", label: "Hãng Sản Xuất", icon: faFlask },
+    { path: "/admin/lich-hen", label: "Lịch hẹn", icon: faFlask },
     // { path: "/admin/hoa-don", label: "Hóa Đơn", icon: faFileInvoice },
     // { path: "/admin/theo-doi", label: "Theo dõi", icon: faEye },
   ];
@@ -63,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
             ))}
             <hr />
             <div className="text-xl">
-              {/* <button className="p-4 cursor-pointer" onClick={logout}><FontAwesomeIcon icon={faRightFromBracket} /> Đăng xuất</button>  */}
+              <button className="p-4 cursor-pointer" onClick={logout}><FontAwesomeIcon icon={faRightFromBracket} /> Đăng xuất</button> 
             </div>
           </div>
         </div>

@@ -41,8 +41,8 @@ const DoctorList: React.FC<DoctorListProps> = ({ doctors, specialties }) => {
       : doctors.filter((doc) => doc.specialty.name === selectedSpecialty);
 
   return (
-    <div className="grid gap-5">
-      <div className="mb-4 flex gap-2 items-center">
+    <div className="grid gap-5 mt-4">
+      <div className="mb-4 flex gap-2 items-center bg-white px-4 py-6 rounded-lg shadow">
         <label className="font-semibold">Chọn khoa:</label>
         <select
           value={selectedSpecialty}
@@ -57,7 +57,7 @@ const DoctorList: React.FC<DoctorListProps> = ({ doctors, specialties }) => {
         </select>
       </div>
 
-      {filteredDoctors.map((doc) => (
+      {filteredDoctors.map((doc) => ( 
         <DoctorCard key={doc.id} doctor={doc} onBookSlot={handleBookSlot} />
       ))}
     </div>

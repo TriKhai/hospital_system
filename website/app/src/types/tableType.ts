@@ -1,5 +1,5 @@
 export type Column<T> = {
-  key: keyof T;
+  key: keyof T | string;
   label: string;
   render?: (value: T[keyof T], row: T) => React.ReactNode;
   sortValue?: (row: T) => unknown;

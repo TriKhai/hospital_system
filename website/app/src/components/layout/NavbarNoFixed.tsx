@@ -27,7 +27,7 @@ export default function NavbarNoFixed() {
 
   const navLinks: NavLinkItem[] = [
     { path: "/trang-chu", label: "Trang chủ", icon: faChartBar },
-    { path: "/gioi-thieu", label: "Giới thiệu", icon: faUser },
+    { path: "/gioi-thieu", label: "Đặt lịch hẹn", icon: faUser },
     { path: "/tin-tuc", label: "Tin tức", icon: faPills },
     {
       path: "#", // tạm thời không link trực tiếp

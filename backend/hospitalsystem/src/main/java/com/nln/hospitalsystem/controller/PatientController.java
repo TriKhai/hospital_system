@@ -5,6 +5,7 @@ import com.nln.hospitalsystem.entity.Patient;
 import com.nln.hospitalsystem.enums.FileCategory;
 import com.nln.hospitalsystem.payload.ResponseData;
 import com.nln.hospitalsystem.payload.request.patient.PatientRequest;
+import com.nln.hospitalsystem.payload.request.patient.PatientUpdateRequest;
 import com.nln.hospitalsystem.service.FileService;
 import com.nln.hospitalsystem.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,6 +62,40 @@ public class PatientController {
     public ResponseEntity<ResponseData<Long>> getCount() {
         long count = patientService.countPatients();
         return ResponseEntity.ok(ResponseData.success(count, "Count patient successfully"));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ResponseData<PatientDTO>> getPatientByUsername(Authentication authentication) {
+        PatientDTO patient = patientService.getPatientByUsername(authentication.getName());
+//        System.out.println("xxxxxxxxxx=>>>>>:" + authentication.getName());
+        return ResponseEntity.ok(ResponseData.success(patient, "Get patient successfully"));
+    }
+
+    @GetMapping("/avatar/{fileName}")
+    public ResponseEntity<?> getAvatarPatient(@PathVariable String fileName) {
+        try {
+            Resource resource = fileService.loadFile(fileName, FileCategory.PATIENT);
+            String contentType = Files.probeContentType(resource.getFile().toPath());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().body("Không thể tải file: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/avatar")
+    public ResponseEntity<ResponseData<Void>> updateAvatar(Authentication authentication, @RequestParam("image") MultipartFile image) {
+        patientService.updateImagePatient(authentication.getName(), image);
+        return ResponseEntity.ok(ResponseData.success(null, "Update image successfully"));
+    }
+
+    @PutMapping("/infor")
+    public ResponseEntity<ResponseData<Void>> updateInfor(Authentication authentication, @RequestBody PatientUpdateRequest request) {
+        patientService.updateInforPatient(authentication.getName(), request);
+        return ResponseEntity.ok(ResponseData.success(null, "Update infor successfully"));
     }
 
 

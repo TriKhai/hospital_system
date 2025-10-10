@@ -1,7 +1,7 @@
 export interface PatientResponse {
     id:        number;
     name:      string;
-    birthDate: null;
+    birthDate: string;
     gender:    boolean;
     address:   string;
     email:     string;
@@ -9,4 +9,13 @@ export interface PatientResponse {
     imageUrl:  string;
     createdAt: Date;
     updatedAt: Date;
+}
+
+export interface PatientUpdateRequest {
+  name?: string;         
+  birthDate?: string;     
+  gender?: boolean;     
+  address?: string;
+  email?: string;
+  phone?: string;
 }
