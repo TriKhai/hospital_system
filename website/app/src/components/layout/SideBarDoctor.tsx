@@ -1,4 +1,5 @@
 import {
+  faCalendar,
   faCalendarCheck,
   faKey,
   faSignOutAlt,
@@ -12,7 +13,8 @@ import { useAuth } from "../../context/useAuth";
 
 const SideBarDoctor: React.FC = () => {
   const menuItems = [
-    { path: "thong-tin", icon: faUser, label: "Thông tin cá nhân" },
+    { path: "/doctor/trang-ca-nhan", icon: faUser, label: "Thông tin cá nhân" },
+    { path: "lich-lam-viec", icon: faCalendar, label: "Lịch làm việc" },
     { path: "lich-hen", icon: faCalendarCheck, label: "Lịch hẹn của tôi" },
     { path: "doi-mat-khau", icon: faKey, label: "Đổi mật khẩu" },
   ];

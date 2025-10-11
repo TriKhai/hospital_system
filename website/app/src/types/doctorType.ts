@@ -50,7 +50,6 @@ export interface AccountDoctorRequest {
   gender: boolean;
   image?: File;
   consultationFee?: number;
-  workingHours?: string; // HH:mm
   licenseNumber?: string;
   yearsOfExperience?: number;
   degree?: string;
@@ -110,4 +109,20 @@ export interface DoctorWorkResponse {
   createdAt: Date;
   updatedAt: Date;
   slots: SlotType[];
+}
+
+export interface DoctorUpdateRequest {
+  name?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  birthDay?: string; // YYYY-MM-DD
+  gender?: boolean; // true = male, false = female
+  consultationFee?: number;
+  workingHours?: string; // "HH:mm"
+  licenseNumber?: string;
+  yearsOfExperience?: number;
+  degree?: string;
+  position?: string;
+  specialtyId?: number; 
 }

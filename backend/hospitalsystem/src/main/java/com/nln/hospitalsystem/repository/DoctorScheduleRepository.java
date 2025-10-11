@@ -27,4 +27,6 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
                                                   @Param("workDate") LocalDate workDate,
                                                   @Param("shiftType") Shifts shiftType);
 
+    List<DoctorSchedule> findByDoctorAccountUsername(String username);
+
 }

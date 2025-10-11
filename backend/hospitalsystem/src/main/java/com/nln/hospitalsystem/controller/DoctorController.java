@@ -6,9 +6,12 @@ import com.nln.hospitalsystem.dto.doctor.DoctorLiteDTO;
 import com.nln.hospitalsystem.dto.doctor.DoctorWorkDTO;
 import com.nln.hospitalsystem.dto.drug.DrugDTO;
 import com.nln.hospitalsystem.dto.patient.PatientDTO;
+import com.nln.hospitalsystem.dto.schedule.ScheduleDTO;
 import com.nln.hospitalsystem.enums.FileCategory;
 import com.nln.hospitalsystem.payload.ResponseData;
 import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
+import com.nln.hospitalsystem.payload.request.doctor.DoctorUpdateRequest;
+import com.nln.hospitalsystem.payload.request.patient.PatientUpdateRequest;
 import com.nln.hospitalsystem.service.DoctorService;
 import com.nln.hospitalsystem.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,13 +102,25 @@ public class DoctorController {
     @GetMapping("/profile")
     public ResponseEntity<ResponseData<DoctorDTO>> getDoctorByUsername(Authentication authentication) {
         DoctorDTO dto = doctorService.getByUsername(authentication.getName());
-        return ResponseEntity.ok(ResponseData.success(dto, "Get patient successfully"));
+        return ResponseEntity.ok(ResponseData.success(dto, "Get doctor successfully"));
     }
 
     @PutMapping("/avatar")
     public ResponseEntity<ResponseData<Void>> updateAvatar(Authentication authentication, @RequestParam("image") MultipartFile image) {
         doctorService.updateImageDoctor(authentication.getName(), image);
         return ResponseEntity.ok(ResponseData.success(null, "Update image successfully"));
+    }
+
+    @PutMapping("/infor")
+    public ResponseEntity<ResponseData<Void>> updateInfor(Authentication authentication, @RequestBody DoctorUpdateRequest request) {
+        doctorService.updateInforDoctor(authentication.getName(), request);
+        return ResponseEntity.ok(ResponseData.success(null, "Update infor successfully"));
+    }
+
+    @GetMapping("/schedule")
+    public ResponseEntity<ResponseData<List<ScheduleDTO>>> getScheduleDoctorByUsername(Authentication authentication) {
+        List<ScheduleDTO> dto = doctorService.getScheduleByUsernameDoctor(authentication.getName());
+        return ResponseEntity.ok(ResponseData.success(dto, "Get schedule successfully"));
     }
 
 

@@ -1,15 +1,22 @@
 import SideBarDoctor from "../../components/layout/SideBarDoctor";
 import NavDoctor from "../../components/layout/NavDoctor";
 import { useEffect, useState } from "react";
-import type { DoctorType } from "../../types/doctorType";
+import type { DoctorType, DoctorUpdateRequest } from "../../types/doctorType";
 import doctorService from "../../services/doctorApi";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "../../context/useAuth";
+import EditDoctorModel from "../../components/layout/modal/EditDoctorModel";
+import specialtyService from "../../services/specialtyApi";
+import type { SpecialtyResponse } from "../../types/specialtyType";
+import { toast } from "react-toastify";
 
 const DoctorPage: React.FC = () => {
   const [doctor, setDoctor] = useState<DoctorType>();
   const [loading, setLoading] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>("/default-patient.jpg");
+  const [openModal, setOpenModal] = useState(false);
+  const [specialties, setSpecialties] = useState<SpecialtyResponse[]>([]);
+
 
   const { user } = useAuth();
 
@@ -24,8 +31,20 @@ const DoctorPage: React.FC = () => {
     }
   };
 
+  const fetchSpecialty = async()=> {
+    setLoading(true);
+    try {
+      const res = await specialtyService.getAll();
+      setSpecialties(res);
+      setLoading(false);
+    } catch (e) {
+      console.error("Lỗi fetch specialties (data): ", e);
+    }
+  }
+
   useEffect(() => {
     fetchProfile();
+    fetchSpecialty();
   }, []);
 
   useEffect(() => {
@@ -63,6 +82,18 @@ const DoctorPage: React.FC = () => {
     }
   };
 
+  const handleSave = async (data: DoctorUpdateRequest) => {
+    try {
+      await doctorService.updateProfile(data);
+      toast.success("Cập nhật thông tin cá nhân thành công");
+      await fetchProfile();
+      setOpenModal(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Cập nhật thất bại, đã xảy ra lỗi");
+    }
+  };
+
   return (
     <div className="min-h-screen flex bg-gray-50">
       {/* Sidebar */}
@@ -85,12 +116,23 @@ const DoctorPage: React.FC = () => {
                   user,
                   imageSrc,
                   onUploadImage: handleUploadImage,
+                  onEditClick: () => setOpenModal(true),
                 }}
               />
             </>
           )}
         </div>
       </main>
+
+      {doctor && (
+        <EditDoctorModel
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          doctor={doctor}
+          specialties={specialties}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 };

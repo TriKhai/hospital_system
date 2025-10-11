@@ -2,9 +2,11 @@ import axiosClient from "../config/axios";
 import type {
   DoctorLite,
   DoctorType,
+  DoctorUpdateRequest,
   DoctorWorkResponse,
 } from "../types/doctorType";
 import type { ResponseData } from "../types/resType";
+import type { ScheduleRes } from "../types/scheduleType";
 
 const BASE_URL = "/doctor";
 
@@ -73,6 +75,16 @@ const doctorService = {
       },
     });
   },
+
+  updateProfile: async (data: Partial<DoctorUpdateRequest>):Promise<void> => {
+      await axiosClient.put(`${BASE_URL}/infor`, data);
+    },
+
+    getSchedule: async (): Promise<ScheduleRes[]> => {
+    const res = await axiosClient.get<ResponseData<ScheduleRes[]>>(`${BASE_URL}/schedule`);
+    return res.data.data;
+  },
+
 };
 
 export default doctorService;

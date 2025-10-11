@@ -20,6 +20,7 @@ import ProfilePatientPage from "./pages/patient/ProfilePatientPage";
 import MyAppointment from "./pages/patient/profite/MyAppointment";
 import InforPatient from "./pages/patient/profite/InforPatient";
 import { DoctorPage, DoctorProfile } from "./pages/doctor";
+import DoctorSchedule from "./pages/doctor/schedule/DoctorSchedule";
 
 export default function App() {
   return (
@@ -57,14 +58,10 @@ export default function App() {
                 </RoleProtectedRoute>
               }
             >
-              {/* Điều hướng mặc định */}
               <Route index element={<Navigate to="trang-ca-nhan" replace />} />
-
-              {/* Các trang con */}
               <Route path="trang-ca-nhan" element={<DoctorProfile />} />
-              {/* <Route path="lich-hen" element={<DoctorAppointments />} />
               <Route path="lich-lam-viec" element={<DoctorSchedule />} />
-              <Route path="doi-mat-khau" element={<DoctorChangePassword />} /> */}
+              
             </Route>
 
             <Route

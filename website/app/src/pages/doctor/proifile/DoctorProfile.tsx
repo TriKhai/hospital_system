@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faCamera,
-  faUser,
   faIdBadge,
   faEnvelope,
   faPhone,
@@ -18,10 +17,11 @@ interface ProfileContextType {
   user?: { username?: string };
   imageSrc: string;
   onUploadImage?: (file: File) => Promise<void>;
+  onEditClick?: () => void;
 }
 
 const DoctorProfile: React.FC = () => {
-  const { doctor, user, imageSrc, onUploadImage } =
+  const { doctor, user, imageSrc, onUploadImage, onEditClick } =
     useOutletContext<ProfileContextType>();
 
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,7 @@ const DoctorProfile: React.FC = () => {
         <div className="mt-6 flex flex-col md:flex-row gap-6 items-start">
           {/* Avatar */}
           <div className="flex flex-col items-center w-full md:w-1/4">
-            <div className="w-36 h-36 rounded-full bg-gray-100 flex items-center justify-center border border-gray-300 shadow-inner overflow-hidden">
+            <div className="w-40 h-40 rounded-full bg-gray-100 flex items-center justify-center border border-gray-300 shadow-inner overflow-hidden">
               {imageSrc ? (
                 <img
                   src={imageSrc}
@@ -148,7 +148,10 @@ const DoctorProfile: React.FC = () => {
           <h2 className="text-xl font-semibold text-gray-800 border-b-2 border-red-500 inline-block pb-1">
             Hồ sơ của bạn
           </h2>
-          <button className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition">
+          <button
+            onClick={onEditClick}
+            className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition"
+          >
             <FontAwesomeIcon icon={faEdit} />
             Chỉnh sửa
           </button>
@@ -168,18 +171,7 @@ const DoctorProfile: React.FC = () => {
             { label: "Email", value: doctor.email || "" },
             { label: "Số điện thoại", value: doctor.phone || "" },
             { label: "Địa chỉ", value: doctor.address || "" },
-            {
-              label: "Ngày đăng ký",
-              value: doctor.createdAt
-                ? format(new Date(doctor.createdAt), "dd/MM/yyyy HH:mm")
-                : "",
-            },
-            {
-              label: "Ngày cập nhật",
-              value: doctor.updatedAt
-                ? format(new Date(doctor.updatedAt), "dd/MM/yyyy HH:mm")
-                : "",
-            },
+
             { label: "Chuyên khoa", value: doctor.specialty.name },
             { label: "Bằng cấp", value: doctor.degree || "" },
             { label: "Chức vụ", value: doctor.position || "" },
@@ -191,6 +183,18 @@ const DoctorProfile: React.FC = () => {
             {
               label: "Phí khám",
               value: doctor.consultationFee?.toLocaleString() + " VND" || "",
+            },
+            {
+              label: "Ngày đăng ký",
+              value: doctor.createdAt
+                ? format(new Date(doctor.createdAt), "dd/MM/yyyy HH:mm")
+                : "",
+            },
+            {
+              label: "Ngày cập nhật",
+              value: doctor.updatedAt
+                ? format(new Date(doctor.updatedAt), "dd/MM/yyyy HH:mm")
+                : "",
             },
           ].map((field, idx) => (
             <div key={idx} className="flex flex-col">

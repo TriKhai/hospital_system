@@ -39,11 +39,14 @@ public class MySecurityConfig {
                         .requestMatchers("/specialty/**").hasRole("ADMIN")
 
                         .requestMatchers("/doctor/specialty").permitAll()
-                        .requestMatchers("/doctor/profile").hasAnyRole("ADMIN", "DOCTOR")
+                        .requestMatchers("/doctor/doctor-work").permitAll()
                         .requestMatchers(HttpMethod.GET, "/doctor").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/doctor/count").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/doctor/profile").hasRole("DOCTOR")
                         .requestMatchers(HttpMethod.PUT, "/doctor/avatar").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.PUT, "/doctor/infor").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.GET, "/doctor/schedule").hasRole("DOCTOR")
+                        .requestMatchers("/doctor/profile").hasAnyRole("ADMIN", "DOCTOR")
 
                         .requestMatchers(HttpMethod.GET, "/patient").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/patient/count").hasRole("ADMIN")
