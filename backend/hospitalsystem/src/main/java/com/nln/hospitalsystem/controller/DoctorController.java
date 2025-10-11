@@ -16,6 +16,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -94,6 +95,19 @@ public class DoctorController {
             return ResponseEntity.badRequest().body("Không thể tải file: " + e.getMessage());
         }
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<ResponseData<DoctorDTO>> getDoctorByUsername(Authentication authentication) {
+        DoctorDTO dto = doctorService.getByUsername(authentication.getName());
+        return ResponseEntity.ok(ResponseData.success(dto, "Get patient successfully"));
+    }
+
+    @PutMapping("/avatar")
+    public ResponseEntity<ResponseData<Void>> updateAvatar(Authentication authentication, @RequestParam("image") MultipartFile image) {
+        doctorService.updateImageDoctor(authentication.getName(), image);
+        return ResponseEntity.ok(ResponseData.success(null, "Update image successfully"));
+    }
+
 
     // Tham so
 //    @GetMapping("/getByID/{id}")

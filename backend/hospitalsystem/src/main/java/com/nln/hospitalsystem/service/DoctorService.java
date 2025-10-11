@@ -21,4 +21,7 @@ public interface DoctorService {
 
 
     List<DoctorWorkDTO> getDoctorsWithAvailableSlotsBySpecialty(Integer specialtyId);
+
+    DoctorDTO getByUsername(String username);
+    void updateImageDoctor(String username, MultipartFile image);
 }

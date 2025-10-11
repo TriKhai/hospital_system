@@ -15,8 +15,16 @@ const appointmentService = {
     console.log(res)
     return res.data.data;
   },
+  getForPatient: async ():Promise<AppointmentResponse[]> => {
+    const res = await axiosClient.get<ResponseData<AppointmentResponse[]>>(`${BASE_URL}/patient`);
+    return res.data.data;
+  },
   updateStatus: async (id: number, status: string): Promise<void> => {
-    const res = await axiosClient.put<ResponseData<void>>(`${BASE_URL}/${id}/status`, status)
+    const res = await axiosClient.put<ResponseData<void>>(`${BASE_URL}/${id}/status`, status);
+    return res.data.data;
+  },
+  cancelByPatient: async (id: number): Promise<void> => {
+    const res = await axiosClient.patch<ResponseData<void>>(`${BASE_URL}/${id}/cancel-by-patient`);
     return res.data.data;
   }
 };

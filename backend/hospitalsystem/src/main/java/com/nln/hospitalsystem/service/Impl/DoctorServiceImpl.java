@@ -241,6 +241,39 @@ public class DoctorServiceImpl implements DoctorService {
         }).toList();
     }
 
+    @Override
+    public DoctorDTO getByUsername(String username) {
+        Doctor doctor = doctorRepository.findByAccount_Username(username)
+                .orElseThrow(() -> new RuntimeException("Username not found"));
+        return DoctorMapper.toDTO(doctor);
+    }
+
+    @Override
+    public void updateImageDoctor(String username, MultipartFile image) {
+        try {
+            if (image == null || image.isEmpty()) {
+                throw new IllegalArgumentException("Invalid image file");
+            }
+
+            Doctor doctor = doctorRepository.findByAccount_Username(username)
+                    .orElseThrow(() -> new EntityNotFoundException("Patient not found for username: " + username));
+
+            if (doctor.getImageUrl() != null) {
+                String oldFileName = Path.of(doctor.getImageUrl()).getFileName().toString();
+                fileService.deleteFile(oldFileName, FileCategory.DOCTOR);
+            }
+
+            String fileName = fileService.createNameFile(image);
+            fileService.saveFile(image, fileName, FileCategory.DOCTOR);
+
+            doctor.setImageUrl(fileName);
+            doctorRepository.save(doctor);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating patient: " + e.getMessage(), e);
+        }
+    }
+
 //    @Override
 //    public List<DoctorWorkDTO> getAllDoctorWorks(Integer specialtyId) {
 ////        List<Doctor> doctors;

@@ -4,7 +4,6 @@ import { AuthProvider } from "./context/AuthProvider";
 import { Login, Register } from "./pages/auth";
 import NotFound from "./pages/not_found/NotFound";
 import { RoleProtectedRoute } from "./components/route/RoleProtectedRoute";
-import HomeDoctor from "./pages/doctor/HomeDoctor";
 import { HomePage, MainPage } from "./pages/patient";
 import {
   AdminPage,
@@ -18,6 +17,9 @@ import OpportunitiesPage from "./components/layout/admin/OpportunitiesPage";
 import SchedulePage from "./pages/admin/schedule/SchedulePage";
 import About from "./pages/patient/About";
 import ProfilePatientPage from "./pages/patient/ProfilePatientPage";
+import MyAppointment from "./pages/patient/profite/MyAppointment";
+import InforPatient from "./pages/patient/profite/InforPatient";
+import { DoctorPage, DoctorProfile } from "./pages/doctor";
 
 export default function App() {
   return (
@@ -26,6 +28,7 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navigate to="/trang-chu" replace />} />
+
             <Route element={<MainPage />}>
               <Route path="/trang-chu" element={<HomePage />} />
               <Route path="/gioi-thieu" element={<About />} />
@@ -33,12 +36,16 @@ export default function App() {
                 path="/trang-ca-nhan"
                 element={
                   <RoleProtectedRoute allowedRoles={["PATIENT"]}>
-                    {/* <Route path="trang-ca-nhan" element={} /> */}
                     <ProfilePatientPage />
                   </RoleProtectedRoute>
                 }
-              />
+              >
+                <Route index element={<Navigate to="thong-tin" replace />} />
+                <Route path="thong-tin" element={<InforPatient />} />
+                <Route path="lich-hen" element={<MyAppointment />} />
+              </Route>
             </Route>
+
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
@@ -46,10 +53,19 @@ export default function App() {
               path="/doctor"
               element={
                 <RoleProtectedRoute allowedRoles={["DOCTOR"]}>
-                  <HomeDoctor />
+                  <DoctorPage />
                 </RoleProtectedRoute>
               }
-            />
+            >
+              {/* Điều hướng mặc định */}
+              <Route index element={<Navigate to="trang-ca-nhan" replace />} />
+
+              {/* Các trang con */}
+              <Route path="trang-ca-nhan" element={<DoctorProfile />} />
+              {/* <Route path="lich-hen" element={<DoctorAppointments />} />
+              <Route path="lich-lam-viec" element={<DoctorSchedule />} />
+              <Route path="doi-mat-khau" element={<DoctorChangePassword />} /> */}
+            </Route>
 
             <Route
               path="/admin"

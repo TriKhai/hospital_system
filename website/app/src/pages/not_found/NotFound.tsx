@@ -11,7 +11,7 @@ const NotFound: React.FC = () => {
     case "ADMIN":
       return "/admin/thong-ke";
     case "DOCTOR":
-      return "/doctor/dashboard";
+      return "/doctor";
     case "PATIENT":
       return "/";
     default:

@@ -6,6 +6,8 @@ import type { AppointmentRequest } from "../../types/appointmentType";
 import { getUsernameFormToken } from "../../utils/authHelper";
 import { toast } from "react-toastify";
 import appointmentService from "../../services/appointmentApi";
+import type { PatientUpdateRequest } from "../../types/patientType";
+import patientService from "../../services/patientApi";
 
 interface DoctorListProps {
   doctors: DoctorWorkResponse[];
@@ -15,23 +17,51 @@ interface DoctorListProps {
 const DoctorList: React.FC<DoctorListProps> = ({ doctors, specialties }) => {
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>("ALL");
 
-  const handleBookSlot = async (request: AppointmentRequest) => {
-    const username = getUsernameFormToken();
-    if (!username) {
-      toast.error("Vui lòng đăng nhập trước khi đặt lịch");
-      return;
-    }
-    const payload: AppointmentRequest = {
-      ...request,
-      usernamePatient: username,
-    };
+  // const handleBookSlot = async (request: AppointmentRequest) => {
+  //   const username = getUsernameFormToken();
+  //   if (!username) {
+  //     toast.error("Vui lòng đăng nhập trước khi đặt lịch");
+  //     return;
+  //   }
+  //   const payload: AppointmentRequest = {
+  //     ...request,
+  //     usernamePatient: username,
+  //   };
 
+  //   try {
+  //     await appointmentService.create(payload);
+  //     toast.success("Đặt lịch thành công!");
+  //   } catch (error) {
+  //     console.error("Lỗi khi đặt lịch:", error);
+  //     toast.error("Đặt lịch thất bại. Vui lòng thử lại!");
+  //   }
+  // };
+
+  const handleConfirmBooking = async (
+    patientUpdate: PatientUpdateRequest | null,
+    appointment: AppointmentRequest
+  ) => {
     try {
+      if (patientUpdate) {
+        await patientService.updateProfile(patientUpdate);
+      }
+
+      const username = getUsernameFormToken();
+      if (!username) {
+        toast.error("Vui lòng đăng nhập trước khi đặt lịch");
+        return;
+      }
+      const payload: AppointmentRequest = {
+        ...appointment,
+        usernamePatient: username,
+      };
+
       await appointmentService.create(payload);
+
       toast.success("Đặt lịch thành công!");
-    } catch (error) {
-      console.error("Lỗi khi đặt lịch:", error);
-      toast.error("Đặt lịch thất bại. Vui lòng thử lại!");
+    } catch (err) {
+      console.error("Lỗi đặt lịch: ", err);
+      toast.error("Đặt lịch thất bại, vui lòng thử lại!");
     }
   };
 
@@ -57,8 +87,12 @@ const DoctorList: React.FC<DoctorListProps> = ({ doctors, specialties }) => {
         </select>
       </div>
 
-      {filteredDoctors.map((doc) => ( 
-        <DoctorCard key={doc.id} doctor={doc} onBookSlot={handleBookSlot} />
+      {filteredDoctors.map((doc) => (
+        <DoctorCard
+          key={doc.id}
+          doctor={doc}
+          onConfirmBooking={handleConfirmBooking}
+        />
       ))}
     </div>
   );

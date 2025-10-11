@@ -60,13 +60,24 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         appointmentRepository.save(appointment);
 
-        MailBody mailToPatient = buildPatientMailBody(patient, slot, request);
-        MailBody mailToDoctor = buildDoctorMailBody(patient, slot, request);
+//        MailBody mailToPatient = buildPatientMailBody(patient, slot, request);
+//        MailBody mailToDoctor = buildDoctorMailBody(patient, slot, request);
+//        mailService.sendMail(mailToPatient);
+//        mailService.sendMail(mailToDoctor);
 
-        mailService.sendMail(mailToPatient);
-        mailService.sendMail(mailToDoctor);
+        MailBody patientMail = buildPatientMailBody(patient, slot, request);
+        if (isValidEmail(patientMail.to())) {
+            mailService.sendMail(patientMail);
+        } else {
+            System.out.println("Email benh nhan khong ton tai");
+        }
 
-
+        MailBody doctorMail = buildDoctorMailBody(patient, slot, request);
+        if (isValidEmail(doctorMail.to())) {
+            mailService.sendMail(doctorMail);
+        } else {
+            System.out.println("Email bac si khong ton tai");
+        }
     }
 
     @Override
@@ -92,9 +103,33 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    @Override
+    public void cancelByPatient(Integer id) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        AppointmentStatus oldStatus = appointment.getStatus();
+        if(!isValidTransition(oldStatus, AppointmentStatus.CANCELLED_BY_PATIENT)) {
+            throw new RuntimeException("Không thể chuyển từ " + oldStatus + " sang CANCELLED_BY_PATIENT");
+        }
+
+        appointment.setStatus(AppointmentStatus.CANCELLED_BY_PATIENT);
+        appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public List<AppointmentDTO> getByUsernamePatient(String username) {
+        List<Appointment> appointments = appointmentRepository.findByPatientAccountUsername(username);
+        return appointments.stream()
+                .map(AppointmentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     private boolean isValidTransition(AppointmentStatus current, AppointmentStatus target) {
         return switch (current) {
-            case PENDING -> target == AppointmentStatus.PENDING_VERIFICATION || target == AppointmentStatus.REJECTED;
+            case PENDING -> target == AppointmentStatus.PENDING_VERIFICATION
+                    || target == AppointmentStatus.REJECTED
+                    || target == AppointmentStatus.CANCELLED_BY_PATIENT;
             case PENDING_VERIFICATION -> target == AppointmentStatus.CONFIRMED || target == AppointmentStatus.REJECTED;
             case CONFIRMED -> target == AppointmentStatus.COMPLETED
                     || target == AppointmentStatus.CANCELLED_BY_ADMIN
@@ -102,6 +137,19 @@ public class AppointmentServiceImpl implements AppointmentService {
             default -> false;
         };
     }
+
+    private boolean isValidEmail(String email) {
+        if (email == null || email.isBlank()) return false;
+
+        // kiểm tra định dạng email hợp lệ
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        if (!email.matches(emailRegex)) return false;
+
+        // có thể chặn domain giả định (nếu bạn biết domain nào là ảo)
+        if (email.endsWith("@hospital.com")) return false; // ví dụ domain test
+        return true;
+    }
+
 
     private MailBody buildPatientMailBody(Patient patient, Slot slot, AppointmentRequest request) {
         String doctorName = slot.getDoctorSchedule().getDoctor().getName();
