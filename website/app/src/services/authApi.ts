@@ -70,7 +70,6 @@ export function buildFormData<T extends Record<string, FormValue>>(data: T): For
   return formData;
 }
 
-
 export async function registerDoctor(
   data: AccountDoctorRequest
 ): Promise<AccountDoctorResponse | null> {

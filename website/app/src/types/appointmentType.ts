@@ -14,7 +14,6 @@ export interface AppointmentResponse {
   patient: PatientResponse;
   doctor: DoctorType;
   slot: SlotType;
-
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
 }

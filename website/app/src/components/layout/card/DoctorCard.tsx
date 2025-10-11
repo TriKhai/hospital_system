@@ -15,15 +15,24 @@ import "dayjs/locale/vi";
 import type { DoctorWorkResponse, SlotType } from "../../../types/doctorType";
 import doctorService from "../../../services/doctorApi";
 import type { AppointmentRequest } from "../../../types/appointmentType";
+import BookingDialog from "../dialog/BookingDialog";
+import type { PatientUpdateRequest } from "../../../types/patientType";
 
 interface DoctorCardProps {
   doctor: DoctorWorkResponse;
-  onBookSlot?: (request: AppointmentRequest) => void;
+  onConfirmBooking: (
+    patientUpdate: PatientUpdateRequest | null,
+    appointment: AppointmentRequest
+  ) => void;
 }
 
-const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBookSlot }) => {
+
+
+const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onConfirmBooking }) => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [imageSrc, setImageSrc] = useState<string>("/default-doctor.jpg");
+  const [selectedSlot, setSelectedSlot] = useState<SlotType | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     setSelectedDate(dayjs().format("YYYY-MM-DD"));
@@ -44,16 +53,21 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBookSlot }) => {
     (slot) => dayjs(slot.workDate).format("YYYY-MM-DD") === selectedDate
   );
 
+  // const handleBookClick = (slot: SlotType) => {
+  //   if (!onBookSlot) return;
+  //   // setSlotId(slot.id)
+  //   const request: AppointmentRequest = {
+  //       slotId: slot.id,
+  //       note: `Đặt lịch với bác sĩ ${doctor.name}`,
+  //       usernamePatient: "",
+  //   }
+  //   onBookSlot(request)
+
+  // }
   const handleBookClick = (slot: SlotType) => {
-    if (!onBookSlot) return;
-    const request: AppointmentRequest = {
-        slotId: slot.id,
-        note: `Đặt lịch với bác sĩ ${doctor.name}`,
-        usernamePatient: "",
-    }
-    onBookSlot(request)
-    
-  }
+    setSelectedSlot(slot);
+    setOpenDialog(true); // mở dialog
+  };
 
   return (
     <div className="bg-white shadow-md rounded-2xl p-5 border border-gray-200 hover:shadow-lg transition">
@@ -148,6 +162,15 @@ const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onBookSlot }) => {
           </p>
         )}
       </div>
+
+      {selectedSlot && (
+        <BookingDialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          slotId={selectedSlot.id}
+          onConfirm={onConfirmBooking}
+        />
+      )}
     </div>
   );
 };

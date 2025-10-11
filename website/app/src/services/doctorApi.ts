@@ -47,9 +47,12 @@ const doctorService = {
   loadImage: async (imageName?: string): Promise<string> => {
     if (!imageName) return "/default-doctor.png"; // ảnh mặc định
     try {
-      const response = await axiosClient.get(`${BASE_URL}/avatar/${imageName}`, {
-        responseType: "blob", 
-      });
+      const response = await axiosClient.get(
+        `${BASE_URL}/avatar/${imageName}`,
+        {
+          responseType: "blob",
+        }
+      );
       return URL.createObjectURL(response.data); // chuyển blob → objectURL
     } catch (error) {
       console.error("Lỗi khi tải ảnh:", error);
@@ -57,42 +60,19 @@ const doctorService = {
     }
   },
 
-  // create: async (formData: FormData): Promise<DoctorType> => {
-  //   const res = await axiosClient.post<ResponseData<DoctorType>>(
-  //     BASE_URL,
-  //     formData,
-  //     {
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     }
-  //   );
-  //   return res.data.data;
-  // },
-
-  // update: async (
-  //   id: number,
-  //   doctor: Partial<DoctorType>,
-  //   file?: File
-  // ): Promise<DoctorType> => {
-  //   const formData = new FormData();
-  //   formData.append(
-  //     "doctor",
-  //     new Blob([JSON.stringify(doctor)], { type: "application/json" })
-  //   );
-  //   if (file) {
-  //     formData.append("file", file);
-  //   }
-
-  //   const res = await axiosClient.put<ResponseData<DoctorType>>(
-  //     `${BASE_URL}/${id}`,
-  //     formData,
-  //     { headers: { "Content-Type": "multipart/form-data" } }
-  //   );
-  //   return res.data.data;
-  // },
-
-  // delete: async (id: number): Promise<void> => {
-  //   await axiosClient.delete(`${BASE_URL}/${id}`);
-  // },
+  getProfile: async (): Promise<DoctorType> => {
+    const res = await axiosClient.get(`${BASE_URL}/profile`);
+    return res.data.data;
+  },
+  updateAvatar: async (file: File): Promise<void> => {
+    const formData = new FormData();
+    formData.append("image", file);
+    await axiosClient.put<ResponseData<void>>(`${BASE_URL}/avatar`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
 };
 
 export default doctorService;

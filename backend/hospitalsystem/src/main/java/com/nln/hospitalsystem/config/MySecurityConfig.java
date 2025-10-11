@@ -42,6 +42,8 @@ public class MySecurityConfig {
                         .requestMatchers("/doctor/profile").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers(HttpMethod.GET, "/doctor").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/doctor/count").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/doctor/profile").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.PUT, "/doctor/avatar").hasRole("DOCTOR")
 
                         .requestMatchers(HttpMethod.GET, "/patient").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/patient/count").hasRole("ADMIN")
@@ -68,6 +70,9 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/appointment").hasRole("PATIENT")
                         .requestMatchers(HttpMethod.GET, "/api/appointment").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/appointment").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/appointment/patient").hasAnyRole("ADMIN", "PATIENT")
+                        .requestMatchers(HttpMethod.PATCH, "/api/appointment/{id}/cancel-by-patient").hasRole("PATIENT")
+
 
                         .anyRequest().authenticated() // Các request khác phải xác thực
                 )

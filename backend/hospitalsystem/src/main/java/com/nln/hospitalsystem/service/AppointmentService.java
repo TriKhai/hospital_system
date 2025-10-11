@@ -9,5 +9,7 @@ import java.util.List;
 public interface AppointmentService {
     void createAppointment(AppointmentRequest request);
     List<AppointmentDTO> getAll();
+    List<AppointmentDTO> getByUsernamePatient(String username);
     void updateStatus(Integer id, AppointmentStatus status);
+    void cancelByPatient(Integer id);
 }
