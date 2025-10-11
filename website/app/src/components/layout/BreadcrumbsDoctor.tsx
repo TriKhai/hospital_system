@@ -12,6 +12,7 @@ export default function BreadcrumbsDoctor() {
     "trang-chu": "Trang chủ",
     "trang-ca-nhan": "Trang cá nhân",
     "lich-hen": "Lịch hẹn",
+    "lich-lam-viec": "Lịch làm việc",
     "doi-mat-khau": "Đổi mật khẩu",
     "thong-tin": "Thông tin cá nhân",
     "benh-nhan": "Bệnh nhân",

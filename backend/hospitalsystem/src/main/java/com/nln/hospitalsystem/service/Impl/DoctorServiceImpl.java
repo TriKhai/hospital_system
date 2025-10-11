@@ -4,14 +4,14 @@ import com.nln.hospitalsystem.dto.account.AccountMapper;
 import com.nln.hospitalsystem.dto.doctor.*;
 import com.nln.hospitalsystem.dto.drug.DrugMapper;
 import com.nln.hospitalsystem.dto.patient.PatientMapper;
+import com.nln.hospitalsystem.dto.schedule.ScheduleDTO;
+import com.nln.hospitalsystem.dto.schedule.ScheduleMapper;
 import com.nln.hospitalsystem.dto.slot.SlotDTO;
 import com.nln.hospitalsystem.entity.*;
 import com.nln.hospitalsystem.enums.FileCategory;
 import com.nln.hospitalsystem.payload.request.doctor.DoctorRequest;
-import com.nln.hospitalsystem.repository.AccountRepository;
-import com.nln.hospitalsystem.repository.DoctorRepository;
-import com.nln.hospitalsystem.repository.SlotRepository;
-import com.nln.hospitalsystem.repository.SpecialtyRepository;
+import com.nln.hospitalsystem.payload.request.doctor.DoctorUpdateRequest;
+import com.nln.hospitalsystem.repository.*;
 import com.nln.hospitalsystem.service.DoctorService;
 import com.nln.hospitalsystem.service.FileService;
 import jakarta.persistence.EntityNotFoundException;
@@ -50,6 +50,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private SlotRepository slotRepository;
+
+    @Autowired
+    private DoctorScheduleRepository doctorScheduleRepository;
 
     @Autowired
     private FileService fileService;
@@ -272,6 +275,44 @@ public class DoctorServiceImpl implements DoctorService {
         } catch (Exception e) {
             throw new RuntimeException("Error creating patient: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void updateInforDoctor(String username, DoctorUpdateRequest request) {
+        try {
+            Doctor doctor = doctorRepository.findByAccount_Username(username)
+                    .orElseThrow(() -> new EntityNotFoundException("Doctor not found for username: " + username));
+
+            if (request.getName() != null) doctor.setName(request.getName());
+            if (request.getEmail() != null) doctor.setEmail(request.getEmail());
+            if (request.getPhone() != null) doctor.setPhone(request.getPhone());
+            if (request.getAddress() != null) doctor.setAddress(request.getAddress());
+            if (request.getBirthDay() != null) doctor.setBirthDay(request.getBirthDay());
+            if (request.getGender() != null) doctor.setGender(request.getGender());
+            if (request.getConsultationFee() != null) doctor.setConsultationFee(request.getConsultationFee());
+            if (request.getLicenseNumber() != null) doctor.setLicenseNumber(request.getLicenseNumber());
+            if (request.getYearsOfExperience() != null) doctor.setYearsOfExperience(request.getYearsOfExperience());
+            if (request.getDegree() != null) doctor.setDegree(request.getDegree());
+            if (request.getPosition() != null) doctor.setPosition(request.getPosition());
+
+            if (request.getSpecialtyId() != null) {
+                Specialty specialty = specialtyRepository.findById(request.getSpecialtyId())
+                        .orElseThrow(() -> new RuntimeException("Specialty not found with id: " + request.getSpecialtyId()));
+                doctor.setSpecialty(specialty);
+            }
+
+            doctorRepository.save(doctor);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating patient: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<ScheduleDTO> getScheduleByUsernameDoctor(String username) {
+        List<DoctorSchedule> doctorSchedules = doctorScheduleRepository.findByDoctorAccountUsername(username);
+        return doctorSchedules.stream()
+                .map(ScheduleMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 //    @Override
