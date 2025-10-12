@@ -17,15 +17,27 @@ const AppointmentPage: React.FC<Props> = ({ statusRender }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [query, setQuery] = useState("");
 
+  const cancelledStatuses = [
+    "REJECTED",
+    "CANCELLED_BY_PATIENT",
+    "CANCELLED_BY_DOCTOR",
+    "CANCELLED_BY_ADMIN",
+  ];
   const fetchData = async () => {
     try {
       setLoading(true);
       const res = await appointmentService.getAll();
       // Nếu có status, filter dữ liệu
-      const filtered = statusRender
-        ? res.filter((d) => d.status === statusRender)
-        : res;
-      setData(filtered);
+
+      const filtered =
+        statusRender === "REJECTED"
+          ? res.filter((d) => cancelledStatuses.includes(d.status))
+          : statusRender
+          ? res.filter((d) => d.status === statusRender)
+          : res;
+
+      // Đảo ngược kết quả
+      setData(filtered.reverse());
     } catch (err) {
       console.error(err);
     } finally {
@@ -124,7 +136,6 @@ const AppointmentPage: React.FC<Props> = ({ statusRender }) => {
               Xác nhận
             </button>
           )}
-
         </div>
       ),
     },
@@ -139,7 +150,6 @@ const AppointmentPage: React.FC<Props> = ({ statusRender }) => {
             Bảng hiển thị các lịch hẹn có trong hệ thống
           </p>
         </div>
-        
       </div>
 
       <div className="flex justify-between">
@@ -174,7 +184,6 @@ const AppointmentPage: React.FC<Props> = ({ statusRender }) => {
           onRowClick={handleRowClick}
         />
       )}
-
     </div>
   );
 };

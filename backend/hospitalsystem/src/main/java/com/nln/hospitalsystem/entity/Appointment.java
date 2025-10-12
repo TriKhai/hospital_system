@@ -24,7 +24,7 @@ public class Appointment {
     private Integer id;
 
     @Enumerated(EnumType.STRING)  // lưu chuỗi thay vì số
-    @Column(name = "status", nullable = false, length = 20)
+    @Column(name = "status", nullable = false, length = 50)
     private AppointmentStatus status;
 
     @Column(name = "note", columnDefinition = "TEXT")

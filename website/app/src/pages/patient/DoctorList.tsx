@@ -16,26 +16,7 @@ interface DoctorListProps {
 
 const DoctorList: React.FC<DoctorListProps> = ({ doctors, specialties }) => {
   const [selectedSpecialty, setSelectedSpecialty] = useState<string>("ALL");
-
-  // const handleBookSlot = async (request: AppointmentRequest) => {
-  //   const username = getUsernameFormToken();
-  //   if (!username) {
-  //     toast.error("Vui lòng đăng nhập trước khi đặt lịch");
-  //     return;
-  //   }
-  //   const payload: AppointmentRequest = {
-  //     ...request,
-  //     usernamePatient: username,
-  //   };
-
-  //   try {
-  //     await appointmentService.create(payload);
-  //     toast.success("Đặt lịch thành công!");
-  //   } catch (error) {
-  //     console.error("Lỗi khi đặt lịch:", error);
-  //     toast.error("Đặt lịch thất bại. Vui lòng thử lại!");
-  //   }
-  // };
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const handleConfirmBooking = async (
     patientUpdate: PatientUpdateRequest | null,
@@ -65,26 +46,48 @@ const DoctorList: React.FC<DoctorListProps> = ({ doctors, specialties }) => {
     }
   };
 
-  const filteredDoctors =
-    selectedSpecialty === "ALL"
-      ? doctors
-      : doctors.filter((doc) => doc.specialty.name === selectedSpecialty);
+  // const filteredDoctors =
+  //   selectedSpecialty === "ALL"
+  //     ? doctors
+  //     : doctors.filter((doc) => doc.specialty.name === selectedSpecialty);
+
+  const filteredDoctors = doctors.filter((doc) => {
+    const matchSpecialty =
+      selectedSpecialty === "ALL" || doc.specialty.name === selectedSpecialty;
+    const matchName = doc.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase().trim());
+    return matchSpecialty && matchName;
+  });
 
   return (
     <div className="grid gap-5 mt-4">
-      <div className="mb-4 flex gap-2 items-center bg-white px-4 py-6 rounded-lg shadow">
-        <label className="font-semibold">Chọn khoa:</label>
-        <select
-          value={selectedSpecialty}
-          onChange={(e) => setSelectedSpecialty(e.target.value)}
-          className="border rounded px-3 py-1"
-        >
-          {specialties.map((dept: SpecialtyResponse) => (
-            <option key={dept.id} value={dept.name}>
-              {dept.name}
-            </option>
-          ))}
-        </select>
+      <div className="flex flex-col md:flex-row gap-4 items-center bg-white px-6 py-4 rounded-xl shadow">
+        <div className="flex items-center gap-2">
+          <label className="font-semibold text-gray-700">Chuyên khoa:</label>
+          <select
+            value={selectedSpecialty}
+            onChange={(e) => setSelectedSpecialty(e.target.value)}
+            className="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          >
+            <option value="ALL">Tất cả</option>
+            {specialties.map((dept: SpecialtyResponse) => (
+              <option key={dept.id} value={dept.name}>
+                {dept.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center gap-2 w-full md:w-1/3">
+          <input
+            type="text"
+            placeholder="Tìm kiếm bác sĩ theo tên..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          />
+        </div>
       </div>
 
       {filteredDoctors.map((doc) => (

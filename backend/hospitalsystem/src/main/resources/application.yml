@@ -38,3 +38,9 @@ fileUpload:
     rootPath: uploads/doctor
   drug:
     rootPath: uploads/drug
+
+system:
+  patient:
+    booking-visible-days: 30 # limit days permit edit schedule
+  doctor:
+    change-limit-days: 30 # limit days permit get schedule for patient

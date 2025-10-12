@@ -19,6 +19,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,6 +60,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Value("${system.patient.booking-visible-days}")
+    private int bookingVisibleDays;
 
     @Override
     public List<DoctorDTO> getDoctors() {
@@ -203,7 +207,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<DoctorWorkDTO> getDoctorsWithAvailableSlotsBySpecialty(Integer specialtyId) {
         LocalDate fromDate = LocalDate.now().plusDays(1);
-        LocalDate toDate = fromDate.plusMonths(1);
+        LocalDate toDate = LocalDate.now().plusDays(bookingVisibleDays);
 
         List<Doctor> doctors;
         if (specialtyId == null) {

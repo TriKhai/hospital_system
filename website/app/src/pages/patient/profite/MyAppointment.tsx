@@ -74,6 +74,8 @@ const MyAppointment: React.FC = () => {
         return "Đã hủy";
       case "CANCELLED_BY_ADMIN":
         return "Đã hủy";
+      case "CANCELLED_BY_DOCTOR":
+        return "Đã hủy";
       default:
         return status;
     }

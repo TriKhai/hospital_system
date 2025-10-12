@@ -70,11 +70,14 @@ public class MySecurityConfig {
                         .requestMatchers("/work/**").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers("/schedule/**").hasAnyRole("ADMIN", "DOCTOR")
 
-                        .requestMatchers(HttpMethod.POST, "/api/appointment").hasRole("PATIENT")
-                        .requestMatchers(HttpMethod.GET, "/api/appointment").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/appointment").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/appointment/patient").hasAnyRole("ADMIN", "PATIENT")
-                        .requestMatchers(HttpMethod.PATCH, "/api/appointment/{id}/cancel-by-patient").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.POST, "/appointment").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/appointment").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/appointment").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/appointment/patient").hasAnyRole("ADMIN", "PATIENT")
+                        .requestMatchers(HttpMethod.GET, "/appointment/doctor").hasAnyRole("DOCTOR", "PATIENT")
+                        .requestMatchers(HttpMethod.PATCH, "/appointment/{id}/cancel-by-patient").hasRole("PATIENT")
+                        .requestMatchers(HttpMethod.PATCH, "/appointment/{id}/cancel-by-doctor").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.PATCH, "/appointment/{id}/confirm-by-doctor").hasRole("DOCTOR")
 
 
                         .anyRequest().authenticated() // Các request khác phải xác thực
