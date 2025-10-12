@@ -17,6 +17,9 @@ import com.nln.hospitalsystem.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,12 +111,46 @@ public class AppointmentServiceImpl implements AppointmentService {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
+        validateAppointmentTime(appointment);
         AppointmentStatus oldStatus = appointment.getStatus();
         if(!isValidTransition(oldStatus, AppointmentStatus.CANCELLED_BY_PATIENT)) {
             throw new RuntimeException("Không thể chuyển từ " + oldStatus + " sang CANCELLED_BY_PATIENT");
         }
 
         appointment.setStatus(AppointmentStatus.CANCELLED_BY_PATIENT);
+        appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public void cancelByDoctor(Integer id) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        validateAppointmentTime(appointment);
+
+        System.out.print("Hello" + id);
+        AppointmentStatus oldStatus = appointment.getStatus();
+        if (!isValidTransition(oldStatus, AppointmentStatus.CANCELLED_BY_DOCTOR)) {
+            throw new RuntimeException("Không thể chuyển từ " + oldStatus + " sang CANCELLED_BY_DOCTOR");
+        }
+
+        appointment.setStatus(AppointmentStatus.CANCELLED_BY_DOCTOR);
+        appointmentRepository.save(appointment);
+    }
+
+    @Override
+    public void confirmByDoctor(Integer id) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch hẹn"));
+
+        validateAppointmentTime(appointment);
+        AppointmentStatus oldStatus = appointment.getStatus();
+
+        if (!isValidTransition(oldStatus, AppointmentStatus.PENDING_VERIFICATION)) {
+            throw new RuntimeException("Không thể chuyển từ " + oldStatus + " sang CONFIRMED");
+        }
+
+        appointment.setStatus(AppointmentStatus.PENDING_VERIFICATION);
         appointmentRepository.save(appointment);
     }
 
@@ -125,10 +162,31 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<AppointmentDTO> getByUsernameDoctor(String username) {
+        List<Appointment> appointments = appointmentRepository.findBySlotDoctorScheduleDoctorAccountUsername(username);
+        return appointments.stream()
+                .map(AppointmentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    private void validateAppointmentTime(Appointment appointment) {
+        LocalDate appointmentDate = appointment.getSlot().getDoctorSchedule().getSchedule().getWorkDate();
+        LocalTime startTime = appointment.getSlot().getStartTime();
+
+        LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, startTime);
+
+        if (appointmentDateTime.isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Không thể thao tác trên lịch hẹn đã qua thời gian.");
+        }
+    }
+
     private boolean isValidTransition(AppointmentStatus current, AppointmentStatus target) {
         return switch (current) {
             case PENDING -> target == AppointmentStatus.PENDING_VERIFICATION
                     || target == AppointmentStatus.REJECTED
+                    || target == AppointmentStatus.CANCELLED_BY_DOCTOR
                     || target == AppointmentStatus.CANCELLED_BY_PATIENT;
             case PENDING_VERIFICATION -> target == AppointmentStatus.CONFIRMED || target == AppointmentStatus.REJECTED;
             case CONFIRMED -> target == AppointmentStatus.COMPLETED

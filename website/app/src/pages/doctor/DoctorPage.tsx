@@ -9,6 +9,8 @@ import EditDoctorModel from "../../components/layout/modal/EditDoctorModel";
 import specialtyService from "../../services/specialtyApi";
 import type { SpecialtyResponse } from "../../types/specialtyType";
 import { toast } from "react-toastify";
+import type { AppointmentResponse } from "../../types/appointmentType";
+import appointmentService from "../../services/appointmentApi";
 
 const DoctorPage: React.FC = () => {
   const [doctor, setDoctor] = useState<DoctorType>();
@@ -16,22 +18,37 @@ const DoctorPage: React.FC = () => {
   const [imageSrc, setImageSrc] = useState<string>("/default-patient.jpg");
   const [openModal, setOpenModal] = useState(false);
   const [specialties, setSpecialties] = useState<SpecialtyResponse[]>([]);
-
+  const [appointments, setAppointments] = useState<AppointmentResponse[]>();
 
   const { user } = useAuth();
 
   const fetchProfile = async () => {
     setLoading(true);
     try {
-      const res = await doctorService.getProfile();
+      // const res = await doctorService.getProfile();
+      // setDoctor(res);
+
+      const [res, resAppointment] = await Promise.all([
+        doctorService.getProfile(),
+        appointmentService.getForDoctor(),
+      ]);
       setDoctor(res);
+      setAppointments(resAppointment);
+    } finally {
       setLoading(false);
-    } catch (e) {
-      console.error("Lỗi fetch data (doctor): ", e);
     }
   };
 
-  const fetchSpecialty = async()=> {
+  const refreshAppointments = async () => {
+    try {
+      const resAppointment = await appointmentService.getForDoctor();
+      setAppointments(resAppointment);
+    } catch (err) {
+      console.error("Lỗi khi load lịch hẹn:", err);
+    }
+  };
+
+  const fetchSpecialty = async () => {
     setLoading(true);
     try {
       const res = await specialtyService.getAll();
@@ -40,7 +57,7 @@ const DoctorPage: React.FC = () => {
     } catch (e) {
       console.error("Lỗi fetch specialties (data): ", e);
     }
-  }
+  };
 
   useEffect(() => {
     fetchProfile();
@@ -101,7 +118,7 @@ const DoctorPage: React.FC = () => {
 
       {/* Main content */}
       <main className="flex-1">
-        <NavDoctor />
+        <NavDoctor imageSrc={imageSrc} doctorName={doctor?.name} doctorSpec={doctor?.specialty.name}/>
 
         <div className="text-gray-60 m-8">
           {loading ? (
@@ -117,6 +134,9 @@ const DoctorPage: React.FC = () => {
                   imageSrc,
                   onUploadImage: handleUploadImage,
                   onEditClick: () => setOpenModal(true),
+                  appointments: appointments,
+                  refreshAppointments: refreshAppointments,
+                  numAppointment: appointments?.length,
                 }}
               />
             </>

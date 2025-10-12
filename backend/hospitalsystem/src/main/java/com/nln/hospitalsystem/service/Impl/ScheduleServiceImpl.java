@@ -2,16 +2,14 @@ package com.nln.hospitalsystem.service.Impl;
 
 import com.nln.hospitalsystem.dto.schedule.ScheduleDTO;
 import com.nln.hospitalsystem.dto.schedule.ScheduleMapper;
-import com.nln.hospitalsystem.entity.Doctor;
-import com.nln.hospitalsystem.entity.DoctorSchedule;
-import com.nln.hospitalsystem.entity.Schedule;
-import com.nln.hospitalsystem.entity.Slot;
+import com.nln.hospitalsystem.entity.*;
 import com.nln.hospitalsystem.entity.key.DoctorScheduleKey;
 import com.nln.hospitalsystem.enums.*;
 import com.nln.hospitalsystem.payload.request.schedule.ScheduleRequest;
 import com.nln.hospitalsystem.repository.*;
 import com.nln.hospitalsystem.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -34,6 +32,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     private SlotRepository slotRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Value("${system.doctor.change-limit-days}")
+    private int doctorChangeLimitDays;
 
     @Override
     public List<ScheduleDTO> getSchedulesbySchedule(Integer specialtyId) {
@@ -154,6 +158,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (!scheduleRequest.getWorkDate().isAfter(today)) {
             throw new IllegalArgumentException("Only schedules from tomorrow can be updated");
         }
+        if (scheduleRequest.getWorkDate().isBefore(today.plusDays(doctorChangeLimitDays))) {
+            throw new IllegalArgumentException("Lịch chỉ có thể thay đổi nếu còn ít nhất 30 ngày nữa tới ngày làm việc");
+        }
 
         // ===== 2. Lấy lịch cũ =====
         DoctorScheduleKey key = new DoctorScheduleKey(scheduleRequest.getDoctorId(), scheduleRequest.getScheduleId());
@@ -182,6 +189,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         oldSchedule.setStatus(DoctorScheduleStatus.CANCELLED);
         oldSchedule.setNote("Replaced by new schedule at " + LocalDateTime.now());
         doctorScheduleRepository.save(oldSchedule);
+
+        cancelAppointmentsByDoctorSchedule(oldSchedule);
 
         // Lấy hoặc tạo schedule mới
         Schedule schedule = oldSchedule.getSchedule();
@@ -225,6 +234,35 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 // ===== HÀM HỖ TRỢ =====
+
+    private void cancelAppointmentsByDoctorSchedule(DoctorSchedule doctorSchedule) {
+        // Lấy tất cả appointment thuộc ca này
+        List<Appointment> appointments = appointmentRepository.findBySlot_DoctorSchedule(doctorSchedule);
+
+        for (Appointment appointment : appointments) {
+            AppointmentStatus status = appointment.getStatus();
+
+            // Nếu đã xác nhận (CONFIRMED) -> không cho đổi
+            if (status == AppointmentStatus.CONFIRMED) {
+                throw new IllegalStateException(
+                        "Không thể huỷ hoặc đổi ca vì có cuộc hẹn đã được xác nhận (ID: " + appointment.getId() + ")"
+                );
+            }
+
+            // Nếu chưa bị huỷ thì huỷ bằng lý do bác sĩ
+            if (status != AppointmentStatus.CANCELLED_BY_PATIENT
+                    && status != AppointmentStatus.CANCELLED_BY_ADMIN
+                    && status != AppointmentStatus.REJECTED
+                    && status != AppointmentStatus.CANCELLED_BY_DOCTOR) {
+                appointment.setStatus(AppointmentStatus.CANCELLED_BY_DOCTOR);
+                appointment.setNote("Cuộc hẹn bị huỷ do bác sĩ thay đổi lịch (" + LocalDateTime.now() + ")");
+            }
+        }
+
+        // Lưu lại tất cả thay đổi
+        appointmentRepository.saveAll(appointments);
+    }
+
 
     // Soft delete (đánh dấu slot cũ là CANCELLED)
     private void softDeleteSlotsByDoctorSchedule(DoctorSchedule schedule) {

@@ -19,8 +19,7 @@ import About from "./pages/patient/About";
 import ProfilePatientPage from "./pages/patient/ProfilePatientPage";
 import MyAppointment from "./pages/patient/profite/MyAppointment";
 import InforPatient from "./pages/patient/profite/InforPatient";
-import { DoctorPage, DoctorProfile } from "./pages/doctor";
-import DoctorSchedule from "./pages/doctor/schedule/DoctorSchedule";
+import { DoctorAppointment, DoctorPage, DoctorProfile, DoctorSchedule } from "./pages/doctor";
 
 export default function App() {
   return (
@@ -61,6 +60,7 @@ export default function App() {
               <Route index element={<Navigate to="trang-ca-nhan" replace />} />
               <Route path="trang-ca-nhan" element={<DoctorProfile />} />
               <Route path="lich-lam-viec" element={<DoctorSchedule />} />
+              <Route path="lich-hen" element={<DoctorAppointment />} />
               
             </Route>
 

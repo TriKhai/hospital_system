@@ -38,6 +38,12 @@ public class AppointmentController {
         return ResponseEntity.ok(ResponseData.success(dto, "Get appointments successfully"));
     }
 
+    @GetMapping("/doctor")
+    public ResponseEntity<ResponseData<List<AppointmentDTO>>> getByDoctor(Authentication authentication) {
+        List<AppointmentDTO> dto = appointmentService.getByUsernameDoctor(authentication.getName());
+        return ResponseEntity.ok(ResponseData.success(dto, "Get appointments successfully"));
+    }
+
     @PutMapping("/{id}/status")
     public ResponseEntity<ResponseData<List<Void>>> updateStatus(@PathVariable Integer id, @RequestBody AppointmentStatus status) {
         appointmentService.updateStatus(id, status);
@@ -50,4 +56,15 @@ public class AppointmentController {
         return ResponseEntity.ok(ResponseData.success(null, "update status successfully"));
     }
 
+    @PatchMapping("/{id}/cancel-by-doctor")
+    public ResponseEntity<ResponseData<List<Void>>> cancelByDoctor(@PathVariable Integer id) {
+        appointmentService.cancelByDoctor(id);
+        return ResponseEntity.ok(ResponseData.success(null, "update status successfully"));
+    }
+
+    @PatchMapping("/{id}/confirm-by-doctor")
+    public ResponseEntity<ResponseData<List<Void>>> confirmByDoctor(@PathVariable Integer id) {
+        appointmentService.confirmByDoctor(id);
+        return ResponseEntity.ok(ResponseData.success(null, "update status successfully"));
+    }
 }

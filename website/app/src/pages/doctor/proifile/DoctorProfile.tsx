@@ -18,10 +18,11 @@ interface ProfileContextType {
   imageSrc: string;
   onUploadImage?: (file: File) => Promise<void>;
   onEditClick?: () => void;
+  numAppointment: number
 }
 
 const DoctorProfile: React.FC = () => {
-  const { doctor, user, imageSrc, onUploadImage, onEditClick } =
+  const { doctor, user, imageSrc, onUploadImage, onEditClick, numAppointment } =
     useOutletContext<ProfileContextType>();
 
   const [loading, setLoading] = useState(false);
@@ -125,7 +126,7 @@ const DoctorProfile: React.FC = () => {
                     icon={faCalendarCheck}
                     className="text-gray-500"
                   />
-                  11
+                  {numAppointment}
                 </p>
               </div>
 
