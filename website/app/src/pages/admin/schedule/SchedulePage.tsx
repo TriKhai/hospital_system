@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { mapSchedulesToEvents } from "../../../utils/workHelper";
 import WorkCalendar from "../../../components/layout/work/WorkCalendar";
 import AddScheduleDialog from "../../../components/layout/work/AddWorkDialog";
-import type { EventInput } from "@fullcalendar/core/index.js";
+// import type { EventInput } from "@fullcalendar/core/index.js";
 
 type SpecialtyType = { id: number; name: string };
 
@@ -24,7 +24,7 @@ export default function SchedulePage() {
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduleRes | null>(
     null
   );
-  const [selectedEvent, setSelectedEvent] = useState<EventInput | null>(null);
+  // const [selectedEvent, setSelectedEvent] = useState<EventInput | null>(null);
 
   const [dialogMode, setDialogMode] = useState<"create" | "edit">("create");
 
@@ -179,24 +179,24 @@ export default function SchedulePage() {
           </select>
         </div>
         <div>
-          <button className="p-2 ml-2 bg-green-200 border" onClick={handleOpen}>
-            Add
+          <button className="p-2 ml-2 bg-[#0E8DA1] text-white border" onClick={handleOpen}>
+            Thêm lịch
           </button>
         </div>
         <div>
           <button
-            className="p-2 ml-2 bg-green-200 border"
+            className="p-2 ml-2 bg-[#0E8DA1] text-white border"
             onClick={handleEditClick}
           >
-            Edit
+            Chỉnh sửa
           </button>
         </div>
         <div>
           <button
-            className="p-2 ml-2 bg-green-200 border"
+            className="p-2 ml-2 bg-[#0E8DA1] text-white border"
             onClick={handleDelete}
           >
-            Delete
+           Xoá lịch
           </button>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default function SchedulePage() {
             } else {
               setSelectedSchedule(null); // nếu không tìm thấy thì clear
             }
-            setSelectedEvent(schedule ?? null);
+            // setSelectedEvent(schedule ?? null);
           }}
         
           selectedEvent={selectedSchedule}

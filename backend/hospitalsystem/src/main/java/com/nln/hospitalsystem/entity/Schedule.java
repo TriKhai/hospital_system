@@ -50,6 +50,4 @@ public class Schedule {
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DoctorSchedule> doctorSchedules = new ArrayList<>();
-
-
 }

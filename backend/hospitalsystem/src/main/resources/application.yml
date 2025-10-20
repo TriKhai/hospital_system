@@ -27,6 +27,10 @@ spring:
           starttls:
             enable: true
 
+server:
+  address: 0.0.0.0
+  port: 8080
+
 jwt:
   secret: "jBpoQbllxjqpDuO/9T4qTWkiMnGWhtazhidIaHx0DNA="
   expiration: 2592000000 # 30 ngày = 2_592_000_000 ms

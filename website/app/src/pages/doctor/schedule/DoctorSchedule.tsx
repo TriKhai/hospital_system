@@ -3,6 +3,13 @@ import WorkCalendar from "../../../components/layout/work/WorkCalendar";
 import type { ScheduleRes } from "../../../types/scheduleType";
 import { mapSchedulesToEvents } from "../../../utils/workHelper";
 import doctorService from "../../../services/doctorApi";
+import AddScheduleByDoctor from "../../../components/layout/dialog/AddScheduleByDoctor";
+import type { DoctorType } from "../../../types/doctorType";
+import { useOutletContext } from "react-router-dom";
+
+interface ProfileContextType {
+  doctor: DoctorType;
+}
 
 const DoctorSchedule: React.FC = () => {
   const [events, setEvents] = useState<ScheduleRes[]>([]);
@@ -11,21 +18,48 @@ const DoctorSchedule: React.FC = () => {
     null
   );
 
+  const { doctor } = useOutletContext<ProfileContextType>();
+
   const fetchEvents = async () => {
     try {
       const scheduleRes: ScheduleRes[] = await doctorService.getSchedule();
       setEvents(scheduleRes);
+      console.log(selectedDate) //
     } catch (err) {
       console.error(err);
     }
   };
 
+  // const handleAddSchedules = async (data: ScheduleDocReq) => {
+  //   try {
+  //     const payload = {
+  //       ...data,
+  //       workDate: data.workDate,
+  //     };
+  //     console.log(payload);
+  //     await scheduleService.createByDoctor(payload);
+  //     await fetchEvents();
+  //     toast.success("Đã thêm lịch thành công.");
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
+  //   }
+  // };
+
   useEffect(() => {
     fetchEvents();
-  }, [])
+  }, []);
 
   return (
     <div>
+      {doctor && (
+        <div className="flex justify-end">
+          <AddScheduleByDoctor
+            doctorId={doctor.id} // TODO: thay bằng id bác sĩ hiện tại
+            onSuccess={fetchEvents} // reload lịch sau khi thêm
+          />
+        </div>
+      )}
       <WorkCalendar
         events={mapSchedulesToEvents(events)}
         onDateClick={setSelectedDate}

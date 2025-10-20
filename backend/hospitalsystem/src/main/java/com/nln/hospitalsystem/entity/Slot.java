@@ -31,6 +31,7 @@ public class Slot {
     private LocalTime endTime;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 50)
     private SlotStatus status = SlotStatus.AVAILABLE;
     // AVAILABLE, BOOKED, CANCELLED
 

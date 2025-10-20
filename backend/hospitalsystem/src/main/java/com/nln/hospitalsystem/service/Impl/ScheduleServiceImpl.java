@@ -5,6 +5,7 @@ import com.nln.hospitalsystem.dto.schedule.ScheduleMapper;
 import com.nln.hospitalsystem.entity.*;
 import com.nln.hospitalsystem.entity.key.DoctorScheduleKey;
 import com.nln.hospitalsystem.enums.*;
+import com.nln.hospitalsystem.payload.request.schedule.ScheduleByDocRequest;
 import com.nln.hospitalsystem.payload.request.schedule.ScheduleRequest;
 import com.nln.hospitalsystem.repository.*;
 import com.nln.hospitalsystem.service.ScheduleService;
@@ -136,6 +137,97 @@ public class ScheduleServiceImpl implements ScheduleService {
                         Slot slot = new Slot();
                         slot.setDoctorSchedule(doctorSchedule);
                         slot.setStatus(SlotStatus.AVAILABLE);
+                        slot.setStartTime(slotStart);
+                        slot.setEndTime(slotEnd);
+
+                        slotRepository.save(slot);
+                    }
+
+                    slotStart = slotEnd; // move next slot
+                }
+            }
+        }
+    }
+
+    @Override
+    public void createScheduleByDoctor(ScheduleByDocRequest request) {
+        LocalDate today = LocalDate.now();
+        if (request.getWorkDate().isBefore(today)) {
+            throw new IllegalArgumentException("Work date must be today or in the future");
+        }
+
+        // Doctor
+        Doctor doctor = doctorRepository.findById(request.getDoctorId())
+                .orElseThrow(() -> new RuntimeException("Doctor Not Found"));
+
+        // Shift info
+        Shifts shift = request.getShift();
+        LocalTime startTime = shift.getStartTime();
+        LocalTime endTime = shift.getEndTime();
+
+        // Lặp lại theo repeat
+        int repeatCount = request.getRepeatCount() != null ? request.getRepeatCount() : 1;
+        RepeatSchedule repeatType = request.getRepeat();
+
+        if (repeatType == RepeatSchedule.NONE) {
+            repeatCount = 1;
+        }
+
+        for (int i = 0; i < repeatCount; i++) {
+            LocalDate targetDate = request.getWorkDate();
+
+            if (i > 0) { // apply repeat
+                if (repeatType == RepeatSchedule.DAILY) {
+                    targetDate = targetDate.plusDays(i);
+                } else if (repeatType == RepeatSchedule.WEEKLY) {
+                    targetDate = targetDate.plusWeeks(i);
+                } else if (repeatType == RepeatSchedule.MONTHLY) {
+                    targetDate = targetDate.plusMonths(i);
+                }
+            }
+
+            // 1. Tạo hoặc lấy Schedule
+            LocalDate finalDate = targetDate;
+            Schedule schedule = scheduleRepository.findByWorkDate(finalDate)
+                    .orElseGet(() -> {
+                        Schedule s = new Schedule();
+                        s.setWorkDate(finalDate);
+                        s.setStatus(ShiftStatus.AVAILABLE);
+                        return scheduleRepository.save(s);
+                    });
+
+            // 2. Tạo hoặc lấy DoctorSchedule
+            DoctorScheduleKey key = new DoctorScheduleKey(doctor.getId(), schedule.getId());
+            DoctorSchedule doctorSchedule = doctorScheduleRepository.findById(key)
+                    .orElseGet(() -> {
+                        DoctorSchedule ds = new DoctorSchedule();
+                        ds.setId(key);
+                        ds.setDoctor(doctor);
+                        ds.setSchedule(schedule);
+                        ds.setStartTime(startTime);
+                        ds.setEndTime(endTime);
+                        ds.setShiftType(shift);
+                        ds.setNote(request.getNote());
+                        ds.setStatus(DoctorScheduleStatus.PENDING);
+                        return doctorScheduleRepository.save(ds);
+                    });
+
+            // 3. Sinh slot theo slotMinutes
+            if (request.getSlotMinutes() != null && request.getSlotMinutes() > 0) {
+                int slotMinutes = request.getSlotMinutes();
+                LocalTime slotStart = startTime;
+
+                while (slotStart.plusMinutes(slotMinutes).compareTo(endTime) <= 0) {
+                    LocalTime slotEnd = slotStart.plusMinutes(slotMinutes);
+
+                    boolean exists = slotRepository.existsByDoctorScheduleAndStartTimeAndEndTime(
+                            doctorSchedule, slotStart, slotEnd
+                    );
+
+                    if (!exists) {
+                        Slot slot = new Slot();
+                        slot.setDoctorSchedule(doctorSchedule);
+                        slot.setStatus(SlotStatus.UNAVAILABLE);
                         slot.setStartTime(slotStart);
                         slot.setEndTime(slotEnd);
 
