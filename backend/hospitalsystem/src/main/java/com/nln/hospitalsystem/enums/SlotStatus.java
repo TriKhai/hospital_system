@@ -1,6 +1,7 @@
 package com.nln.hospitalsystem.enums;
 
 public enum SlotStatus {
+    UNAVAILABLE,
     AVAILABLE,   // Slot trống, bệnh nhân có thể đặt
     BOOKED,      // Đã có bệnh nhân đặt
     CANCELLED,   // Bị hủy (do bệnh nhân hoặc bác sĩ)

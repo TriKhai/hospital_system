@@ -4,6 +4,7 @@ export type Status =
   | "AVAILABLE"
   | "BOOKED"
   | "CANCELLED"
+  | "PENDING"
   | "COMPLETED"
   | "ABSENT"
   | "MEETING";
@@ -19,6 +20,17 @@ export interface ScheduleReq {
   scheduleId: number;
   note: string;
 }
+
+export interface ScheduleDocReq {
+  doctorId: number;
+  workDate: string;
+  shift: string;
+  slotMinutes: number;
+  repeat?: string;
+  repeatCount?: number;
+  note: string;
+}
+
 
 export interface ScheduleRes {
   id: string; // Bắt buộc để FullCalendar quản lý event

@@ -2,6 +2,7 @@ package com.nln.hospitalsystem.controller;
 
 import com.nln.hospitalsystem.dto.schedule.ScheduleDTO;
 import com.nln.hospitalsystem.payload.ResponseData;
+import com.nln.hospitalsystem.payload.request.schedule.ScheduleByDocRequest;
 import com.nln.hospitalsystem.payload.request.schedule.ScheduleRequest;
 import com.nln.hospitalsystem.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,12 @@ public class ScheduleController {
         scheduleService.updateSchedule(request);
 
         return ResponseEntity.ok(ResponseData.success(null, "update successfully"));
+    }
+
+    @PostMapping("/doctor")
+    public ResponseEntity<ResponseData<Void>> createByDoctor(@RequestBody ScheduleByDocRequest request) {
+        scheduleService.createScheduleByDoctor(request);
+        return ResponseEntity.ok(ResponseData.created(null, "Created successfully"));
     }
 
     @DeleteMapping("/{doctorId}/{scheduleId}")

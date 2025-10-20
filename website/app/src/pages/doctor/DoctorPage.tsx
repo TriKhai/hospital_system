@@ -33,7 +33,12 @@ const DoctorPage: React.FC = () => {
         appointmentService.getForDoctor(),
       ]);
       setDoctor(res);
-      setAppointments(resAppointment);
+      const sortedAppointments = [...resAppointment].sort(
+        (a, b) =>
+          new Date(a.slot.workDate).getTime() - new Date(b.slot.workDate).getTime()
+      );
+
+      setAppointments(sortedAppointments);
     } finally {
       setLoading(false);
     }
@@ -118,7 +123,11 @@ const DoctorPage: React.FC = () => {
 
       {/* Main content */}
       <main className="flex-1">
-        <NavDoctor imageSrc={imageSrc} doctorName={doctor?.name} doctorSpec={doctor?.specialty.name}/>
+        <NavDoctor
+          imageSrc={imageSrc}
+          doctorName={doctor?.name}
+          doctorSpec={doctor?.specialty.name}
+        />
 
         <div className="text-gray-60 m-8">
           {loading ? (

@@ -12,6 +12,7 @@ import {
   CRMDrugPage,
   CRMPage,
   DashboardPage,
+  DoctorSchedulePage,
 } from "./pages/admin";
 import OpportunitiesPage from "./components/layout/admin/OpportunitiesPage";
 import SchedulePage from "./pages/admin/schedule/SchedulePage";
@@ -79,6 +80,7 @@ export default function App() {
               <Route path="thuoc" element={<CRMDrugPage />} />
               <Route path="lich" element={<SchedulePage />} />
               <Route path="lich-hen" element={<CRMAppointmentPage />} />
+              <Route path="duyet-lich" element={<DoctorSchedulePage />} />
               <Route path="test" element={<OpportunitiesPage />} />
             </Route>
 

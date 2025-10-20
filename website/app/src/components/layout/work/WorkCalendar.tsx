@@ -92,6 +92,8 @@ const WorkCalendar: React.FC<Props> = ({
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
+                    <br/>
+                    
                 `,
               allowHTML: true,
               theme: "light",
@@ -106,7 +108,13 @@ const WorkCalendar: React.FC<Props> = ({
           }}
           eventContent={(arg) => {
             const status = arg.event.extendedProps.status;
-            const dotColor = status === "CANCELLED" ? "red" : "blue";
+            const dotColor =
+              status === "CANCELLED"
+                ? "red"
+                : status === "PENDING"
+                ? "yellow"
+                : "blue";
+
             const isSelected =
               selectedEvent && arg.event.id === selectedEvent.id;
 

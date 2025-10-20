@@ -79,6 +79,10 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/appointment/{id}/cancel-by-doctor").hasRole("DOCTOR")
                         .requestMatchers(HttpMethod.PATCH, "/appointment/{id}/confirm-by-doctor").hasRole("DOCTOR")
 
+                        .requestMatchers(HttpMethod.GET, "/doctor-schedule").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/doctor-schedule/{doctorId}/{scheduleId}/approve").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/doctor-schedule/{doctorId}/{scheduleId}/cancel").hasRole("ADMIN")
+
 
                         .anyRequest().authenticated() // Các request khác phải xác thực
                 )

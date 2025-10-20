@@ -1,6 +1,6 @@
 import axiosClient from "../config/axios";
 import type { ResponseData } from "../types/resType";
-import type { ScheduleReq, ScheduleRes } from "../types/scheduleType";
+import type { ScheduleDocReq, ScheduleReq, ScheduleRes } from "../types/scheduleType";
 
 const BASE_URL = "/schedule";
 
@@ -24,7 +24,11 @@ const scheduleService = {
 
   delete: async (doctorId: number, scheduleId: number): Promise<void> => {
     await axiosClient.delete(`${BASE_URL}/${doctorId}/${scheduleId}`);
-  }
+  }, 
+  createByDoctor: async (data: ScheduleDocReq): Promise<void> => {
+    const res = await axiosClient.post<ResponseData<void>>(`${BASE_URL}/doctor`, data);
+    return res.data.data;
+  },
     
 };
 

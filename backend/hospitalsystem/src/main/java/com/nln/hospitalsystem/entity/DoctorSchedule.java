@@ -36,8 +36,8 @@ public class DoctorSchedule {
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)  // lưu chuỗi thay vì số
+    @Column(name = "status", nullable = false, length = 50)
     private DoctorScheduleStatus status = DoctorScheduleStatus.AVAILABLE;
 
     @Column(name = "start_time")

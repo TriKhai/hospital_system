@@ -32,6 +32,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
     { path: "/admin/chuyen-khoa", label: "Chuyên Khoa", icon: faTruck },
     { path: "/admin/thuoc", label: "Thuốc", icon: faUserTie },
     { path: "/admin/lich", label: "Lịch làm việc", icon: faPills },
+    { path: "/admin/duyet-lich", label: "Duyệt lịch bác sĩ", icon: faTruck },
     { path: "/admin/lich-hen", label: "Lịch hẹn", icon: faFlask },
     // { path: "/admin/hoa-don", label: "Hóa Đơn", icon: faFileInvoice },
     // { path: "/admin/theo-doi", label: "Theo dõi", icon: faEye },

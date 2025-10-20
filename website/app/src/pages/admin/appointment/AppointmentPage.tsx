@@ -80,6 +80,11 @@ const AppointmentPage: React.FC<Props> = ({ statusRender }) => {
       render: (_, record) => record.patient.name,
     },
     {
+      key: "phonePatient",
+      label: "Điện thoại bệnh nhân",
+      render: (_, record) => record.patient.phone,
+    },
+    {
       key: "doctor",
       label: "Bác sĩ",
       render: (_, record) => record.doctor.name,
