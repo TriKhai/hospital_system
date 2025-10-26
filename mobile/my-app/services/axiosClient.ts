@@ -14,30 +14,33 @@ const axiosClient = axios.create({
 });
 
 // Request interceptor
-axiosClient.interceptors.request.use(async (config) => {
-  try {
+axiosClient.interceptors.request.use(
+  async (config) => {
     const token = await AsyncStorage.getItem("token");
 
-    // DEBUG
-    console.log("request:", {
-      method: config.method,
-      url: `${config.baseURL ?? ""}${config.url ?? ""}`,
-      headers: config.headers,
-      data: config.data,
-    });
-
-    console.log("Token:", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-  } catch (error) {
-    console.log("Lỗi lấy token:", error);
+
+    console.log("Token: ", token)
+
+    // Debug log
+    console.log("API Request:", {
+      url: config.url,
+      method: config.method,
+      headers: config.headers,
+      // data: config.data,
+    });
+
+    return config;
+  },
+  (error) => {
+    console.log("Request error:", error);
+    return Promise.reject(error);
   }
-  return config;
-});
+);
 
 // Response interceptor
-
 axiosClient.interceptors.response.use(
   (response) => {
     const fullUrl = `${response.config.baseURL ?? ""}${response.config.url ?? ""}`;

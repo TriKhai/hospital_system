@@ -11,11 +11,11 @@ export interface PatientResponse {
     updatedAt: Date;
 }
 
-export interface PatientUpdateRequest {
-  name?: string;         
-  birthDate?: string;     
-  gender?: boolean;     
-  address?: string;
-  email?: string;
-  phone?: string;
-}
+  export interface PatientUpdateRequest {
+    name?: string;         
+    birthDate?: string;     
+    gender?: boolean;     
+    address?: string;
+    email?: string;
+    phone?: string;
+  }

@@ -1,0 +1,42 @@
+import { ResponseData } from "@/types/api/apiType";
+import { SupplierRequest, SupplierResponse } from "@/types/api/medicineType";
+import axiosClient from "./axiosClient";
+
+const BASE_URL = "/supplier";
+
+const supplierService = {
+  getAll: async (): Promise<SupplierResponse[]> => {
+    const res = await axiosClient.get<ResponseData<SupplierResponse[]>>(BASE_URL);
+    return res.data.data;
+  },
+
+  create: async (data: SupplierRequest): Promise<SupplierResponse> => {
+    const res = await axiosClient.post<ResponseData<SupplierResponse>>(
+      BASE_URL,
+      data
+    );
+    return res.data.data;
+  },
+
+  update: async (
+    id: number,
+    data: SupplierRequest
+  ): Promise<SupplierResponse> => {
+    const res = await axiosClient.put<ResponseData<SupplierResponse>>(
+      `${BASE_URL}/${id}`,
+      data
+    );
+    return res.data.data;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    await axiosClient.delete(`${BASE_URL}/${id}`);
+  },
+
+  getCount: async (): Promise<number> => {
+    const res = await axiosClient.get(`${BASE_URL}/count`);
+    return res.data.data;
+  }
+};
+
+export default supplierService;
