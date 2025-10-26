@@ -8,6 +8,9 @@ import {
 } from "react-native";
 
 export default function Index() {
+
+
+  
   return (
     <ScrollView className="flex-1 bg-gray-50 px-4">
       {/* Header */}

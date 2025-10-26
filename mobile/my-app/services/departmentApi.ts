@@ -1,0 +1,46 @@
+import { ResponseData } from "@/types/api/apiType";
+import {
+  DepartmentRequest,
+  DepartmentResponse,
+} from "@/types/api/departmentType";
+import axiosClient from "./axiosClient";
+
+const BASE_URL = "/department";
+
+const departmentService = {
+  getAll: async (): Promise<DepartmentResponse[]> => {
+    const res =
+      await axiosClient.get<ResponseData<DepartmentResponse[]>>(BASE_URL);
+    return res.data.data;
+  },
+
+  create: async (data: DepartmentRequest): Promise<DepartmentResponse> => {
+    const res = await axiosClient.post<ResponseData<DepartmentResponse>>(
+      BASE_URL,
+      data
+    );
+    return res.data.data;
+  },
+
+  update: async (
+    id: number,
+    data: DepartmentRequest
+  ): Promise<DepartmentResponse> => {
+    const res = await axiosClient.put<ResponseData<DepartmentResponse>>(
+      `${BASE_URL}/${id}`,
+      data
+    );
+    return res.data.data;
+  },
+
+  delete: async (id: number): Promise<void> => {
+    await axiosClient.delete(`${BASE_URL}/${id}`);
+  },
+
+  getCount: async (): Promise<number> => {
+    const res = await axiosClient.get(`${BASE_URL}/count`);
+    return res.data.data;
+  },
+};
+
+export default departmentService;

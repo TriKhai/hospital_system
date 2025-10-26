@@ -1,10 +1,11 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import AddBlogScreen from '@/components/Blog/AddBlog'
 
 const blog = () => {
   return (
-    <View>
-      <Text>blog</Text>
+    <View className='h-full'>
+      <AddBlogScreen />
     </View>
   )
 }

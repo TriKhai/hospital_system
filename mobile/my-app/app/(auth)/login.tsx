@@ -1,36 +1,38 @@
-import { View, Text, TextInput, TouchableOpacity, Alert, Button } from "react-native";
-import { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { useEffect, useState } from "react";
 import { router } from "expo-router";
-import authService from "@/services/authApi";
-import { useDispatch } from "react-redux";
 import { login } from "@/store/slices/authSlice";
-import { LoginResponse } from "@/types/api/authType";
 import { FontAwesome } from "@expo/vector-icons";
-
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === "ADMIN") {
+        router.replace("/(admin)");
+      } else {
+        router.replace("/(public)");
+      }
+    }
+  }, [isAuthenticated, user]);
 
   const handleLogin = async () => {
     try {
-      console.log("Login with:", username, password);
-      const res:LoginResponse = await authService.login({ username, password });
+      // Gọi thunk login và lấy kết quả trả về
+      const res = await dispatch(login({ username, password })).unwrap();
 
-      if (res?.token) {
-        // Lưu vào Redux
-        dispatch(
-          login(res)
-        );
+      Alert.alert("Thành công", `Xin chào ${res.username}`);
 
-        Alert.alert("Thành công", `Xin chào ${res.username}`);
-
-        // Chuyển hướng sau đăng nhập
-        // Nếu dùng expo-router:
-        router.replace("/(public)");
+      // Kiểm tra role để điều hướng
+      if (res.role === "ADMIN") {
+        router.replace("/(admin)");
       } else {
-        Alert.alert("Lỗi", "Đăng nhập thất bại, vui lòng thử lại.");
+        router.replace("/(public)");
       }
     } catch (error) {
       console.log("Login failed:", error);
@@ -50,7 +52,6 @@ export default function LoginScreen() {
       >
         <FontAwesome name="close" size={22} color="#444" />
       </TouchableOpacity>
-
 
       <Text className="text-center text-2xl font-bold text-gray-900 mb-10">
         Đăng nhập

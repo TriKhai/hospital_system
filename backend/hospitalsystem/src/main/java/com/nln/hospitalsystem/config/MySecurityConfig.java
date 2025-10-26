@@ -39,6 +39,17 @@ public class MySecurityConfig {
                         .requestMatchers("/specialty/**").hasRole("ADMIN")
 
                         .requestMatchers("/doctor/specialty").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/tag").permitAll()
+                        .requestMatchers("/tag/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/category/**").permitAll()
+                        .requestMatchers("/category/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/blog").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/blog/**").permitAll()
+                        .requestMatchers("/blog/**").hasRole("ADMIN")
+
                         .requestMatchers("/doctor/doctor-work").permitAll()
                         .requestMatchers(HttpMethod.GET, "/doctor").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/doctor/count").hasRole("ADMIN")
