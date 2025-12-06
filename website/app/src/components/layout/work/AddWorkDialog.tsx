@@ -55,8 +55,9 @@ export default function AddScheduleDialog({
       toast.error("Ngày làm việc phải từ ngày mai trở đi.");
       return;
     }
-
+// 
     await onSubmit(values);
+    // console.log("values: ", values)
     onClose();
   };
 

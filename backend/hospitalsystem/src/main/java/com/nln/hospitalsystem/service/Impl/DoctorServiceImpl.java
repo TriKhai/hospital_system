@@ -125,7 +125,7 @@ public class DoctorServiceImpl implements DoctorService {
             doctor.setGender(doctorRequest.getGender());
             doctor.setBirthDay(doctorRequest.getBirthDay());
             doctor.setConsultationFee(doctorRequest.getConsultationFee());
-            doctor.setWorkingHours(doctorRequest.getWorkingHours());
+//            doctor.setWorkingHours(doctorRequest.getWorkingHours());
             doctor.setLicenseNumber(doctorRequest.getLicenseNumber());
             doctor.setYearsOfExperience(doctorRequest.getYearsOfExperience());
             doctor.setDegree(doctorRequest.getDegree());
@@ -183,7 +183,7 @@ public class DoctorServiceImpl implements DoctorService {
                         .gender(Boolean.parseBoolean(record.get("gender"))) // true = male, false = female
                         .imageUrl(null) // CSV không import ảnh
                         .consultationFee(new BigDecimal(record.get("consultationFee")))
-                        .workingHours(LocalTime.parse(record.get("workingHours")))
+//                        .workingHours(LocalTime.parse(record.get("workingHours")))
                         .licenseNumber(record.get("licenseNumber"))
                         .yearsOfExperience(Integer.parseInt(record.get("yearsOfExperience")))
                         .degree(record.get("degree"))
@@ -211,10 +211,10 @@ public class DoctorServiceImpl implements DoctorService {
 
         List<Doctor> doctors;
         if (specialtyId == null) {
-            // 🔹 Lấy tất cả bác sĩ
+            // Lấy tất cả bác sĩ
             doctors = doctorRepository.findAll();
         } else {
-            // 🔹 Lấy bác sĩ theo chuyên khoa
+            // Lấy bác sĩ theo chuyên khoa
             doctors = doctorRepository.findBySpecialtyId(specialtyId);
         }
         if (doctors.isEmpty()) return List.of();
@@ -246,6 +246,11 @@ public class DoctorServiceImpl implements DoctorService {
 
             return dto;
         }).toList();
+    }
+
+    @Override
+    public List<ScheduleDTO> getSchedules(Integer specialtyId) {
+        return List.of();
     }
 
     @Override
@@ -319,17 +324,4 @@ public class DoctorServiceImpl implements DoctorService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<DoctorWorkDTO> getAllDoctorWorks(Integer specialtyId) {
-////        List<Doctor> doctors;
-////        if (specialtyId == null) {
-////            doctors = doctorRepository.findAllUpcomingWithWorkDetails();
-////        } else {
-////            doctors = doctorRepository.findAllUpcomingBySpecialty(specialtyId);
-////        }
-////        return doctors.stream()
-////                .map(DoctorWorkMapper::mapToDTO)
-////                .collect(Collectors.toList());
-//        return List.of();
-//    }
 }

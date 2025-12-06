@@ -24,23 +24,26 @@ public class Slot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "start_time")
+    @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
-    @Column(name = "end_time")
+    @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 50)
     private SlotStatus status = SlotStatus.AVAILABLE;
-    // AVAILABLE, BOOKED, CANCELLED
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "doctor_id", referencedColumnName = "doctor_id"),
-            @JoinColumn(name = "schedule_id", referencedColumnName = "schedule_id")
+            @JoinColumn(name = "schedule_id", referencedColumnName = "schedule_id"),
+            @JoinColumn(name = "shift_type", referencedColumnName = "shift_type")
     })
     private DoctorSchedule doctorSchedule;
+
+    @OneToOne(mappedBy = "slot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Appointment appointment;
 
     @CreatedDate
     @Column(name="created_at", updatable = false)
@@ -49,7 +52,4 @@ public class Slot {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @OneToOne(mappedBy = "slot", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Appointment appointment;
 }

@@ -46,9 +46,10 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/category/**").permitAll()
                         .requestMatchers("/category/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/blog").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/blog/doctor/**").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.GET, "/blog/doctor/**").hasRole("DOCTOR")
                         .requestMatchers(HttpMethod.GET, "/blog/**").permitAll()
-                        .requestMatchers("/blog/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/blog/**").hasRole("ADMIN")
 
                         .requestMatchers("/doctor/doctor-work").permitAll()
                         .requestMatchers(HttpMethod.GET, "/doctor").hasRole("ADMIN")
@@ -77,6 +78,8 @@ public class MySecurityConfig {
 
                         .requestMatchers("/account/**").hasRole("ADMIN")
 
+                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
+
                         .requestMatchers("/staff-schedule/**").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers("/work/**").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers("/schedule/**").hasAnyRole("ADMIN", "DOCTOR")
@@ -94,7 +97,7 @@ public class MySecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/doctor-schedule/{doctorId}/{scheduleId}/approve").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/doctor-schedule/{doctorId}/{scheduleId}/cancel").hasRole("ADMIN")
 
-
+                        .requestMatchers("/ai-pneumonia/**").permitAll()
                         .anyRequest().authenticated() // Các request khác phải xác thực
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource));

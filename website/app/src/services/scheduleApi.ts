@@ -9,6 +9,7 @@ const scheduleService = {
     const res = await axiosClient.get<ResponseData<ScheduleRes[]>>(BASE_URL, {
       params: specialtyID ? { specialtyID } : {},
     });
+    console.log("res schedule: ", res.data.data)
     return res.data.data;
   },
 

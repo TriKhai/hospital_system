@@ -102,11 +102,12 @@ public class ScheduleServiceImpl implements ScheduleService {
                         Schedule s = new Schedule();
                         s.setWorkDate(finalDate);
                         s.setStatus(ShiftStatus.AVAILABLE);
+//                        s.setShiftType(scheduleRequest.getShift());
                         return scheduleRepository.save(s);
                     });
 
             // 2. Tạo hoặc lấy DoctorSchedule
-            DoctorScheduleKey key = new DoctorScheduleKey(doctor.getId(), schedule.getId());
+            DoctorScheduleKey key = new DoctorScheduleKey(doctor.getId(), schedule.getId(), shift);
             DoctorSchedule doctorSchedule = doctorScheduleRepository.findById(key)
                     .orElseGet(() -> {
                         DoctorSchedule ds = new DoctorSchedule();
@@ -139,10 +140,8 @@ public class ScheduleServiceImpl implements ScheduleService {
                         slot.setStatus(SlotStatus.AVAILABLE);
                         slot.setStartTime(slotStart);
                         slot.setEndTime(slotEnd);
-
                         slotRepository.save(slot);
                     }
-
                     slotStart = slotEnd; // move next slot
                 }
             }
@@ -197,7 +196,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                     });
 
             // 2. Tạo hoặc lấy DoctorSchedule
-            DoctorScheduleKey key = new DoctorScheduleKey(doctor.getId(), schedule.getId());
+            DoctorScheduleKey key = new DoctorScheduleKey(doctor.getId(), schedule.getId(), shift);
             DoctorSchedule doctorSchedule = doctorScheduleRepository.findById(key)
                     .orElseGet(() -> {
                         DoctorSchedule ds = new DoctorSchedule();
@@ -206,7 +205,6 @@ public class ScheduleServiceImpl implements ScheduleService {
                         ds.setSchedule(schedule);
                         ds.setStartTime(startTime);
                         ds.setEndTime(endTime);
-                        ds.setShiftType(shift);
                         ds.setNote(request.getNote());
                         ds.setStatus(DoctorScheduleStatus.PENDING);
                         return doctorScheduleRepository.save(ds);
@@ -255,7 +253,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         // ===== 2. Lấy lịch cũ =====
-        DoctorScheduleKey key = new DoctorScheduleKey(scheduleRequest.getDoctorId(), scheduleRequest.getScheduleId());
+        DoctorScheduleKey key = new DoctorScheduleKey(scheduleRequest.getDoctorId(), scheduleRequest.getScheduleId(),  scheduleRequest.getShift());
         DoctorSchedule oldSchedule = doctorScheduleRepository.findById(key)
                 .orElseThrow(() -> new RuntimeException("DoctorSchedule not found"));
 
@@ -297,7 +295,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         Doctor doctor = oldSchedule.getDoctor();
-        boolean exists = doctorScheduleRepository.existsByDoctorAndWorkDateAndShiftType(
+        boolean exists = doctorScheduleRepository.existsByDoctorAndScheduleWorkDateAndScheduleShiftType(
                 doctor, scheduleRequest.getWorkDate(), scheduleRequest.getShift()
         );
         if (exists) {
@@ -305,14 +303,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         // Tạo ca mới
-        DoctorScheduleKey newKey = new DoctorScheduleKey(doctor.getId(), schedule.getId());
+        DoctorScheduleKey newKey = new DoctorScheduleKey(doctor.getId(), schedule.getId(), scheduleRequest.getShift());
         DoctorSchedule newSchedule = DoctorSchedule.builder()
                 .id(newKey)
                 .doctor(doctor)
                 .schedule(schedule)
                 .startTime(scheduleRequest.getShift().getStartTime())
                 .endTime(scheduleRequest.getShift().getEndTime())
-                .shiftType(scheduleRequest.getShift())
                 .status(scheduleRequest.getStatus())
                 .note(scheduleRequest.getNote())
                 .build();
@@ -455,21 +452,21 @@ public class ScheduleServiceImpl implements ScheduleService {
 //        }
 //    }
 
-    @Override
-    public void delelteSchedule(Integer doctorId, Long scheduleId) {
-        DoctorScheduleKey key = new DoctorScheduleKey(doctorId, scheduleId);
-        DoctorSchedule doctorSchedule = doctorScheduleRepository.findById(key)
-                .orElseThrow(() -> new RuntimeException("DoctorSchedule not found"));
-
-        doctorSchedule.setStatus(DoctorScheduleStatus.CANCELLED);
-        doctorSchedule.setNote("Cancelled at " + LocalDateTime.now());
-        doctorScheduleRepository.save(doctorSchedule);
-
-        // Optionally: cập nhật tất cả slots -> CANCELLED
-        List<Slot> slots = slotRepository.findByDoctorSchedule(doctorSchedule);
-        slots.forEach(slot -> slot.setStatus(SlotStatus.CANCELLED));
-        slotRepository.saveAll(slots);
-    }
+//    @Override
+//    public void delelteSchedule(Integer doctorId, Long scheduleId) {
+//        DoctorScheduleKey key = new DoctorScheduleKey(doctorId, scheduleId, );
+//        DoctorSchedule doctorSchedule = doctorScheduleRepository.findById(key)
+//                .orElseThrow(() -> new RuntimeException("DoctorSchedule not found"));
+//
+//        doctorSchedule.setStatus(DoctorScheduleStatus.CANCELLED);
+//        doctorSchedule.setNote("Cancelled at " + LocalDateTime.now());
+//        doctorScheduleRepository.save(doctorSchedule);
+//
+//        // Optionally: cập nhật tất cả slots -> CANCELLED
+//        List<Slot> slots = slotRepository.findByDoctorSchedule(doctorSchedule);
+//        slots.forEach(slot -> slot.setStatus(SlotStatus.CANCELLED));
+//        slotRepository.saveAll(slots);
+//    }
 
 
 }

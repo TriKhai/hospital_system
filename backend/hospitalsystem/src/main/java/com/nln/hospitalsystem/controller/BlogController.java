@@ -4,11 +4,13 @@ import com.nln.hospitalsystem.dto.blog.BlogDTO;
 import com.nln.hospitalsystem.dto.category.CategoryDTO;
 import com.nln.hospitalsystem.enums.BlogStatus;
 import com.nln.hospitalsystem.payload.ResponseData;
+import com.nln.hospitalsystem.payload.request.blog.BlogFormRequest;
 import com.nln.hospitalsystem.payload.request.blog.BlogRequest;
 import com.nln.hospitalsystem.payload.request.category.CategoryRequest;
 import com.nln.hospitalsystem.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,8 +23,8 @@ public class BlogController {
     private BlogService blogService;
 
     @PostMapping
-    public ResponseEntity<ResponseData<Void>> create(@RequestBody BlogRequest request) {
-        blogService.create(request);
+    public ResponseEntity<ResponseData<Void>> create(Authentication authentication, @RequestBody BlogRequest request) {
+        blogService.create(authentication.getName(), request);
         return ResponseEntity.ok(ResponseData.created(null, "Created successfully"));
     }
 
@@ -35,6 +37,18 @@ public class BlogController {
     @GetMapping("/public")
     public ResponseEntity<ResponseData<List<BlogDTO>>> getBlogsPublic() {
         List<BlogDTO> dto = blogService.findByStatus(BlogStatus.APPROVED);
+        return ResponseEntity.ok(ResponseData.success(dto, "Get all successfully"));
+    }
+
+    @GetMapping("/doctor")
+    public ResponseEntity<ResponseData<List<BlogDTO>>> getBlogsForDoctor(Authentication authentication) {
+        List<BlogDTO> dto = blogService.findByDoctor(authentication.getName());
+        return ResponseEntity.ok(ResponseData.success(dto, "Get all successfully"));
+    }
+
+    @PostMapping("/doctor")
+    public ResponseEntity<ResponseData<BlogDTO>> createBlogByDoctor(Authentication authentication, @RequestBody BlogFormRequest request) {
+        BlogDTO dto = blogService.createByDoctor(authentication.getName(), request);
         return ResponseEntity.ok(ResponseData.success(dto, "Get all successfully"));
     }
 

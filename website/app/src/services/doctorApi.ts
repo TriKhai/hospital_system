@@ -82,6 +82,7 @@ const doctorService = {
 
     getSchedule: async (): Promise<ScheduleRes[]> => {
     const res = await axiosClient.get<ResponseData<ScheduleRes[]>>(`${BASE_URL}/schedule`);
+    console.log("Doctor works: ", res.data.data)
     return res.data.data;
   },
 

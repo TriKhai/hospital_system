@@ -45,7 +45,7 @@ export default function CRMAppointmentPage() {
       count: 0,
       component: <AppointmentPage statusRender="CONFIRMED" />,
     },
-    {
+    {   
       label: "Đã từ chối",
       count: 0,
       component: <AppointmentPage statusRender="REJECTED" />,

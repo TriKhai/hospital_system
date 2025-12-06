@@ -33,11 +33,12 @@ const WorkCalendar: React.FC<Props> = ({
     api?.gotoDate(date.toDate()); // nhảy ngày theo mini calendar
   };
 
+  console.log("events: ", events)
   return (
     <div className="flex gap-4">
       <div className="flex-1">
         <FullCalendar
-          key={selectedEvent?.id || "calendar"}
+          // key={selectedEvent?.id || "calendar"}
           ref={mainCalendarRef}
           height="70vh"
           plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}

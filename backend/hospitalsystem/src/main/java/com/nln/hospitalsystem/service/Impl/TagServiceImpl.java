@@ -57,4 +57,43 @@ public class TagServiceImpl implements TagService {
             throw new RuntimeException("Lỗi khi đọc CSV Tag: " + e.getMessage());
         }
     }
+
+    @Override
+    public TagDTO findById(Long id) {
+        Tag tag = tagRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tag với ID: " + id));
+        return TagMapper.toDTO(tag);
+    }
+
+    @Override
+    public TagDTO create(String txt) {
+        Tag tag = new Tag();
+        tag.setName(txt);
+        tagRepository.save(tag);
+        return TagMapper.toDTO(tag);
+    }
+
+    @Override
+    public TagDTO update(Long id, String txt) {
+        Tag existing = tagRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tag với ID: " + id));
+        existing.setName(txt);
+        tagRepository.save(existing);
+        return TagMapper.toDTO(existing);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Tag existing = tagRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tag với ID: " + id));
+        if (!existing.getBlogs().isEmpty()) {
+            throw new RuntimeException("Không thể xoá danh mục vì vẫn còn bài viết bên trong.");
+        }
+        tagRepository.delete(existing);
+    }
+
+    @Override
+    public Long countTags() {
+        return tagRepository.count();
+    }
 }

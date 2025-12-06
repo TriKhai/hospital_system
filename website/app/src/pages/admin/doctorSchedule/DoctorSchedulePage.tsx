@@ -51,10 +51,10 @@ const DoctorSchedulePage: React.FC = () => {
   //     }
   //   };
 
-  const handleApprove = async (doctorId: number, scheduleId: number) => {
+  const handleApprove = async (doctorId: number, scheduleId: number, shift: string) => {
   if (!window.confirm("Bạn có chắc muốn duyệt lịch này không?")) return;
   try {
-    await doctorScheduleService.approve(doctorId, scheduleId);
+    await doctorScheduleService.approve(doctorId, scheduleId, shift);
     toast.success("Đã duyệt lịch thành công!");
     await fetchData();
   } catch (err) {
@@ -64,10 +64,10 @@ const DoctorSchedulePage: React.FC = () => {
 };
 
 // Hủy lịch
-const handleCancel = async (doctorId: number, scheduleId: number) => {
+const handleCancel = async (doctorId: number, scheduleId: number, shift: string) => {
   if (!window.confirm("Bạn có chắc muốn hủy lịch này không?")) return;
   try {
-    await doctorScheduleService.cancel(doctorId, scheduleId);
+    await doctorScheduleService.cancel(doctorId, scheduleId, shift);
     toast.success("Đã hủy lịch thành công!");
     await fetchData();
   } catch (err) {
@@ -140,13 +140,13 @@ const handleCancel = async (doctorId: number, scheduleId: number) => {
           {record.status === "PENDING" && (
             <>
               <button
-                onClick={() => handleApprove(record.id.doctorId, record.id.scheduleId)}
+                onClick={() => handleApprove(record.id.doctorId, record.id.scheduleId, record.shiftType)}
                 className="px-2 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition"
               >
                 Duyệt
               </button>
               <button
-                onClick={() => handleCancel(record.id.doctorId, record.id.scheduleId)}
+                onClick={() => handleCancel(record.id.doctorId, record.id.scheduleId, record.shiftType)}
                 className="px-2 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition"
               >
                 Từ chối

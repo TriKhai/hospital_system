@@ -40,6 +40,9 @@ public class Schedule {
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
 
+    @Column(name = "location")
+    private String location;
+
     @CreatedDate
     @Column(name="created_at", updatable = false)
     private LocalDateTime createdAt;

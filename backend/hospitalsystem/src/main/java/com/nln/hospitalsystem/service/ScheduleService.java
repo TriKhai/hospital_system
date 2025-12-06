@@ -11,6 +11,6 @@ public interface ScheduleService {
     void createSchedule(ScheduleRequest scheduleRequest);
     void createScheduleByDoctor(ScheduleByDocRequest request);
     void updateSchedule(ScheduleRequest scheduleRequest);
-    void delelteSchedule(Integer doctorId, Long scheduleId);
+//    void delelteSchedule(Integer doctorId, Long scheduleId);
 //    void approveSchedule(Integer doctorId, Long scheduleId);
 }

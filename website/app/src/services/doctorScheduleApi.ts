@@ -9,14 +9,14 @@ const doctorScheduleService = {
     const res = await axiosClient.get<ResponseData<DoctorScheduleRes[]>>(BASE_URL);
     return res.data.data;
   },
-  approve: async (doctorId: number, scheduleId: number): Promise<DoctorScheduleRes> => {
+  approve: async (doctorId: number, scheduleId: number, shift: string): Promise<DoctorScheduleRes> => {
     const res = await axiosClient.patch<ResponseData<DoctorScheduleRes>>(
-      `${BASE_URL}/${doctorId}/${scheduleId}/approve`
+      `${BASE_URL}/${doctorId}/${scheduleId}/${shift}/approve`
     );
     return res.data.data;
   },
-  cancel: async (doctorId: number, scheduleId: number, reason?: string): Promise<void> => {
-    await axiosClient.patch(`${BASE_URL}/${doctorId}/${scheduleId}/cancel`, {
+  cancel: async (doctorId: number, scheduleId: number, shift: string, reason?: string): Promise<void> => {
+    await axiosClient.patch(`${BASE_URL}/${doctorId}/${scheduleId}/${shift}/cancel`, {
       reason: reason ?? "Admin đã hủy lịch này.",
     });
   },

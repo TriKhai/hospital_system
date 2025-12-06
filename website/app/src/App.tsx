@@ -7,6 +7,7 @@ import { RoleProtectedRoute } from "./components/route/RoleProtectedRoute";
 import { HomePage, MainPage } from "./pages/patient";
 import {
   AdminPage,
+  CRMBlogPage,
   CRMAccountPage,
   CRMAppointmentPage,
   CRMDrugPage,
@@ -14,13 +15,15 @@ import {
   DashboardPage,
   DoctorSchedulePage,
 } from "./pages/admin";
-import OpportunitiesPage from "./components/layout/admin/OpportunitiesPage";
 import SchedulePage from "./pages/admin/schedule/SchedulePage";
-import About from "./pages/patient/About";
 import ProfilePatientPage from "./pages/patient/ProfilePatientPage";
 import MyAppointment from "./pages/patient/profite/MyAppointment";
 import InforPatient from "./pages/patient/profite/InforPatient";
-import { DoctorAppointment, DoctorPage, DoctorProfile, DoctorSchedule } from "./pages/doctor";
+import { DoctorAppointment, DoctorBlogPage, DoctorPage, DoctorProfile, DoctorSchedule } from "./pages/doctor";
+import Blogs from "./pages/patient/Blogs";
+import BlogDetailPage from "./components/layout/blog/BlogDetailPage";
+import Booking from "./pages/patient/Booking";
+import PneumoniaPredict from "./components/layout/admin/PneumoniaPredict";
 
 export default function App() {
   return (
@@ -32,7 +35,9 @@ export default function App() {
 
             <Route element={<MainPage />}>
               <Route path="/trang-chu" element={<HomePage />} />
-              <Route path="/gioi-thieu" element={<About />} />
+              <Route path="dat-lich" element={<Booking />} />
+              <Route path="/tin-tuc" element={<Blogs />} />
+              <Route path="/tin-tuc/:id" element={<BlogDetailPage />} />
               <Route
                 path="/trang-ca-nhan"
                 element={
@@ -44,6 +49,7 @@ export default function App() {
                 <Route index element={<Navigate to="thong-tin" replace />} />
                 <Route path="thong-tin" element={<InforPatient />} />
                 <Route path="lich-hen" element={<MyAppointment />} />
+                
               </Route>
             </Route>
 
@@ -62,6 +68,7 @@ export default function App() {
               <Route path="trang-ca-nhan" element={<DoctorProfile />} />
               <Route path="lich-lam-viec" element={<DoctorSchedule />} />
               <Route path="lich-hen" element={<DoctorAppointment />} />
+              <Route path="bai-viet" element={<DoctorBlogPage />} />
               
             </Route>
 
@@ -81,7 +88,8 @@ export default function App() {
               <Route path="lich" element={<SchedulePage />} />
               <Route path="lich-hen" element={<CRMAppointmentPage />} />
               <Route path="duyet-lich" element={<DoctorSchedulePage />} />
-              <Route path="test" element={<OpportunitiesPage />} />
+              <Route path="bai-viet" element={<CRMBlogPage />} />
+              <Route path="test" element={<PneumoniaPredict />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

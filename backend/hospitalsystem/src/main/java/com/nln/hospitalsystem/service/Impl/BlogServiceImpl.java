@@ -7,12 +7,14 @@ import com.nln.hospitalsystem.entity.Category;
 import com.nln.hospitalsystem.entity.Doctor;
 import com.nln.hospitalsystem.entity.Tag;
 import com.nln.hospitalsystem.enums.BlogStatus;
+import com.nln.hospitalsystem.payload.request.blog.BlogFormRequest;
 import com.nln.hospitalsystem.payload.request.blog.BlogRequest;
 import com.nln.hospitalsystem.repository.BlogRepository;
 import com.nln.hospitalsystem.repository.CategoryRepository;
 import com.nln.hospitalsystem.repository.DoctorRepository;
 import com.nln.hospitalsystem.repository.TagRepository;
 import com.nln.hospitalsystem.service.BlogService;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -51,6 +53,44 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public List<BlogDTO> findByDoctor(String username) {
+        Doctor doctor = doctorRepository.findByAccount_Username(username)
+                .orElseThrow(() -> new EntityNotFoundException("doctor not found for username: " + username));
+        List<Blog> blogs = blogRepository.findByAuthor(doctor);
+
+        return blogs.stream()
+                .map(BlogMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public BlogDTO createByDoctor(String username, BlogFormRequest request) {
+        Doctor author = doctorRepository.findByAccount_Username(username)
+                .orElseThrow(() -> new EntityNotFoundException("doctor not found for username: " + username));
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + request.getCategoryId()));
+        List<Tag> tags = tagRepository.findAllById(request.getTagIds());
+
+
+        Blog blog = Blog.builder()
+                .title(request.getTitle())
+                .description(request.getDescription())
+                .thumbnail(request.getThumbnail())
+                .category(category)
+                .author(author)
+                .content(request.getContent())
+                .relatedLink(request.getRelatedLink())
+                .tags(tags)
+                .status(BlogStatus.APPROVED) // ❗Mặc định là chờ duyệt
+                .likes(0)
+                .build();
+
+        blogRepository.save(blog);
+
+        return BlogMapper.toDTO(blog);
+    }
+
+    @Override
     public List<BlogDTO> findByStatus(BlogStatus status) {
         return blogRepository.findByStatus(status)
                 .stream()
@@ -66,7 +106,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public void create(BlogRequest request) {
+    public void create(String username, BlogRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + request.getCategoryId()));
 
@@ -88,7 +128,6 @@ public class BlogServiceImpl implements BlogService {
                 .likes(0)
                 .build();
 
-//        Blog savedBlog = blogRepository.save(blog);
         blogRepository.save(blog);
     }
 

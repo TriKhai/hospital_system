@@ -17,7 +17,7 @@ public class DoctorWorkMapper {
                 .gender(doctor.getGender())
                 .imageUrl(doctor.getImageUrl())
                 .consultationFee(doctor.getConsultationFee())
-                .workingHours(doctor.getWorkingHours())
+//                .workingHours(doctor.getWorkingHours())
                 .licenseNumber(doctor.getLicenseNumber())
                 .yearsOfExperience(doctor.getYearsOfExperience())
                 .degree(doctor.getDegree())

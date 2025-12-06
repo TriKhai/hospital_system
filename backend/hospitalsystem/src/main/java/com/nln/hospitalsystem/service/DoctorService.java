@@ -21,8 +21,8 @@ public interface DoctorService {
     DoctorDTO updateDoctor(String username, DoctorRequest doctorRequest);
     List<DoctorDTO> importDoctor(MultipartFile file);
 
-
     List<DoctorWorkDTO> getDoctorsWithAvailableSlotsBySpecialty(Integer specialtyId);
+    List<ScheduleDTO> getSchedules(Integer specialtyId);
 
     DoctorDTO getByUsername(String username);
     void updateImageDoctor(String username, MultipartFile image);

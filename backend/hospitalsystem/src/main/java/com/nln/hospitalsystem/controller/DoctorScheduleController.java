@@ -2,6 +2,7 @@ package com.nln.hospitalsystem.controller;
 
 import com.nln.hospitalsystem.dto.doctor.DoctorDTO;
 import com.nln.hospitalsystem.dto.doctorSchedule.DoctorScheduleDTO;
+import com.nln.hospitalsystem.enums.Shifts;
 import com.nln.hospitalsystem.payload.ResponseData;
 import com.nln.hospitalsystem.service.DoctorScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,19 @@ public class DoctorScheduleController {
         return ResponseEntity.ok(ResponseData.success(dto, "Get doctor schedule successfully"));
     }
 
-    @PatchMapping("/{doctorId}/{scheduleId}/approve")
+    @PatchMapping("/{doctorId}/{scheduleId}/{shiftType}/approve")
     public ResponseEntity<ResponseData<List<Void>>> approveSchedule( @PathVariable Integer doctorId,
-                                                                     @PathVariable Long scheduleId) {
-        doctorScheduleService.approveSchedule(doctorId, scheduleId);
+                                                                     @PathVariable Long scheduleId,
+                                                                     @PathVariable Shifts shiftType) {
+        doctorScheduleService.approveSchedule(doctorId, scheduleId, shiftType);
         return ResponseEntity.ok(ResponseData.success(null, "Approve schedule successfully"));
     }
 
-    @PatchMapping("/{doctorId}/{scheduleId}/cancel")
+    @PatchMapping("/{doctorId}/{scheduleId}/{shiftType}/cancel")
     public ResponseEntity<ResponseData<List<Void>>> cancelSchedule( @PathVariable Integer doctorId,
-                                                                     @PathVariable Long scheduleId) {
-        doctorScheduleService.cancelSchedule(doctorId, scheduleId);
+                                                                     @PathVariable Long scheduleId,
+                                                                    @PathVariable Shifts shiftType){
+        doctorScheduleService.cancelSchedule(doctorId, scheduleId, shiftType);
         return ResponseEntity.ok(ResponseData.success(null, "Cancel schedule successfully"));
     }
 }

@@ -17,3 +17,4 @@ export interface AppointmentResponse {
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
 }
+

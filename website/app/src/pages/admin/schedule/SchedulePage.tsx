@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import specialtyService from "../../../services/specialtyApi";
 import doctorService from "../../../services/doctorApi";
 import type { DoctorLite } from "../../../types/doctorType";
@@ -27,6 +27,8 @@ export default function SchedulePage() {
   // const [selectedEvent, setSelectedEvent] = useState<EventInput | null>(null);
 
   const [dialogMode, setDialogMode] = useState<"create" | "edit">("create");
+
+  const mappedEvents = useMemo(() => mapSchedulesToEvents(events), [events]);
 
   const handleOpen = () => {
     setSelectedSchedule(null); // tạo mới => clear selection
@@ -61,6 +63,7 @@ export default function SchedulePage() {
         doctorRes = await doctorService.getBySpecialty();
         scheduleRes = await scheduleService.getAll();
       }
+      console.log(events);
 
       setDoctors(doctorRes);
       setEvents(scheduleRes);
@@ -90,11 +93,12 @@ export default function SchedulePage() {
 
   const handleAddSchedules = async (data: ScheduleReq) => {
     try {
+      // console.log("data: ", data)
       const payload = {
         ...data,
         workDate: data.workDate,
       };
-      console.log(payload);
+      console.log("payload: ", payload);
       await scheduleService.create(payload);
       await fetchDoctorsAndSchedules(activeSpecialtyId);
       toast.success("Đã thêm lịch thành công.");
@@ -104,26 +108,25 @@ export default function SchedulePage() {
     }
   };
 
- const handleDelete = async () => {
-  if (!selectedSchedule) {
-    toast.info("Vui lòng chọn 1 lịch để xoá");
-    return;
-  }
+  const handleDelete = async () => {
+    if (!selectedSchedule) {
+      toast.info("Vui lòng chọn 1 lịch để xoá");
+      return;
+    }
 
-  try {
-    await scheduleService.delete(
-      selectedSchedule.doctorId,
-      selectedSchedule.scheduleId
-    );
-    await fetchDoctorsAndSchedules(activeSpecialtyId);
-    setSelectedSchedule(null); // clear selection
-    toast.success("Đã xoá lịch thành công.");
-  } catch (err) {
-    console.error(err);
-    toast.error("Đã xảy ra lỗi, không thể xoá lịch.");
-  }
-};
-
+    try {
+      await scheduleService.delete(
+        selectedSchedule.doctorId,
+        selectedSchedule.scheduleId
+      );
+      await fetchDoctorsAndSchedules(activeSpecialtyId);
+      setSelectedSchedule(null); // clear selection
+      toast.success("Đã xoá lịch thành công.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Đã xảy ra lỗi, không thể xoá lịch.");
+    }
+  };
 
   const handleUpdateSchedule = async (data: ScheduleReq) => {
     try {
@@ -145,8 +148,8 @@ export default function SchedulePage() {
     return {
       doctorId: schedule.doctorId,
       workDate: schedule.start.split("T")[0], // just the date part
-      shift: "MORNING", // 🔧 You'll need real logic here
-      slotMinutes: 30, // 🔧 or extract this if available
+      shift: "MORNING", //  You'll need real logic here
+      slotMinutes: 30, // or extract this if available
       repeat: "NONE",
       repeatCount: 0,
       status: schedule.status || "AVAILABLE",
@@ -179,7 +182,10 @@ export default function SchedulePage() {
           </select>
         </div>
         <div>
-          <button className="p-2 ml-2 bg-[#0E8DA1] text-white border" onClick={handleOpen}>
+          <button
+            className="p-2 ml-2 bg-[#0E8DA1] text-white border"
+            onClick={handleOpen}
+          >
             Thêm lịch
           </button>
         </div>
@@ -196,16 +202,27 @@ export default function SchedulePage() {
             className="p-2 ml-2 bg-[#0E8DA1] text-white border"
             onClick={handleDelete}
           >
-           Xoá lịch
+            Xoá lịch
           </button>
         </div>
       </div>
       <div className="">
-        {/* <WorkCalendar
-          events={mapSchedulesToEvents(events)}
-          onDateClick={setSelectedDate}
-        /> */}
         <WorkCalendar
+          events={mappedEvents}
+          onDateClick={setSelectedDate}
+          onEventClick={(info) => {
+            const id = info.event.id;
+            const schedule = events.find((e) => e.id === id);
+            if (schedule) {
+              setSelectedSchedule(schedule);
+            } else {
+              setSelectedSchedule(null);
+            }
+          }}
+          selectedEvent={selectedSchedule}
+        />
+
+        {/* <WorkCalendar
           events={mapSchedulesToEvents(events)}
           onDateClick={setSelectedDate}
           onEventClick={(info) => {
@@ -220,7 +237,7 @@ export default function SchedulePage() {
           }}
         
           selectedEvent={selectedSchedule}
-        />
+        /> */}
       </div>
       {/* <AddScheduleDialog
         onSubmit={handleAddSchedules}

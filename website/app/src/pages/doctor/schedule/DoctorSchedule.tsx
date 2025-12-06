@@ -30,21 +30,6 @@ const DoctorSchedule: React.FC = () => {
     }
   };
 
-  // const handleAddSchedules = async (data: ScheduleDocReq) => {
-  //   try {
-  //     const payload = {
-  //       ...data,
-  //       workDate: data.workDate,
-  //     };
-  //     console.log(payload);
-  //     await scheduleService.createByDoctor(payload);
-  //     await fetchEvents();
-  //     toast.success("Đã thêm lịch thành công.");
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Đã xảy ra lỗi, không thể thêm lịch.");
-  //   }
-  // };
 
   useEffect(() => {
     fetchEvents();
@@ -55,8 +40,8 @@ const DoctorSchedule: React.FC = () => {
       {doctor && (
         <div className="flex justify-end">
           <AddScheduleByDoctor
-            doctorId={doctor.id} // TODO: thay bằng id bác sĩ hiện tại
-            onSuccess={fetchEvents} // reload lịch sau khi thêm
+            doctorId={doctor.id} 
+            onSuccess={fetchEvents} 
           />
         </div>
       )}
@@ -69,7 +54,7 @@ const DoctorSchedule: React.FC = () => {
           if (schedule) {
             setSelectedSchedule(schedule);
           } else {
-            setSelectedSchedule(null); // nếu không tìm thấy thì clear
+            setSelectedSchedule(null); 
           }
         }}
         selectedEvent={selectedSchedule}

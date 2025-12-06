@@ -5,6 +5,7 @@ import com.nln.hospitalsystem.dto.doctorSchedule.DoctorScheduleMapper;
 import com.nln.hospitalsystem.entity.DoctorSchedule;
 import com.nln.hospitalsystem.entity.key.DoctorScheduleKey;
 import com.nln.hospitalsystem.enums.DoctorScheduleStatus;
+import com.nln.hospitalsystem.enums.Shifts;
 import com.nln.hospitalsystem.enums.SlotStatus;
 import com.nln.hospitalsystem.repository.DoctorScheduleRepository;
 import com.nln.hospitalsystem.service.DoctorScheduleService;
@@ -27,8 +28,8 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     }
 
     @Override
-    public void approveSchedule(Integer doctorId, Long scheduleId) {
-        DoctorScheduleKey key = new DoctorScheduleKey(doctorId, scheduleId);
+    public void approveSchedule(Integer doctorId, Long scheduleId, Shifts shift) {
+        DoctorScheduleKey key = new DoctorScheduleKey(doctorId, scheduleId, shift);
         DoctorSchedule ds = doctorScheduleRepository.findById(key)
                 .orElseThrow(() -> new RuntimeException("DoctorSchedule not found"));
 
@@ -50,8 +51,8 @@ public class DoctorScheduleServiceImpl implements DoctorScheduleService {
     }
 
     @Override
-    public void cancelSchedule(Integer doctorId, Long scheduleId) {
-        DoctorScheduleKey key = new DoctorScheduleKey(doctorId, scheduleId);
+    public void cancelSchedule(Integer doctorId, Long scheduleId, Shifts shift) {
+        DoctorScheduleKey key = new DoctorScheduleKey(doctorId, scheduleId, shift);
         DoctorSchedule ds = doctorScheduleRepository.findById(key)
                 .orElseThrow(() -> new RuntimeException("DoctorSchedule not found"));
 

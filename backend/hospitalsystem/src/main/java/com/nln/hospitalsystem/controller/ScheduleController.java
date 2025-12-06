@@ -49,7 +49,7 @@ public class ScheduleController {
     @DeleteMapping("/{doctorId}/{scheduleId}")
     public ResponseEntity<ResponseData<List<Void>>> delete(@PathVariable Integer doctorId, @PathVariable Long scheduleId) {
 
-        scheduleService.delelteSchedule(doctorId, scheduleId);
+//        scheduleService.delelteSchedule(doctorId, scheduleId);
 
         return ResponseEntity.ok(ResponseData.success(null, "delete successfully"));
     }

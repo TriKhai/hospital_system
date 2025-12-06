@@ -42,20 +42,20 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void create(CategoryRequest request) {
+    public CategoryDTO create(CategoryRequest request) {
         Category category = CategoryMapper.toEntity(request);
         Category saved = categoryRepository.save(category);
-//        return CategoryMapper.toDTO(saved);
+        return CategoryMapper.toDTO(saved);
     }
 
     @Override
-    public void update(Long id, CategoryRequest request) {
+    public CategoryDTO update(Long id, CategoryRequest request) {
         Category existing = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy danh mục với ID: " + id));
 
         CategoryMapper.updateEntity(existing, request);
-        categoryRepository.save(existing);
-//        return CategoryMapper.toDTO(categoryRepository.save(existing));
+        Category saved = categoryRepository.save(existing);
+        return CategoryMapper.toDTO(saved);
     }
 
     @Override
@@ -96,5 +96,10 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (Exception e) {
             throw new RuntimeException("Lỗi khi đọc CSV: " + e.getMessage());
         }
+    }
+
+    @Override
+    public Long countCategories() {
+        return categoryRepository.count();
     }
 }

@@ -15,7 +15,7 @@ public class ScheduleMapper {
         Schedule schedule = doctorSchedule.getSchedule();
 
         return ScheduleDTO.builder()
-                .id(schedule.getId() + "-" + doctorSchedule.getDoctor().getId())
+                .id(schedule.getId() + "-" + doctorSchedule.getDoctor().getId() + "-" + doctorSchedule.getShiftType())
                 .title("BS " + doctorSchedule.getDoctor().getName()
                         + " (" + doctorSchedule.getDoctor().getSpecialty().getName() + ")")
                 .start(schedule.getWorkDate() != null && doctorSchedule.getStartTime() != null

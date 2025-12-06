@@ -16,6 +16,7 @@ const SideBarDoctor: React.FC = () => {
     { path: "/doctor/trang-ca-nhan", icon: faUser, label: "Thông tin cá nhân" },
     { path: "lich-lam-viec", icon: faCalendar, label: "Lịch làm việc" },
     { path: "lich-hen", icon: faCalendarCheck, label: "Lịch hẹn của tôi" },
+    { path: "bai-viet", icon: faCalendarCheck, label: "Bài viết của tôi" },
     { path: "doi-mat-khau", icon: faKey, label: "Đổi mật khẩu" },
   ];
   const { logout } = useAuth();

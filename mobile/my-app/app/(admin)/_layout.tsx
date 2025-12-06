@@ -36,13 +36,10 @@ export default function AdminLayout() {
 
   return (
     <Drawer
-      // 🧭 Custom Drawer
       drawerContent={(props) => (
         <DrawerContentScrollView {...props}>
-          {/* Danh sách tab mặc định */}
           <DrawerItemList {...props} />
 
-          {/* Nút đăng xuất */}
           <DrawerItem
             label="Đăng xuất"
             icon={({ color, size }) => (

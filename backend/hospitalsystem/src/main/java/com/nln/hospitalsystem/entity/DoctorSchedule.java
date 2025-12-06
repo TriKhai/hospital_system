@@ -46,12 +46,12 @@ public class DoctorSchedule {
     @Column(name = "end_time")
     private LocalTime endTime;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "shift_type")
-    private Shifts shiftType;
-
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "shift_type", insertable = false, updatable = false)
+    private Shifts shiftType;
 
     @CreatedDate
     @Column(name="created_at", updatable = false)

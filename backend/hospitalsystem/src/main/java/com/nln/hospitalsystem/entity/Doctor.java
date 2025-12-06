@@ -51,9 +51,8 @@ public class Doctor {
     @Column(name = "consultation_fee")
     private BigDecimal consultationFee;
 
-    // ở ERD để Date nhưng thực chất "working_hours" thường là time → dùng LocalTime
-    @Column(name = "working_hours")
-    private LocalTime workingHours;
+//    @Column(name = "working_hours")
+//    private LocalTime workingHours;
 
     @Column(name = "license_number")
     private String licenseNumber;
@@ -90,5 +89,11 @@ public class Doctor {
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DoctorSchedule> doctorSchedules = new ArrayList<>();
+
+    @OneToOne(mappedBy = "doctor",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private DoctorDetail doctorDetail;
 
 }

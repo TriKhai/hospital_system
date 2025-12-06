@@ -17,7 +17,7 @@ public class DoctorMapper {
                 .gender(doctor.getGender())
                 .imageUrl(doctor.getImageUrl())
                 .consultationFee(doctor.getConsultationFee())
-                .workingHours(doctor.getWorkingHours())
+//                .workingHours(doctor.getWorkingHours())
                 .licenseNumber(doctor.getLicenseNumber())
                 .yearsOfExperience(doctor.getYearsOfExperience())
                 .degree(doctor.getDegree())
@@ -42,7 +42,7 @@ public class DoctorMapper {
         doctor.setGender(dto.getGender());
         doctor.setImageUrl(dto.getImageUrl());
         doctor.setConsultationFee(dto.getConsultationFee());
-        doctor.setWorkingHours(dto.getWorkingHours());
+//        doctor.setWorkingHours(dto.getWorkingHours());
         doctor.setLicenseNumber(dto.getLicenseNumber());
         doctor.setYearsOfExperience(dto.getYearsOfExperience());
         doctor.setDegree(dto.getDegree());

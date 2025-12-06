@@ -13,6 +13,8 @@ import drugTypeReducer from "./slices/drugTypeSlice"
 import supplierReducer from "./slices/supplierSlice"
 import manufacturerReducer from "./slices/manufacturerSlice"
 import appointmentReducer from "./slices/appointmentSlice"
+import tagReducer from "./slices/tagSlice"
+import categoryReducer from "./slices/categorySlice"
 
 const persistConfig = {
   key: "root",
@@ -33,6 +35,8 @@ const rootReducer = combineReducers({
   supplier: supplierReducer,
   manufacturer: manufacturerReducer,
   appointment: appointmentReducer,
+  tag: tagReducer,
+  category: categoryReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

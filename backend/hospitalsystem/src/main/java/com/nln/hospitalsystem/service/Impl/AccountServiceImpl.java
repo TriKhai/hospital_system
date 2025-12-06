@@ -178,7 +178,7 @@ public class AccountServiceImpl implements AccountService {
                 .yearsOfExperience(request.getYearsOfExperience())
                 .licenseNumber(request.getLicenseNumber())
                 .consultationFee(request.getConsultationFee())
-                .workingHours(request.getWorkingHours())
+//                .workingHours(request.getWorkingHours())
                 .build();
 
         doctor.setSpecialty(
