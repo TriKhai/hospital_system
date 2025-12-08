@@ -5,3 +5,8 @@ export interface PredictionResult {
 }
 
 // export interface AiResponse extends ResponseData<PredictionResult> {}
+
+export interface GradcamResult {
+  predicted_class: "PNEUMONIA" | "NORMAL" | string; 
+  gradcam_image_base64: string; 
+}

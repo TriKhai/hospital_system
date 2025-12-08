@@ -1,58 +1,47 @@
-// đặt ở trên cùng file
-const recentAppointments = [
-  {
-    id: 1,
-    patient: "John Doe",
-    doctor: "Dr. Smith",
-    time: "12/09/2025 10:00",
-    status: "Completed",
-  },
-  {
-    id: 2,
-    patient: "Jane Doe",
-    doctor: "Dr. Brown",
-    time: "12/09/2025 11:00",
-    status: "Upcoming",
-  },
-  {
-    id: 3,
-    patient: "Jane Doe",
-    doctor: "Dr. Brown",
-    time: "12/09/2025 11:30",
-    status: "Upcoming",
-  },
-  {
-    id: 3,
-    patient: "Jane Doe",
-    doctor: "Dr. Brown",
-    time: "12/09/2025 11:30",
-    status: "Upcoming",
-  },
-  {
-    id: 3,
-    patient: "Jane Doe",
-    doctor: "Dr. Brown",
-    time: "12/09/2025 11:30",
-    status: "Upcoming",
-  },
-  {
-    id: 3,
-    patient: "Jane Doe",
-    doctor: "Dr. Brown",
-    time: "12/09/2025 11:30",
-    status: "Upcoming",
-  },
-  {
-    id: 4,
-    patient: "Jane Doe",
-    doctor: "Dr. Brown",
-    time: "12/09/2025 12:00",
-    status: "Cancelled",
-  },
-  // ...
-];
+import { useEffect, useState } from "react";
+import dashboardService from "../../../services/dashboardApi";
+import type { AppointmentResponse } from "../../../types/appointmentType";
+import dayjs from "dayjs";
 
 export default function RecentAppointments() {
+  const [appointments, setAppointments] = useState<AppointmentResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    dashboardService
+      .getLatestAppointments(7) // lấy 7 lịch mới nhất
+      .then((data) => setAppointments(data))
+      .finally(() => setLoading(false));
+  }, []);
+
+  function mapStatus(status: string) {
+    if (
+      status === "REJECTED" ||
+      status === "CANCELLED_BY_PATIENT" ||
+      status === "CANCELLED_BY_DOCTOR" ||
+      status === "CANCELLED_BY_ADMIN"
+    ) {
+      return { label: "Cancelled", class: "bg-red-100 text-red-700" };
+    }
+
+    if (
+      status === "PENDING" ||
+      status === "PENDING_VERIFICATION" 
+    ) {
+      return { label: "Upcoming", class: "bg-yellow-100 text-yellow-700" };
+    }
+
+    if (status === "CONFIRMED") {
+      return { label: "Completed", class: "bg-green-100 text-green-700" };
+    }
+
+    if (status === "NO_SHOW") {
+      return { label: "No show", class: "bg-gray-200 text-gray-600" };
+    }
+
+    return { label: status, class: "" }; // fallback
+  }
+
   return (
     <div className="bg-white p-4 rounded shadow">
       <p className="font-semibold mb-3">Recent Appointments</p>
@@ -67,34 +56,43 @@ export default function RecentAppointments() {
         </div>
 
         <div className="max-h-64 overflow-y-auto">
-          {recentAppointments.map((item) => (
-            <div
-              key={item.id}
-              className="grid grid-cols-3 md:grid-cols-4 items-center px-3 py-2 text-sm border-t"
-            >
-              <span>{item.patient}</span>
-              <span className="text-gray-600">{item.doctor}</span>
+          {loading && (
+            <p className="text-center py-4 text-gray-500">Loading...</p>
+          )}
 
-              <span className="hidden md:block">
-                <span
-                  className={
-                    "inline-flex items-center px-2 py-0.5 rounded text-xs " +
-                    (item.status === "Completed"
-                      ? "bg-green-100 text-green-700"
-                      : item.status === "Cancelled"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-yellow-100 text-yellow-700")
-                  }
-                >
-                  {item.status}
+          {!loading && appointments.length === 0 && (
+            <p className="text-center py-4 text-gray-500">
+              No recent appointments
+            </p>
+          )}
+
+          {!loading &&
+            appointments.map((item) => (
+              <div
+                key={item.id}
+                className="grid grid-cols-3 md:grid-cols-4 items-center px-3 py-2 text-sm border-t"
+              >
+                <span>{item.patient.name}</span>
+
+                <span className="text-gray-600">{item.doctor.name}</span>
+
+                <span className="hidden md:block">
+                  <span
+                    className={
+                      "inline-flex items-center px-2 py-0.5 rounded text-xs " +
+                      mapStatus(item.status).class
+                    }
+                  >
+                    {mapStatus(item.status).label}
+                  </span>
                 </span>
-              </span>
 
-              <span className="text-right text-gray-500 text-xs md:text-sm">
-                {item.time}
-              </span>
-            </div>
-          ))}
+                <span className="text-right text-gray-500 text-xs md:text-sm">
+                  {dayjs(item.slot.workDate).format("DD/MM/YYYY")}{" "}
+                  {item.slot.startTime}
+                </span>
+              </div>
+            ))}
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 
 const Welcome: React.FC = () => {
   return (
-    <section className="w-ful py-16 mt-20">
+    <section className="w-ful py-6 mt-20">
       <div className="flex-column justify-center text-center pt-3 mb-1">
         <p className="font-black text-6xl mb-4">BỆNH VIỆN THÀNH PHỐ CẦN THƠ</p>
         <div>

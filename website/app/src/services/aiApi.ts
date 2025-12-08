@@ -1,5 +1,5 @@
 import axiosClient from "../config/axios";
-import type { PredictionResult } from "../types/aiType";
+import type { GradcamResult, PredictionResult } from "../types/aiType";
 import type { ResponseData } from "../types/resType";
 
 const BASE_URL = "/ai-pneumonia";
@@ -22,6 +22,27 @@ const aiService = {
     return res.data.data; // PredictionResult
   },
 
+  gradcam: async (
+    file: File
+  ): Promise<GradcamResult> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await axiosClient.post<
+      ResponseData<GradcamResult>
+    >(BASE_URL + "/gradcam", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (!res.data.success) {
+      throw new Error(res.data.message);
+    }
+
+    return res.data.data;
+    console.log(res.data.data)
+  },
   
 };
 

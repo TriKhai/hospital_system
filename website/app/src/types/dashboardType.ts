@@ -19,3 +19,9 @@ export interface AppointmentStatusStats {
   status: string;
   count: number;
 }
+
+export interface AppointmentChart {
+  label: string;
+  active: number;
+  cancelled: number;
+}

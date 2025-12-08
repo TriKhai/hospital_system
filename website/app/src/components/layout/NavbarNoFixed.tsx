@@ -58,7 +58,7 @@ export default function NavbarNoFixed() {
                 <div className="px-4 py-2 cursor-pointer rounded-md hover:bg-gray-100">
                   {label} ▾
                 </div>
-                <div className="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg rounded mt-2 min-w-[150px]">
+                <div className="absolute left-0 top-full hidden group-hover:block bg-white shadow-lg rounded pt-2 min-w-[150px]">
                   {children.map((child) => (
                     <NavLink
                       key={child.path}

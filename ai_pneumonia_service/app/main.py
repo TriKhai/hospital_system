@@ -2,8 +2,9 @@ from fastapi import FastAPI, UploadFile, File
 from app.model_pneumonia import load_model, predict_image
 from app.utils import transform_image, is_valid_image, is_xray_like
 from PIL import Image
+from app.gradcam_pneumonia import generate_gradcam
 import io
-
+import base64
 
 app = FastAPI()
 
@@ -21,8 +22,8 @@ async def predict(file: UploadFile = File(...)):
     
     img = Image.open(io.BytesIO(image_bytes))
     # 2. kiểm tra ảnh quá nhỏ
-    if img.width < 200 or img.height < 200:
-        return {"error": "Ảnh quá nhỏ, vui lòng dùng ảnh X-ray rõ nét ≥ 200px."}
+    # if img.width < 200 or img.height < 200:
+    #     return {"error": "Ảnh quá nhỏ, vui lòng dùng ảnh X-ray rõ nét ≥ 200px."}
     
     # 3. kiểm tra có phải ảnh X-ray
     if not is_xray_like(img):
@@ -41,6 +42,23 @@ async def predict(file: UploadFile = File(...)):
             labels[0]: probs[0],
             labels[1]: probs[1]
         }
+    }
+
+@app.post("/gradcam")
+async def gradcam(file: UploadFile = File(...)):
+
+    image_bytes = await file.read()
+
+    if not is_valid_image(image_bytes):
+        return {"error": "File không phải ảnh JPG/PNG hợp lệ."}
+
+    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+
+    heatmap_b64, pred_class = generate_gradcam(model, img, device=device)
+
+    return {
+        "predicted_class": labels[pred_class],
+        "gradcam_image_base64": heatmap_b64
     }
 
 @app.get("/")

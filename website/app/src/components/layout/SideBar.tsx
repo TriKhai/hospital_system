@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faChartBar,
   type IconDefinition,

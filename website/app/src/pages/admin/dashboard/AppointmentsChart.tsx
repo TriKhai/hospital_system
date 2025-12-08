@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -11,108 +11,115 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-
-//
-// ─── DỮ LIỆU CỨNG (FAKE DATA) ───────────────────────────────────────────────
-//
-
-const dataByHour = [
-  { label: "08:00", active: 6, cancelled: 2 },
-  { label: "09:00", active: 10, cancelled: 4 },
-  { label: "10:00", active: 14, cancelled: 2 },
-  { label: "11:00", active: 9, cancelled: 3 },
-  { label: "14:00", active: 7, cancelled: 3 },
-  { label: "15:00", active: 10, cancelled: 3 },
-  { label: "16:00", active: 6, cancelled: 3 },
-];
-
-const dataByDayOfWeek = [
-  { label: "T2", active: 26, cancelled: 4 },
-  { label: "T3", active: 29, cancelled: 3 },
-  { label: "T4", active: 32, cancelled: 5 },
-  { label: "T5", active: 30, cancelled: 2 },
-  { label: "T6", active: 35, cancelled: 5 },
-  { label: "T7", active: 22, cancelled: 4 },
-  { label: "CN", active: 12, cancelled: 2 },
-];
-
-const dataByWeek = [
-  { label: "Tuần 1", active: 120, cancelled: 25 },
-  { label: "Tuần 2", active: 140, cancelled: 30 },
-  { label: "Tuần 3", active: 136, cancelled: 28 },
-  { label: "Tuần 4", active: 148, cancelled: 32 },
-];
-
-const dataByDayInMonth = Array.from({ length: 30 }, (_, i) => ({
-  label: `Ngày ${i + 1}`,
-  active: Math.floor(Math.random() * 40) + 10,
-  cancelled: Math.floor(Math.random() * 10) + 2,
-}));
-
-const dataByMonth = [
-  { label: "T1", active: 310, cancelled: 60 },
-  { label: "T2", active: 280, cancelled: 55 },
-  { label: "T3", active: 350, cancelled: 70 },
-  { label: "T4", active: 330, cancelled: 65 },
-  { label: "T5", active: 360, cancelled: 75 },
-  { label: "T6", active: 340, cancelled: 68 },
-  { label: "T7", active: 320, cancelled: 60 },
-  { label: "T8", active: 370, cancelled: 80 },
-  { label: "T9", active: 360, cancelled: 75 },
-  { label: "T10", active: 390, cancelled: 90 },
-  { label: "T11", active: 350, cancelled: 65 },
-  { label: "T12", active: 380, cancelled: 85 },
-];
-
-//
-// ─── COMPONENT ──────────────────────────────────────────────────────────────
-//
+import dashboardService from "../../../services/dashboardApi";
+import type { AppointmentChart } from "../../../types/dashboardType";
+import dayjs from "dayjs";
 
 export default function AppointmentsChart() {
-  const [mode, setMode] = useState<"hour" | "weekday" | "week" | "monthday" | "yearmonth">("hour");
+  const [mode, setMode] = useState<
+    "hour" | "weekday" | "week" | "monthday" | "yearmonth"
+  >("hour");
   const [chartType, setChartType] = useState<"bar" | "line">("bar");
-  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "cancelled">("all");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "active" | "cancelled"
+  >("all");
 
-  const [selectedDate, setSelectedDate] = useState("2025-01-15");
-  const [selectedMonth, setSelectedMonth] = useState(1); // 1 - 12
-  const [selectedYear, setSelectedYear] = useState(2025);
+  const [shiftMode, setShiftMode] = useState<
+    "all" | "morning" | "afternoon" | "evening"
+  >("all");
+
+  const now = dayjs();
+
+  const [selectedDate, setSelectedDate] = useState(now.format("YYYY-MM-DD"));
+  const [selectedMonth, setSelectedMonth] = useState(now.month() + 1); 
+  const [selectedYear, setSelectedYear] = useState(now.year());
+
+  const [hourData, setHourData] = useState<AppointmentChart[]>([]);
+  const [weekdayData, setWeekdayData] = useState<AppointmentChart[]>([]);
+  const [weekData, setWeekData] = useState<AppointmentChart[]>([]);
+  const [monthdayData, setMonthdayData] = useState<AppointmentChart[]>([]);
+  const [yearMonthData, setYearMonthData] = useState<AppointmentChart[]>([]);
+
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        if (mode === "hour") {
+          const data = await dashboardService.getHourlyStats(
+            selectedDate,
+            shiftMode
+          );
+          setHourData(data);
+        }
+
+        if (mode === "weekday") {
+          const data = await dashboardService.getWeekdayStats(selectedDate);
+          setWeekdayData(data);
+        }
+
+        if (mode === "week") {
+          const data = await dashboardService.getWeeklyStats(selectedMonth, selectedYear);
+          setWeekData(data);
+        }
+
+        if (mode === "monthday") {
+          const data = await dashboardService.getMonthDayStats(selectedMonth, selectedYear);
+          setMonthdayData(data);
+        }
+
+        if (mode === "yearmonth") {
+          const data = await dashboardService.getStatsYearMonth(selectedYear);
+          setYearMonthData(data);
+        }
+
+      } catch (e) {
+        console.error("Fetch stats failed:", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [mode, selectedDate, shiftMode, selectedMonth, selectedYear]);
 
   //
   // CHỌN DỮ LIỆU THEO MODE
   //
   let title = "";
-  let baseData = dataByHour;
+  let baseData: AppointmentChart[] = [];
 
   if (mode === "hour") {
     title = "Theo giờ trong ngày";
-    baseData = dataByHour;
+    baseData = hourData;
   } else if (mode === "weekday") {
     title = "Theo ngày trong tuần";
-    baseData = dataByDayOfWeek;
+    baseData = weekdayData;
   } else if (mode === "week") {
     title = "Theo tuần trong tháng";
-    baseData = dataByWeek;
+    baseData = weekData;
   } else if (mode === "monthday") {
     title = "Theo ngày trong tháng";
-    baseData = dataByDayInMonth;
+    baseData = monthdayData;
   } else if (mode === "yearmonth") {
     title = "Theo tháng trong năm";
-    baseData = dataByMonth;
+    baseData = yearMonthData;
   }
 
-  //
-  // LỌC DỮ LIỆU THEO TRẠNG THÁI
-  //
+  // // LỌC DỮ LIỆU THEO TRẠNG THÁI
   let data = baseData.map((d) => {
     let obj: any = { label: d.label };
-    if (filterStatus === "all" || filterStatus === "active") obj.active = d.active;
-    if (filterStatus === "all" || filterStatus === "cancelled") obj.cancelled = d.cancelled;
+    if (filterStatus === "all" || filterStatus === "active")
+      obj.active = d.active;
+    if (filterStatus === "all" || filterStatus === "cancelled")
+      obj.cancelled = d.cancelled;
     return obj;
   });
 
-  //
   // RENDER CHART
-  //
   const renderChart = () => {
     if (chartType === "bar") {
       return (
@@ -134,21 +141,32 @@ export default function AppointmentsChart() {
       );
     }
 
-    // Line chart
     return (
       <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis dataKey="label" />
-        <YAxis />
+        <YAxis allowDecimals={false}/>
         <Tooltip />
         <Legend />
 
         {(filterStatus === "all" || filterStatus === "active") && (
-          <Line type="monotone" dataKey="active" stroke="#2563eb" strokeWidth={2} name="Không huỷ" />
+          <Line
+            type="monotone"
+            dataKey="active"
+            stroke="#2563eb"
+            strokeWidth={2}
+            name="Không huỷ"
+          />
         )}
 
         {(filterStatus === "all" || filterStatus === "cancelled") && (
-          <Line type="monotone" dataKey="cancelled" stroke="#ef4444" strokeWidth={2} name="Huỷ" />
+          <Line
+            type="monotone"
+            dataKey="cancelled"
+            stroke="#ef4444"
+            strokeWidth={2}
+            name="Huỷ"
+          />
         )}
       </LineChart>
     );
@@ -159,10 +177,8 @@ export default function AppointmentsChart() {
   //
   return (
     <div className="h-full flex flex-col gap-3">
-
-      {/* ─── OPTIONS BAR ───────────────────────── */}
+      {/* OPTIONS BAR */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
         {/* Mode chọn dạng thời gian */}
         <div className="inline-flex rounded-lg border bg-white p-1">
           {[
@@ -176,13 +192,39 @@ export default function AppointmentsChart() {
               key={item.key}
               onClick={() => setMode(item.key as any)}
               className={`px-3 py-1 text-xs sm:text-sm rounded-md ${
-                mode === item.key ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-100"
+                mode === item.key
+                  ? "bg-[#0E8DA1] text-white"
+                  : "text-gray-600 hover:bg-gray-100"
               }`}
             >
               {item.label}
             </button>
           ))}
         </div>
+
+        {/* Mode CHỌN BUỔI (chỉ hiện khi mode = hour) */}
+        {mode === "hour" && (
+          <div className="inline-flex rounded-lg border bg-white p-1">
+            {[
+              { key: "all", label: "Tất cả" },
+              { key: "morning", label: "Sáng" },
+              { key: "afternoon", label: "Chiều" },
+              { key: "evening", label: "Tối" },
+            ].map((item) => (
+              <button
+                key={item.key}
+                onClick={() => setShiftMode(item.key as any)}
+                className={`px-3 py-1 text-xs sm:text-sm rounded-md ${
+                  shiftMode === item.key
+                    ? "bg-[#0E8DA1] text-white"
+                    : "text-gray-600 hover:bg-gray-100"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Chọn chart type */}
         <div className="inline-flex rounded-lg border bg-white p-1">
@@ -195,7 +237,7 @@ export default function AppointmentsChart() {
               onClick={() => setChartType(item.key as any)}
               className={`px-3 py-1 text-xs sm:text-sm rounded-md ${
                 chartType === item.key
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[#0E8DA1] text-white"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -216,7 +258,7 @@ export default function AppointmentsChart() {
               onClick={() => setFilterStatus(item.key as any)}
               className={`px-3 py-1 text-xs sm:text-sm rounded-md ${
                 filterStatus === item.key
-                  ? "bg-blue-600 text-white"
+                  ? "bg-[#0E8DA1] text-white"
                   : "text-gray-600 hover:bg-gray-100"
               }`}
             >
@@ -226,9 +268,8 @@ export default function AppointmentsChart() {
         </div>
       </div>
 
-      {/* ─── CHỌN NGÀY/THÁNG/NĂM ───────────────────────── */}
+      {/* CHỌN NGÀY/THÁNG/NĂM */}
       <div className="flex gap-3 text-sm text-gray-600">
-
         {(mode === "hour" || mode === "weekday") && (
           <input
             type="date"
@@ -238,7 +279,27 @@ export default function AppointmentsChart() {
           />
         )}
 
-        {(mode === "week" || mode === "monthday") && (
+        {mode === "week" && (
+          <>
+            <input
+              type="number"
+              min={1}
+              max={12}
+              className="border p-2 rounded w-28"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+            />
+
+            <input
+              type="number"
+              className="border p-2 rounded w-28"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+            />
+          </>
+        )}
+
+        {(mode === "monthday") && (
           <input
             type="number"
             min={1}
@@ -259,7 +320,7 @@ export default function AppointmentsChart() {
         )}
       </div>
 
-      {/* ─── BIỂU ĐỒ ───────────────────────── */}
+      {/* BIỂU ĐỒ */}
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           {renderChart()}

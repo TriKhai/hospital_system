@@ -116,7 +116,7 @@ const DashboardPage = () => {
 
         <div className="grid gap-4">
           <div className="bg-white p-4 rounded shadow h-80">
-            <p className="font-semibold mb-2">Appointments Overview</p>
+            <p className="font-semibold mb-2">Thống kê lịch hẹn</p>
             <div className="w-full h-[calc(100%-0.5rem)]">
               <AppointmentsChart />
             </div>
