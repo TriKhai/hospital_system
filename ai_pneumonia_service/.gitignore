@@ -1,2 +1,6 @@
 venv/
-.ai_pneumonia_service/venv/
+*/venv/
+ai_pneumonia_service/venv/
+__pycache__/
+*.pyc
+app/__pycache__/
