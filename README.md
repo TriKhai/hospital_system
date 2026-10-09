@@ -2,7 +2,7 @@
 
 ## Member List
 
-1. Lý Trí Khải - B2207530 - khaib2207530@student.ctu.edu.vn
+1. Trí Khải - Bxxxx - khaixxx@xxxx
 
 ## Technologies Used:
 
